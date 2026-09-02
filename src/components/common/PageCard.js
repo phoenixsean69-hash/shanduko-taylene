@@ -1,11 +1,1 @@
-export function PageCard({ title, tools = '', className = '', body = '' }) {
-  return `
-    <section class="card shanduko-card ${className}">
-      <header class="card-header">
-        <h3 class="card-title">${title}</h3>
-        ${tools ? `<div class="card-tools">${tools}</div>` : ''}
-      </header>
-      <div class="card-body">${body}</div>
-    </section>
-  `;
-}
+export function PageCard({title,subtitle='',action='',body='',className=''}){return `<section class="surface-card ${className}"><header class="surface-card-header"><div><h2>${title}</h2>${subtitle?`<p>${subtitle}</p>`:''}</div>${action}</header><div class="surface-card-body">${body}</div></section>`}

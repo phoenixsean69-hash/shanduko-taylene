@@ -1,7 +1,1 @@
-export function RecentTransactions() {
-  const products=[['01','Home Decor Range','45%'],['02','Disney Princess Pink Bag 18”','29%'],['03','Bathroom Essentials','18%'],['04','Apple Smartwatches','25%']];
-  return `<section class="figma-card products-card"><div class="figma-card-head"><h3>Top Products</h3></div>
-    <div class="product-head"><span>#</span><span>Name</span><span>Popularity</span><span>Sales</span></div>
-    ${products.map(([n,name,p])=>`<div class="product-row"><span>${n}</span><strong>${name}</strong><span class="product-progress"><i style="width:${p}"></i></span><em>${p}</em></div>`).join('')}
-  </section>`;
-}
+export function RecentTransactions(){const r=[['SHND-2026-B0899','26/06/2026','Stand 0812 - Tendai Kwenda','Development Fees','$1,200.00'],['SHND-2026-B0892','26/06/2026','Stand 1402 - John T. Moyo','Development Fees','$450.00'],['SHND-2026-B0495','19/05/2026','Stand 1109 - Farai Ndlovu','Admin Fees','$35.00']];return `<section class="surface-card"><header class="surface-card-header"><div><h2>Recent Transactions</h2><p>Latest administrator intake events</p></div><a class="text-link" href="#/transactions">View all</a></header><div class="table-scroll"><table class="data-table"><thead><tr><th>Receipt</th><th>Date</th><th>Member / Stand</th><th>Ledger</th><th>Amount</th><th>Status</th></tr></thead><tbody>${r.map(x=>`<tr><td><code>${x[0]}</code></td><td>${x[1]}</td><td><strong>${x[2].split(' - ')[1]||x[2]}</strong><small>${x[2].split(' - ')[0]}</small></td><td><span class="ledger-badge ${x[3].startsWith('Admin')?'admin':'development'}">${x[3]}</span></td><td><strong>${x[4]}</strong></td><td><span class="status-badge">Verified</span></td></tr>`).join('')}</tbody></table></div></section>`}

@@ -1,12 +1,1 @@
-export function CollectionsOverview() {
-  const online = [14,17,6,16,12,17,13], offline=[12,11,20,7,10,13,10];
-  return `<section class="figma-card revenue-card">
-    <div class="figma-card-head"><h3>Total Revenue</h3><span></span></div>
-    <div class="mini-chart">
-      <div class="y-labels"><span>25k</span><span>20k</span><span>15k</span><span>10k</span><span>5k</span><span>0</span></div>
-      <div class="chart-bars">${online.map((v,i)=>`<div class="revenue-bar-group"><i style="height:${v*3}px"></i><b style="height:${offline[i]*3}px"></b></div>`).join('')}</div>
-      <div class="x-labels">${['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(x=>`<span>${x}</span>`).join('')}</div>
-    </div>
-    <div class="chart-legend"><span><i></i> Online Sales</span><span><i></i> Offline Sales</span></div>
-  </section>`;
-}
+export function CollectionsOverview(){const a=[18,26,12,34,22,28,38],d=[26,20,16,28,23,34,44];return `<section class="surface-card"><header class="surface-card-header"><div><h2>Collections Overview</h2><p>Admin Fees vs Development Fees</p></div><span class="period-chip">Current period</span></header><div class="chart-area"><div class="bar-chart"><div class="chart-grid"></div>${a.map((v,i)=>`<div class="bar-group"><span class="bar admin" style="height:${v*4}px"></span><span class="bar development" style="height:${d[i]*4}px"></span></div>`).join('')}</div><div class="chart-labels">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<span>${x}</span>`).join('')}</div><div class="legend"><span><i class="dot admin"></i>Admin Fees</span><span><i class="dot development"></i>Development Fees</span></div></div></section>`}

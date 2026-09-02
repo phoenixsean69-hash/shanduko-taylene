@@ -1,0 +1,1 @@
+export function StatCard({icon,label,value,note,tone}){return `<article class="stat-card ${tone}"><div class="stat-icon"><i class="bi ${icon}"></i></div><div class="stat-copy"><span class="stat-label">${label}</span><strong>${value}</strong><small>${note}</small></div></article>`}

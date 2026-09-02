@@ -1,13 +1,1 @@
-export function StatGrid() {
-  const stats = [
-    ['bi-bar-chart-fill', '$1k', 'Total Sales', '+8% from yesterday', 'pink'],
-    ['bi-bag-fill', '300', 'Total Order', '+5% from yesterday', 'yellow'],
-    ['bi-check-circle-fill', '5', 'Product Sold', '+1.2% from yesterday', 'green'],
-    ['bi-person-plus-fill', '8', 'New Customers', '0.5% from yesterday', 'purple'],
-  ];
-  return `<div class="sales-stat-grid">${stats.map(([icon,value,title,note,tone]) => `
-    <div class="sales-stat ${tone}">
-      <span class="stat-icon"><i class="bi ${icon}"></i></span>
-      <strong>${value}</strong><span>${title}</span><small>${note}</small>
-    </div>`).join('')}</div>`;
-}
+import {StatCard} from '../common/StatCard.js'; export function StatGrid(){return `<div class="stats-grid">${StatCard({icon:'bi-people-fill',label:'Registered Members',value:'1,248',note:'18 added this month',tone:'pink'})}${StatCard({icon:'bi-receipt',label:'Receipts Processed',value:'326',note:'Paper-book linked',tone:'amber'})}${StatCard({icon:'bi-wallet2',label:'Admin Fees',value:'$8,420',note:'Current period',tone:'green'})}${StatCard({icon:'bi-building',label:'Development Fees',value:'$42,860',note:'Current period',tone:'purple'})}</div>`}

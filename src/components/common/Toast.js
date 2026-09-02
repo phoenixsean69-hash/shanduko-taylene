@@ -1,14 +1,1 @@
-export function showToast(message, type = 'info') {
-  const icon = type === 'success' ? 'bi-check-circle-fill' : 'bi-info-circle-fill';
-  const el = document.createElement('div');
-  el.className = `shanduko-toast ${type}`;
-  el.innerHTML = `<i class="bi ${icon}" aria-hidden="true"></i><span>${message}</span>`;
-  document.body.appendChild(el);
-
-  requestAnimationFrame(() => el.classList.add('show'));
-
-  window.setTimeout(() => {
-    el.classList.remove('show');
-    window.setTimeout(() => el.remove(), 250);
-  }, 2600);
-}
+export function showToast(message){const n=document.createElement('div');n.className='toast-message';n.innerHTML=`<i class="bi bi-check-circle-fill"></i><span>${message}</span>`;document.body.appendChild(n);requestAnimationFrame(()=>n.classList.add('show'));setTimeout(()=>{n.classList.remove('show');setTimeout(()=>n.remove(),220)},2500)}
