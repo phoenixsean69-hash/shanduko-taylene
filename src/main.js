@@ -108,7 +108,7 @@ function shell() {
 
 function dashboard() {
   return `
-  <div class="row g-3 mb-3">
+  <div class="dashboard-stat-row mb-3">
     ${infoBox('Registered Members', '1,248', '18 added this month', 'bi-people-fill', 'primary')}
     ${infoBox('Receipts Processed', '326', '12% vs last month', 'bi-receipt-cutoff', 'warning')}
     ${infoBox('Admin Fees', '$8,420', 'Current period', 'bi-wallet2', 'success')}
@@ -172,7 +172,7 @@ function ledgerPage(kind) {
   const description = kind === 'admin' ? 'Operational administration, compliance certificates and staff overheads.' : 'Civil engineering, trenching, road layers and electrical connectivity.';
   const total = data.reduce((s, r) => s + r[4], 0);
   const rows = data.map(r => `<tr><td><code>${r[0]}</code></td><td>${r[1]}</td><td><strong>${r[2].split(' — ')[1]}</strong><div class="text-muted small">${r[2].split(' — ')[0]}</div></td><td>${r[3]}</td><td><strong>${money(r[4])}</strong></td><td><span class="badge text-bg-success">Verified</span></td></tr>`).join('');
-  return `<div class="row g-3 mb-3">${infoBox('Period receipts', String(data.length), 'Paper-linked entries', 'bi-receipt', 'primary')}${infoBox('Ledger total', money(total), 'Current sample period', 'bi-cash-stack', 'success')}${infoBox('Integrity', 'Balanced', 'Source documents matched', 'bi-check2-circle', 'warning')}</div><div class="card card-outline card-primary"><div class="card-header"><h3 class="card-title">${title}</h3><div class="card-tools"><span class="text-muted small me-2">${description}</span><button class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-1"></i>Export</button></div></div><div class="card-body p-0 table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Receipt #</th><th>Processing date</th><th>Member / Stand</th><th>Bank branch context</th><th>Amount</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  return `<div class="dashboard-stat-row mb-3">${infoBox('Period receipts', String(data.length), 'Paper-linked entries', 'bi-receipt', 'primary')}${infoBox('Ledger total', money(total), 'Current sample period', 'bi-cash-stack', 'success')}${infoBox('Integrity', 'Balanced', 'Source documents matched', 'bi-check2-circle', 'warning')}</div><div class="card card-outline card-primary"><div class="card-header"><h3 class="card-title">${title}</h3><div class="card-tools"><span class="text-muted small me-2">${description}</span><button class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-1"></i>Export</button></div></div><div class="card-body p-0 table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Receipt #</th><th>Processing date</th><th>Member / Stand</th><th>Bank branch context</th><th>Amount</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
 
 function auditPage() {

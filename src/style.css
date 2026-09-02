@@ -71,3 +71,320 @@ body {
   .card-tools .text-muted { display:none; }
   .app-content { padding-left:.65rem; padding-right:.65rem; }
 }
+
+/* ============================================================
+   SHANDUKO UI FIXES
+   Equal dashboard banners + explicit text/background contrast
+   ============================================================ */
+
+/* ---------- GLOBAL TYPOGRAPHY ---------- */
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Poppins", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f5f6fa;
+  color: #273142;
+}
+
+/* Don't let inherited body colours leak into AdminLTE components */
+.app-main,
+.app-content,
+.app-content-header,
+.card,
+.card-body,
+.card-header,
+.table,
+.table > :not(caption) > *,
+.form-label,
+.form-control,
+.form-select {
+  color: #273142;
+}
+
+/* ---------- EQUAL DASHBOARD BANNERS ---------- */
+
+.dashboard-stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.dashboard-stat-row > * {
+  min-width: 0;
+  height: 100%;
+}
+
+.dashboard-stat-row .info-box {
+  width: 100%;
+  min-height: 118px;
+  height: 118px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.dashboard-stat-row .info-box-icon {
+  width: 58px;
+  min-width: 58px;
+  height: 58px;
+  margin: 0 1rem;
+  flex: 0 0 58px;
+}
+
+.dashboard-stat-row .info-box-content {
+  min-width: 0;
+  padding-right: 1rem;
+}
+
+.dashboard-stat-row .info-box-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-stat-row .info-box-number {
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.dashboard-stat-row .progress-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- CARDS ---------- */
+
+.card {
+  background: #ffffff;
+  color: #273142;
+}
+
+.card-header,
+.card-body,
+.card-footer {
+  background: #ffffff;
+  color: #273142;
+}
+
+.card-title {
+  color: #273142;
+}
+
+/* ---------- TABLES ---------- */
+
+.table {
+  --bs-table-color: #273142;
+  --bs-table-bg: #ffffff;
+  --bs-table-border-color: #edf0f4;
+  color: #273142;
+  background: #ffffff;
+}
+
+.table thead th {
+  color: #667085;
+  background: #f8f9fc;
+  font-weight: 600;
+  border-bottom-color: #e9ecf2;
+}
+
+.table tbody td {
+  color: #344054;
+  background: #ffffff;
+  vertical-align: middle;
+}
+
+.table tbody tr:hover td {
+  background: #fafbff;
+  color: #273142;
+}
+
+/* ---------- FORMS ---------- */
+
+.form-label {
+  color: #344054;
+  font-weight: 500;
+}
+
+.form-control,
+.form-select {
+  color: #273142;
+  background-color: #ffffff;
+  border-color: #dfe3ea;
+}
+
+.form-control::placeholder {
+  color: #98a2b3;
+}
+
+.form-control:focus,
+.form-select:focus {
+  color: #273142;
+  background-color: #ffffff;
+  border-color: var(--shanduko-primary);
+}
+
+/* ---------- MUTED TEXT ---------- */
+
+.text-muted,
+.text-secondary {
+  color: #667085 !important;
+}
+
+/* ---------- LINKS ---------- */
+
+.app-main a:not(.btn):not(.nav-link) {
+  color: var(--shanduko-primary);
+}
+
+.app-main a:not(.btn):not(.nav-link):hover {
+  color: var(--shanduko-primary-dark);
+}
+
+/* ---------- DARK SIDEBAR ---------- */
+
+/*
+   Explicitly scope white sidebar text so the global body color
+   can never bleed into it.
+*/
+
+.app-sidebar,
+.app-sidebar .sidebar-wrapper,
+.app-sidebar .sidebar-brand,
+.app-sidebar .brand-link {
+  color: #ffffff;
+}
+
+.app-sidebar .nav-link,
+.app-sidebar .nav-link p,
+.app-sidebar .nav-icon {
+  color: #c8cedb;
+}
+
+.app-sidebar .nav-link:hover,
+.app-sidebar .nav-link:hover p,
+.app-sidebar .nav-link:hover .nav-icon,
+.app-sidebar .nav-link.active,
+.app-sidebar .nav-link.active p,
+.app-sidebar .nav-link.active .nav-icon {
+  color: #ffffff;
+}
+
+.app-sidebar .nav-header {
+  color: #778096;
+}
+
+/* ---------- HEADER ---------- */
+
+.app-header,
+.app-header .navbar-nav,
+.app-header .nav-link {
+  color: #596275;
+}
+
+.app-header .nav-link:hover {
+  color: var(--shanduko-primary);
+}
+
+/* ---------- SEARCH ---------- */
+
+.top-search {
+  background: #f5f6fa;
+  color: #596275;
+}
+
+.top-search input {
+  color: #273142;
+}
+
+.top-search input::placeholder {
+  color: #98a2b3;
+}
+
+/* ---------- BREADCRUMBS ---------- */
+
+.breadcrumb-item {
+  color: #667085;
+}
+
+.breadcrumb-item.active {
+  color: #273142;
+}
+
+.breadcrumb-item a {
+  color: var(--shanduko-primary);
+}
+
+/* ---------- ACCOUNT SELECTION ---------- */
+
+.account-choice {
+  color: #273142;
+  background: #ffffff;
+}
+
+.account-choice strong {
+  color: #273142;
+}
+
+.account-choice small {
+  color: #667085;
+}
+
+.account-choice.selected {
+  color: #273142;
+}
+
+/* ---------- AUDIT / CONTROL ROWS ---------- */
+
+.control-row {
+  color: #344054;
+}
+
+.control-row strong {
+  color: #273142;
+}
+
+.control-row small {
+  color: #667085;
+}
+
+/* ---------- FOOTER ---------- */
+
+.app-footer {
+  color: #667085;
+}
+
+.app-footer strong {
+  color: #344054;
+}
+
+/* ---------- RESPONSIVE BANNERS ---------- */
+
+@media (max-width: 1199.98px) {
+  .dashboard-stat-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .dashboard-stat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-stat-row .info-box {
+    height: 108px;
+    min-height: 108px;
+  }
+}
+
