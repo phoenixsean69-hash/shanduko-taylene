@@ -1,4 +1,4 @@
-const items = [
+﻿const items = [
   ['dashboard', 'Dashboard', 'bi-pie-chart-fill'],
   ['leaderboard', 'Leaderboard', 'bi-bar-chart'],
   ['order', 'Order', 'bi-cart3'],
@@ -14,7 +14,7 @@ export function Sidebar() {
     <aside class="figma-sidebar">
       <a href="#/dashboard" class="figma-brand">
         <span class="brand-symbol"><i class="bi bi-link-45deg"></i></span>
-        <strong>Dabang</strong>
+        <strong>Shanduko</strong>
       </a>
       <nav class="figma-nav">
         ${items.map(([key, label, icon]) => `
@@ -25,10 +25,11 @@ export function Sidebar() {
       </nav>
       <div class="pro-card">
         <div class="pro-orb"><i class="bi bi-currency-dollar"></i></div>
-        <strong>Dabang Pro</strong>
-        <small>Get access to all<br>features on ternbuss</small>
+        <strong>Shanduko Pro</strong>
+        <small>Get access to all<br>cooperative tools and reporting</small>
         <button>Get Pro</button>
       </div>
     </aside>
   `;
 }
+

@@ -1,298 +1,534 @@
-﻿/* ============================================================
-   SHANDUKO — VIEWPORT RESET
-   Real full-screen application, not a centered Figma canvas
-   ============================================================ */
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 :root {
-  --shanduko-primary: #6757e8;
-  --shanduko-primary-dark: #5143c4;
-  --shanduko-page: #f5f6fa;
-  --shanduko-text: #1f2937;
-  --shanduko-muted: #667085;
-  --shanduko-border: #e8ebf1;
-  --shanduko-sidebar: #ffffff;
+  --primary: #635bff;
+  --primary-dark: #5148e8;
+  --page: #f5f6fa;
+  --card: #ffffff;
+  --text: #1f2a44;
+  --muted: #98a1b2;
+  --border: #edf0f5;
+
+  --pink: #ffe0e4;
+  --yellow: #fff0cf;
+  --green: #d9f7e5;
+  --purple: #eadbff;
 }
 
-/* ============================================================
-   ROOT
-   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 html,
-body {
-  width: 100% !important;
-  height: 100% !important;
-  min-width: 100% !important;
-  min-height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
 }
 
 body {
-  overflow: hidden !important;
-  background: var(--shanduko-page) !important;
-  color: var(--shanduko-text) !important;
-  font-family: "Poppins", sans-serif !important;
-  font-size: 15px !important;
-}
-
-/* Remove every possible centered canvas */
-body > *,
-#app,
-#root,
-.app-wrapper {
-  width: 100vw !important;
-  min-width: 100vw !important;
-  max-width: none !important;
-
-  height: 100vh !important;
-  min-height: 100vh !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  overflow: hidden;
+  background: var(--page);
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ============================================================
-   ADMINLTE ROOT
+   APP SHELL
    ============================================================ */
 
-.app-wrapper {
-  position: relative !important;
-  display: grid !important;
-
-  grid-template-columns: 260px minmax(0, 1fr) !important;
-  grid-template-rows: 74px minmax(0, 1fr) !important;
-
-  overflow: hidden !important;
-}
-
-/* ============================================================
-   HEADER
-   ============================================================ */
-
-.app-header {
-  position: relative !important;
-
-  grid-column: 1 / -1 !important;
-  grid-row: 1 !important;
-
-  width: 100% !important;
-  height: 74px !important;
-  min-height: 74px !important;
-  max-width: none !important;
-
-  margin: 0 !important;
-  padding: 0 !important;
-
-  background: #fff !important;
-  border-bottom: 1px solid var(--shanduko-border) !important;
+.figma-shell {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-rows: 72px minmax(0, 1fr);
+  background: var(--page);
 }
 
 /* ============================================================
    SIDEBAR
    ============================================================ */
 
-.app-sidebar {
-  position: relative !important;
-  inset: auto !important;
+.figma-sidebar {
+  grid-column: 1;
+  grid-row: 1 / -1;
 
-  grid-column: 1 !important;
-  grid-row: 2 !important;
+  display: flex;
+  flex-direction: column;
 
-  width: 260px !important;
-  min-width: 260px !important;
-  max-width: 260px !important;
+  padding: 24px 14px 20px;
 
-  height: calc(100vh - 74px) !important;
-  min-height: 0 !important;
+  background: #fff;
+  border-right: 1px solid var(--border);
 
-  margin: 0 !important;
-  padding: 0 !important;
+  overflow: hidden;
+}
 
-  background: var(--shanduko-sidebar) !important;
-  border-right: 1px solid var(--shanduko-border) !important;
+.figma-brand {
+  height: 54px;
 
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 0 10px;
+
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand-symbol {
+  width: 40px;
+  height: 40px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 40px;
+
+  color: #fff;
+  background: var(--primary);
+
+  border-radius: 10px;
+}
+
+.brand-symbol i {
+  font-size: 18px;
+}
+
+.figma-brand strong {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* navigation */
+
+.figma-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  margin-top: 28px;
+}
+
+.figma-nav-item {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 0 16px;
+
+  color: #8290a8;
+  text-decoration: none;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  transition:
+    background .18s ease,
+    color .18s ease,
+    transform .18s ease;
+}
+
+.figma-nav-item i {
+  width: 18px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.figma-nav-item:hover {
+  color: var(--primary);
+  background: #f6f5ff;
+}
+
+.figma-nav-item.active {
+  color: #fff;
+  background: var(--primary);
+  box-shadow: 0 8px 18px rgba(99, 91, 255, .2);
+}
+
+/* pro card */
+
+.pro-card {
+  margin-top: auto;
+
+  padding: 20px 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  color: #fff;
+  background: linear-gradient(145deg, #6257ff, #746cf1);
+
+  border-radius: 13px;
+
+  overflow: hidden;
+}
+
+.pro-orb {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 10px;
+
+  color: var(--primary);
+
+  background: #fff;
+  border-radius: 50%;
+}
+
+.pro-card strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pro-card small {
+  margin-top: 5px;
+
+  color: rgba(255,255,255,.78);
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.pro-card button {
+  margin-top: 14px;
+
+  min-width: 76px;
+  height: 30px;
+
+  border: 0;
+  border-radius: 6px;
+
+  background: #fff;
+  color: var(--primary);
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.figma-header {
+  grid-column: 2;
+  grid-row: 1;
+
+  display: grid;
+  grid-template-columns: 1fr minmax(260px, 360px) auto;
+  align-items: center;
+  gap: 28px;
+
+  padding: 0 30px;
+
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.figma-search {
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 14px;
+
+  background: #f7f8fc;
+  border: 1px solid #eef0f5;
+  border-radius: 9px;
+}
+
+.figma-search i {
+  color: var(--primary);
+  font-size: 15px;
+}
+
+.figma-search input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.figma-search input::placeholder {
+  color: #aeb5c2;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon-button,
+.profile-button {
+  border: 0;
+  background: transparent;
+
+  font-family: inherit;
+}
+
+.icon-button {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 8px;
+
+  color: #6d7890;
+
+  font-size: 11px;
+}
+
+.icon-button i {
+  font-size: 14px;
+}
+
+.notification-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+
+  width: 5px;
+  height: 5px;
+
+  background: #ff8a34;
+  border-radius: 50%;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: var(--text);
+
+  cursor: pointer;
+}
+
+.profile-photo {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  color: #fff;
+  background: #d8be9e;
+
+  border-radius: 50%;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profile-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  line-height: 1.15;
+}
+
+.profile-copy strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.profile-copy small {
+  margin-top: 3px;
+
+  color: var(--muted);
+  font-size: 8px;
 }
 
 /* ============================================================
    MAIN
    ============================================================ */
 
-.app-main {
-  position: relative !important;
-  inset: auto !important;
+.figma-main {
+  grid-column: 2;
+  grid-row: 2;
 
-  grid-column: 2 !important;
-  grid-row: 2 !important;
+  min-width: 0;
+  min-height: 0;
 
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
+  padding: 20px 24px 28px;
 
-  height: calc(100vh - 74px) !important;
-  min-height: 0 !important;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  margin: 0 !important;
-  padding: 0 !important;
+  background: var(--page);
+}
 
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-
-  background: var(--shanduko-page) !important;
+.page-container {
+  width: 100%;
+  max-width: none;
 }
 
 /* ============================================================
-   REMOVE BOOTSTRAP CANVAS CONSTRAINTS
+   GENERIC CARDS
    ============================================================ */
 
-.app-main > *,
-.app-main .container,
-.app-main .container-fluid,
-.app-main .row {
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.app-main .container,
-.app-main .container-fluid {
-  padding-left: 28px !important;
-  padding-right: 28px !important;
+.card,
+.shanduko-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  box-shadow: 0 4px 18px rgba(43, 56, 82, .035);
 }
 
 /* ============================================================
-   PAGE HEADER
-   ============================================================ */
-
-.app-content-header {
-  width: 100% !important;
-  max-width: none !important;
-
-  padding: 24px 28px 14px !important;
-
-  background: transparent !important;
-}
-
-.app-content-header h1 {
-  margin: 0 !important;
-
-  font-size: 28px !important;
-  line-height: 1.2 !important;
-  font-weight: 600 !important;
-
-  color: var(--shanduko-text) !important;
-}
-
-.page-subtitle {
-  margin-top: 5px !important;
-  font-size: 14px !important;
-  color: var(--shanduko-muted) !important;
-}
-
-/* ============================================================
-   CONTENT
-   ============================================================ */
-
-.app-content {
-  width: 100% !important;
-  max-width: none !important;
-
-  padding: 12px 28px 32px !important;
-}
-
-/* ============================================================
-   BIGGER DASHBOARD SCALE
+   INFO BOXES
    ============================================================ */
 
 .dashboard-stat-grid {
-  display: grid !important;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr)) !important;
-
-  gap: 18px !important;
-
-  width: 100% !important;
+  margin-bottom: 18px;
 }
 
+.info-box,
 .shanduko-stat-card {
-  width: 100% !important;
+  min-width: 0;
+  min-height: 112px;
+  height: 112px;
 
-  min-height: 150px !important;
-  height: 150px !important;
+  display: flex;
+  align-items: center;
 
-  padding: 0 !important;
+  margin: 0;
+  padding: 14px;
 
-  border-radius: 14px !important;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: none;
 }
 
-.shanduko-stat-card .info-box-icon {
-  width: 64px !important;
-  min-width: 64px !important;
+.info-box-icon {
+  width: 48px;
+  height: 48px;
 
-  height: 64px !important;
+  flex: 0 0 48px;
 
-  margin: auto 16px auto 18px !important;
+  display: grid;
+  place-items: center;
 
-  font-size: 21px !important;
+  margin-right: 12px;
+
+  border-radius: 10px;
+
+  font-size: 15px;
 }
 
-.shanduko-stat-card .info-box-text {
-  font-size: 13px !important;
+.shanduko-stat-card:nth-child(1) {
+  background: var(--pink);
 }
 
-.shanduko-stat-card .info-box-number {
-  font-size: 22px !important;
-  line-height: 1.25 !important;
-
-  margin: 4px 0 !important;
+.shanduko-stat-card:nth-child(2) {
+  background: var(--yellow);
 }
 
-.shanduko-stat-card .info-box-note {
-  font-size: 11px !important;
+.shanduko-stat-card:nth-child(3) {
+  background: var(--green);
 }
 
-/* ============================================================
-   CARDS
-   ============================================================ */
-
-.shanduko-card {
-  width: 100% !important;
-
-  border-radius: 14px !important;
-
-  border: 1px solid var(--shanduko-border) !important;
-
-  background: #fff !important;
-
-  box-shadow: 0 4px 18px rgba(31, 41, 55, .045) !important;
-
-  overflow: hidden !important;
+.shanduko-stat-card:nth-child(4) {
+  background: var(--purple);
 }
 
-.shanduko-card .card-header {
-  min-height: 62px !important;
-
-  padding: 16px 20px !important;
-
-  background: #fff !important;
+.shanduko-stat-card:nth-child(1) .info-box-icon {
+  background: #ff6f91;
+  color: #fff;
 }
 
-.shanduko-card .card-title {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-
-  color: var(--shanduko-text) !important;
+.shanduko-stat-card:nth-child(2) .info-box-icon {
+  background: #ff9e69;
+  color: #fff;
 }
 
-.shanduko-card .card-body {
-  padding: 20px !important;
+.shanduko-stat-card:nth-child(3) .info-box-icon {
+  background: #36cf78;
+  color: #fff;
+}
 
-  background: #fff !important;
-  color: var(--shanduko-text) !important;
+.shanduko-stat-card:nth-child(4) .info-box-icon {
+  background: #a76df0;
+  color: #fff;
+}
+
+.info-box-content {
+  min-width: 0;
+}
+
+.info-box-text {
+  display: block;
+
+  color: #6f7b91;
+
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.info-box-number {
+  display: block;
+
+  margin-top: 2px;
+
+  color: var(--text);
+
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.info-box-note {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8691a4;
+
+  font-size: 8px;
 }
 
 /* ============================================================
@@ -300,10 +536,41 @@ body > *,
    ============================================================ */
 
 .dashboard-grid {
-  width: 100% !important;
+  margin: 0;
+}
 
-  --bs-gutter-x: 18px !important;
-  --bs-gutter-y: 18px !important;
+.dashboard-grid > [class*="col-"] {
+  margin-bottom: 18px;
+}
+
+.shanduko-card .card-header {
+  min-height: 56px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 18px;
+
+  background: #fff;
+
+  border-bottom: 1px solid #f1f2f6;
+}
+
+.shanduko-card .card-title {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.shanduko-card .card-tools {
+  margin-left: auto;
+}
+
+.shanduko-card .card-body {
+  padding: 18px;
 }
 
 /* ============================================================
@@ -311,16 +578,85 @@ body > *,
    ============================================================ */
 
 .collections-chart {
-  height: 340px !important;
+  position: relative;
+
+  width: 100%;
+  height: 300px;
 }
 
-.trend-chart {
-  width: 100% !important;
-  height: 280px !important;
+.bars {
+  position: relative;
+
+  height: 245px;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 14px;
+
+  padding: 10px 12px 0;
+
+  border-bottom: 1px solid #edf0f4;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(25% - 1px),
+      #f2f4f8 calc(25% - 1px),
+      #f2f4f8 25%
+    );
+}
+
+.bar-group {
+  height: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+
+  flex: 1;
+}
+
+.bar {
+  width: 10px;
+
+  border-radius: 3px 3px 0 0;
+}
+
+.bar-admin {
+  background: #1597ff;
+}
+
+.bar-development {
+  background: #17c994;
 }
 
 .chart-axis {
-  font-size: 11px !important;
+  display: flex;
+  justify-content: space-around;
+
+  padding-top: 8px;
+
+  color: #a0a7b4;
+
+  font-size: 8px;
+}
+
+.trend-chart {
+  width: 100%;
+  height: 245px;
+}
+
+.trend-primary {
+  fill: none;
+  stroke: #635bff;
+}
+
+.trend-success {
+  fill: none;
+  stroke: #20cf79;
 }
 
 /* ============================================================
@@ -328,208 +664,671 @@ body > *,
    ============================================================ */
 
 .shanduko-table {
-  width: 100% !important;
+  width: 100%;
 
-  font-size: 13px !important;
+  color: var(--text);
 
-  color: #344054 !important;
-
-  background: #fff !important;
+  font-size: 11px;
 }
 
 .shanduko-table thead th {
-  padding: 15px 18px !important;
+  padding: 12px 14px;
 
-  font-size: 12px !important;
+  background: #fafbfc;
+  color: #8992a4;
 
-  color: #667085 !important;
-  background: #f8f9fc !important;
+  border-bottom: 1px solid #edf0f4;
+
+  font-size: 9px;
+  font-weight: 600;
+
+  white-space: nowrap;
 }
 
 .shanduko-table tbody td {
-  padding: 16px 18px !important;
+  padding: 13px 14px;
 
-  color: #344054 !important;
-  background: #fff !important;
+  color: #455168;
+
+  background: #fff;
+
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.shanduko-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table-subtext {
+  margin-top: 2px;
+
+  color: #99a1ae;
+
+  font-size: 8px;
+}
+
+.shanduko-table code {
+  color: var(--primary);
+
+  font-family: inherit;
+  font-size: 9px;
 }
 
 /* ============================================================
-   SIDEBAR TYPOGRAPHY
+   FORMS
    ============================================================ */
 
-.sidebar-brand {
-  height: 74px !important;
-  min-height: 74px !important;
+.form-label {
+  display: block;
 
-  border-bottom: 1px solid var(--shanduko-border) !important;
+  margin-bottom: 6px;
+
+  color: #576176;
+
+  font-size: 10px;
+  font-weight: 500;
 }
 
-.brand-link {
-  height: 74px !important;
-  min-height: 74px !important;
+.form-control,
+.form-select,
+.input-group-text {
+  min-height: 42px;
 
-  padding: 0 20px !important;
+  border-color: #e4e8ef;
 
-  color: #1f2937 !important;
+  background: #fff;
+
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 11px;
+
+  box-shadow: none !important;
 }
 
-.brand-mark {
-  width: 40px !important;
-  height: 40px !important;
-
-  border-radius: 11px !important;
+.form-control::placeholder {
+  color: #abb3c0;
 }
 
-.brand-text {
-  font-size: 19px !important;
-  font-weight: 600 !important;
-}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary);
 
-.sidebar-menu .nav-header {
-  padding: 18px 18px 8px !important;
+  background: #fff;
 
-  font-size: 11px !important;
-  font-weight: 700 !important;
+  color: var(--text);
 
-  letter-spacing: .1em !important;
-}
-
-.sidebar-menu .nav-link {
-  min-height: 48px !important;
-
-  margin: 4px 10px !important;
-  padding: 12px 14px !important;
-
-  border-radius: 10px !important;
-
-  font-size: 14px !important;
-}
-
-.sidebar-menu .nav-link p {
-  font-size: 14px !important;
-}
-
-.sidebar-menu .nav-icon {
-  width: 22px !important;
-
-  margin-right: 10px !important;
-
-  font-size: 17px !important;
+  box-shadow: 0 0 0 3px rgba(99,91,255,.09) !important;
 }
 
 /* ============================================================
-   HEADER SCALE
+   ACCOUNT CHOICE
    ============================================================ */
 
-.app-header .nav-link {
-  font-size: 14px !important;
+.account-choice {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  padding: 13px;
+
+  color: var(--text);
+
+  background: #fff;
+
+  border: 1px solid #e5e8ee;
+  border-radius: 9px;
 }
 
-.top-search {
-  width: 340px !important;
-  min-width: 340px !important;
+.account-choice.selected {
+  border-color: var(--primary);
 
-  height: 44px !important;
+  background: rgba(99,91,255,.045);
 }
 
-.top-search input {
-  font-size: 13px !important;
+.account-choice span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.avatar-sm {
-  width: 40px !important;
-  height: 40px !important;
+.account-choice strong {
+  font-size: 11px;
+  font-weight: 600;
+}
 
-  font-size: 12px !important;
+.account-choice small {
+  color: var(--muted);
+  font-size: 8px;
 }
 
 /* ============================================================
-   FOOTER
+   PROTOCOL / UPLOAD / AUDIT
    ============================================================ */
 
-.app-footer {
-  width: 100% !important;
-  max-width: none !important;
+.protocol-note {
+  display: flex;
+  gap: 10px;
 
-  padding: 12px 28px !important;
+  padding: 12px 14px;
 
-  color: #667085 !important;
-  background: var(--shanduko-page) !important;
+  color: #43506a;
+
+  background: #eff5ff;
+
+  border-radius: 9px;
+
+  font-size: 9px;
 }
 
-/* ============================================================
-   NO FAKE CANVAS
-   ============================================================ */
+.protocol-note > i {
+  color: #4679ff;
+  font-size: 15px;
+}
 
-body::before,
-body::after,
-.app-wrapper::before,
-.app-wrapper::after,
-.app-main::before,
-.app-main::after {
-  display: none !important;
-  content: none !important;
+.protocol-note strong {
+  color: var(--text);
+  font-size: 10px;
+}
+
+.upload-tile {
+  min-height: 118px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+
+  color: #7e899d;
+
+  background: #fafbfc;
+
+  border: 2px dashed #dce2eb;
+  border-radius: 10px;
+
+  text-align: center;
+
+  font-size: 9px;
+}
+
+.upload-tile i {
+  color: var(--primary);
+  font-size: 20px;
+}
+
+.audit-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid #edf0f4;
+}
+
+.audit-event:last-child {
+  border-bottom: 0;
+}
+
+.audit-event time {
+  margin-left: auto;
+
+  color: #a0a8b5;
+
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.audit-icon {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: grid;
+  place-items: center;
+
+  color: var(--primary);
+
+  background: rgba(99,91,255,.1);
+
+  border-radius: 50%;
 }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
 
-@media (max-width: 1199.98px) {
-
-  .app-wrapper {
-    grid-template-columns: 240px minmax(0, 1fr) !important;
-  }
-
-  .app-sidebar {
-    width: 240px !important;
-    min-width: 240px !important;
-    max-width: 240px !important;
+@media (max-width: 1200px) {
+  .figma-shell {
+    grid-template-columns: 210px minmax(0, 1fr);
   }
 
   .dashboard-stat-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .figma-header {
+    grid-template-columns: 1fr 280px auto;
   }
 }
 
-@media (max-width: 991.98px) {
-
-  .app-wrapper {
-    display: block !important;
+@media (max-width: 900px) {
+  .figma-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 72px minmax(0, 1fr);
   }
 
-  .app-sidebar {
-    position: fixed !important;
-    z-index: 1038 !important;
-
-    width: 260px !important;
-    max-width: 260px !important;
-    min-width: 260px !important;
-
-    height: 100vh !important;
+  .figma-sidebar {
+    display: none;
   }
 
-  .app-main {
-    width: 100vw !important;
-    height: calc(100vh - 74px) !important;
+  .figma-header {
+    grid-column: 1;
+  }
+
+  .figma-main {
+    grid-column: 1;
   }
 }
 
-@media (max-width: 575.98px) {
-
+@media (max-width: 640px) {
   .dashboard-stat-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 
-  .app-main .container,
-  .app-main .container-fluid,
-  .app-content-header,
-  .app-content {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+  .figma-header {
+    grid-template-columns: 1fr auto;
+    padding: 0 14px;
   }
 
-  .top-search {
-    display: none !important;
+  .figma-search {
+    display: none;
+  }
+
+  .header-title {
+    font-size: 20px;
+  }
+
+  .profile-copy {
+    display: none;
+  }
+
+  .figma-main {
+    padding: 14px;
   }
 }
+
+/* ============================================================
+   SHANDUKO — DASHBOARD COMPONENT RESTORE
+   Fixes the middle dashboard / SVG / card layout
+   ============================================================ */
+
+/* Dashboard page */
+.dashboard-view {
+  width: 100%;
+}
+
+/* Shared Figma-style card */
+.figma-card {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+
+  background: #ffffff;
+  border: 1px solid #edf0f5;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 18px rgba(43, 56, 82, .035);
+
+  overflow: hidden;
+}
+
+.figma-card-head {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 18px 10px;
+}
+
+.figma-card-head h3 {
+  margin: 0;
+
+  color: #1f2a44;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.figma-card-head small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #a0a8b6;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 8px;
+}
+
+/* Export button */
+.export-btn {
+  height: 32px;
+
+  padding: 0 11px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  border: 1px solid #e7eaf0;
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #657086;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+
+  cursor: pointer;
+}
+
+.export-btn:hover {
+  border-color: #cfd4df;
+  color: #635bff;
+}
+
+/* ============================================================
+   TODAY'S SALES
+   ============================================================ */
+
+.sales-summary {
+  margin-bottom: 18px;
+}
+
+.sales-summary > .dashboard-stat-grid {
+  padding: 0 18px 18px;
+  margin: 0;
+}
+
+.sales-summary .info-box {
+  height: 110px;
+  min-height: 110px;
+}
+
+/* ============================================================
+   VISITOR INSIGHTS
+   ============================================================ */
+
+.top-row {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.top-row > div {
+  width: 100%;
+}
+
+.visitor-card {
+  width: 100%;
+  min-height: 285px;
+}
+
+.visitor-card .figma-card-head {
+  padding-bottom: 4px;
+}
+
+/*
+   CRITICAL:
+   SVG paths must NEVER inherit the browser's default black fill.
+*/
+.visitor-card .line-chart {
+  display: block;
+
+  width: calc(100% - 36px);
+  height: 185px;
+
+  margin: 0 18px;
+
+  overflow: visible;
+
+  background: transparent;
+}
+
+.visitor-card .line-chart path {
+  fill: none !important;
+
+  stroke-width: 2.5px;
+
+  vector-effect: non-scaling-stroke;
+}
+
+.visitor-card .purple-line {
+  stroke: #7b42f6 !important;
+}
+
+.visitor-card .red-line {
+  stroke: #ff4d57 !important;
+}
+
+.visitor-card .green-line {
+  stroke: #19cf68 !important;
+}
+
+.visitor-card .focus-line {
+  stroke: #ff7d82 !important;
+
+  stroke-width: 1.2px !important;
+
+  stroke-dasharray: 2 3;
+}
+
+.visitor-card .focus-dot {
+  fill: #ff6c72 !important;
+  stroke: #ff6c72 !important;
+}
+
+.months {
+  display: grid;
+
+  grid-template-columns: repeat(12, 1fr);
+
+  gap: 4px;
+
+  padding: 4px 18px 0;
+
+  color: #a2a9b5;
+
+  font-size: 7px;
+
+  text-align: center;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+
+  padding: 8px 18px 14px;
+
+  color: #929aaa;
+
+  font-size: 8px;
+}
+
+.chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chart-legend i {
+  width: 7px;
+  height: 7px;
+
+  display: inline-block;
+
+  border-radius: 2px;
+}
+
+.chart-legend .purple {
+  background: #7b42f6;
+}
+
+.chart-legend .red {
+  background: #ff4d57;
+}
+
+.chart-legend .green {
+  background: #19cf68;
+}
+
+/* ============================================================
+   LOWER DASHBOARD GRIDS
+   ============================================================ */
+
+.middle-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(0, 1fr)
+    minmax(0, .95fr);
+
+  gap: 18px;
+
+  width: 100%;
+
+  margin-bottom: 18px;
+}
+
+.middle-grid > div,
+.bottom-grid > div {
+  min-width: 0;
+}
+
+.bottom-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(0, 1fr)
+    minmax(0, .95fr);
+
+  gap: 18px;
+
+  width: 100%;
+}
+
+/* ============================================================
+   CHART CONTAINERS USED BY THE OTHER DASHBOARD COMPONENTS
+   ============================================================ */
+
+.chart-placeholder,
+.chart-box {
+  width: 100%;
+  min-width: 0;
+}
+
+.line-chart {
+  display: block;
+
+  width: 100%;
+}
+
+svg {
+  max-width: 100%;
+}
+
+/* Prevent all dashboard SVG graphics from becoming giant black shapes */
+.dashboard-view svg path {
+  fill: none;
+}
+
+.dashboard-view svg circle.focus-dot,
+.dashboard-view svg .focus-dot {
+  fill: #ff6c72;
+}
+
+/* ============================================================
+   TARGET / SATISFACTION / COUNTRY COMPONENT SUPPORT
+   ============================================================ */
+
+.target-chart,
+.satisfaction-chart,
+.country-map,
+.volume-chart {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ============================================================
+   TYPOGRAPHY INSIDE DASHBOARD COMPONENTS
+   ============================================================ */
+
+.dashboard-view h3,
+.dashboard-view h4,
+.dashboard-view h5,
+.dashboard-view h6 {
+  font-family: "Poppins", sans-serif;
+  color: #1f2a44;
+}
+
+.dashboard-view p {
+  font-family: "Poppins", sans-serif;
+}
+
+.dashboard-view .text-muted {
+  color: #98a1b2 !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+  .middle-grid,
+  .bottom-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .middle-grid > div:first-child,
+  .bottom-grid > div:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .middle-grid,
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .middle-grid > div:first-child,
+  .bottom-grid > div:first-child {
+    grid-column: auto;
+  }
+
+  .chart-legend {
+    flex-wrap: wrap;
+  }
+
+  .visitor-card .line-chart {
+    height: 170px;
+  }
+}
+
+/* ============================================================
+   END DASHBOARD COMPONENT RESTORE
+   ============================================================ */
+
