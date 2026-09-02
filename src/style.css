@@ -1,390 +1,535 @@
+﻿/* ============================================================
+   SHANDUKO — VIEWPORT RESET
+   Real full-screen application, not a centered Figma canvas
+   ============================================================ */
+
 :root {
   --shanduko-primary: #6757e8;
   --shanduko-primary-dark: #5143c4;
-  --shanduko-sidebar: #171a25;
-}
-
-* { box-sizing: border-box; }
-body {
-  font-family: "Poppins", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: .88rem;
-  color: #273142;
-  letter-spacing: -.01em;
-  -webkit-font-smoothing: antialiased;
-}
-.app-header { min-height: 64px; }
-.app-header .nav-link { color: #596275; }
-.app-header .nav-link:hover { color: var(--shanduko-primary); }
-.app-sidebar { background: var(--shanduko-sidebar) !important; }
-.sidebar-brand { border-bottom: 1px solid rgba(255,255,255,.06); }
-.brand-link { display:flex; align-items:center; gap:.7rem; min-height:64px; color:#fff !important; text-decoration:none; padding-left:1.15rem; }
-.brand-mark { width:34px; height:34px; border-radius:10px; background:var(--shanduko-primary); display:grid; place-items:center; box-shadow:0 8px 24px rgba(103,87,232,.28); }
-.sidebar-menu .nav-header { color:#778096; font-size:.67rem; font-weight:700; letter-spacing:.12em; padding:.9rem 1rem .45rem; }
-.sidebar-menu .nav-link { margin:.18rem .65rem; border-radius:.55rem; color:#c8cedb; padding:.72rem .9rem; }
-.sidebar-menu .nav-link:hover { background:rgba(255,255,255,.06); color:#fff; }
-.sidebar-menu .nav-link.active { background:linear-gradient(90deg,var(--shanduko-primary),#7d70f2); color:#fff; box-shadow:0 8px 22px rgba(103,87,232,.2); }
-.sidebar-menu .nav-icon { font-size:1rem; }
-.sidebar-footer-box { background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.06); }
-.top-search { display:flex; align-items:center; min-width:270px; background:#f5f6fa; border:1px solid #eef0f4; border-radius:9px; padding:0 .65rem; }
-.top-search i { color:#8790a3; }
-.top-search input { border:0; box-shadow:none !important; background:transparent; }
-.avatar-sm { width:32px; height:32px; border-radius:50%; display:grid; place-items:center; background:var(--shanduko-primary); color:#fff; font-weight:700; font-size:.7rem; }
-.navbar-badge { position:relative; top:-10px; left:-7px; font-size:.55rem; }
-.app-content-header { background:transparent; }
-.app-main { min-height:calc(100vh - 64px); }
-.app-footer { background:transparent; border-top:1px solid #e8ebf1; color:#7b8496; padding:.8rem 1rem; }
-.card { border:1px solid #ebedf2; border-radius:.8rem; box-shadow:0 5px 20px rgba(38,48,67,.04); }
-.card-header { background:#fff; border-bottom:1px solid #eef0f4; padding:.95rem 1.1rem; }
-.card-title { font-weight:650; font-size:.92rem; }
-.card-outline.card-primary { border-top:3px solid var(--shanduko-primary); }
-.btn-primary { --bs-btn-bg:var(--shanduko-primary); --bs-btn-border-color:var(--shanduko-primary); --bs-btn-hover-bg:var(--shanduko-primary-dark); --bs-btn-hover-border-color:var(--shanduko-primary-dark); }
-.info-box { min-height:108px; border:1px solid #ebedf2; border-radius:.8rem; background:#fff; }
-.info-box-icon { width:58px; height:58px; margin:1rem .8rem 1rem 1rem; border-radius:.8rem; display:grid; place-items:center; opacity:.95; }
-.info-box-text { font-size:.74rem; color:#70798b; }
-.info-box-number { font-size:1.15rem; font-weight:700; margin:.1rem 0; }
-.chart-placeholder.tall { height:290px; display:flex; flex-direction:column; justify-content:flex-end; }
-.bars { flex:1; display:flex; align-items:flex-end; justify-content:space-around; gap:18px; padding:20px 12px 12px; border-bottom:1px solid #edf0f4; background:linear-gradient(to bottom,transparent 19%,#f6f7fa 20%,transparent 21%,transparent 39%,#f6f7fa 40%,transparent 41%,transparent 59%,#f6f7fa 60%,transparent 61%,transparent 79%,#f6f7fa 80%,transparent 81%); }
-.bar-group { height:100%; flex:1; display:flex; align-items:flex-end; justify-content:center; gap:5px; }
-.bar { display:block; width:13px; border-radius:4px 4px 0 0; }
-.bar-a { background:var(--shanduko-primary); }
-.bar-b { background:#20c997; }
-.chart-axis { display:flex; justify-content:space-around; padding-top:.5rem; color:#8b94a5; font-size:.67rem; }
-.trend-chart { width:100%; height:245px; }
-.control-row { display:flex; align-items:center; justify-content:space-between; padding:.78rem 0; border-bottom:1px solid #edf0f4; }
-.control-row:last-child { border-bottom:0; }
-.control-row div { display:flex; gap:.6rem; align-items:center; }
-.account-choice { display:flex; align-items:flex-start; gap:.6rem; width:100%; border:1px solid #e4e7ee; border-radius:.7rem; padding:.8rem; cursor:pointer; }
-.account-choice.selected { border-color:var(--shanduko-primary); background:rgba(103,87,232,.05); box-shadow:inset 0 0 0 1px rgba(103,87,232,.15); }
-.account-choice span { display:flex; flex-direction:column; }
-.account-choice small { color:#7b8496; margin-top:.15rem; }
-.upload-tile { min-height:130px; border:2px dashed #dbe0ea; border-radius:.75rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.2rem; color:#7c8798; background:#fafbfc; }
-.upload-tile i { font-size:1.35rem; color:var(--shanduko-primary); }
-.audit-icon { width:35px; height:35px; border-radius:50%; background:rgba(103,87,232,.1); color:var(--shanduko-primary); display:grid; place-items:center; flex:0 0 auto; }
-.toast-msg { position:fixed; right:22px; bottom:22px; z-index:1100; transform:translateY(15px); opacity:0; background:#1f2937; color:#fff; border-radius:10px; padding:.8rem 1rem; box-shadow:0 12px 36px rgba(0,0,0,.22); display:flex; align-items:center; gap:.55rem; transition:.25s ease; }
-.toast-msg.show { opacity:1; transform:translateY(0); }
-.toast-msg.success i { color:#34d399; }
-@media (max-width: 991.98px) {
-  .top-search { min-width:220px; }
-}
-@media (max-width: 575.98px) {
-  .top-search { display:none; }
-  .card-tools .text-muted { display:none; }
-  .app-content { padding-left:.65rem; padding-right:.65rem; }
+  --shanduko-page: #f5f6fa;
+  --shanduko-text: #1f2937;
+  --shanduko-muted: #667085;
+  --shanduko-border: #e8ebf1;
+  --shanduko-sidebar: #ffffff;
 }
 
 /* ============================================================
-   SHANDUKO UI FIXES
-   Equal dashboard banners + explicit text/background contrast
+   ROOT
    ============================================================ */
 
-/* ---------- GLOBAL TYPOGRAPHY ---------- */
-
 html,
-body,
-button,
-input,
-select,
-textarea {
-  font-family: "Poppins", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+body {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 body {
-  background: #f5f6fa;
-  color: #273142;
+  overflow: hidden !important;
+  background: var(--shanduko-page) !important;
+  color: var(--shanduko-text) !important;
+  font-family: "Poppins", sans-serif !important;
+  font-size: 15px !important;
 }
 
-/* Don't let inherited body colours leak into AdminLTE components */
-.app-main,
-.app-content,
-.app-content-header,
-.card,
-.card-body,
-.card-header,
-.table,
-.table > :not(caption) > *,
-.form-label,
-.form-control,
-.form-select {
-  color: #273142;
+/* Remove every possible centered canvas */
+body > *,
+#app,
+#root,
+.app-wrapper {
+  width: 100vw !important;
+  min-width: 100vw !important;
+  max-width: none !important;
+
+  height: 100vh !important;
+  min-height: 100vh !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
-/* ---------- EQUAL DASHBOARD BANNERS ---------- */
+/* ============================================================
+   ADMINLTE ROOT
+   ============================================================ */
 
-.dashboard-stat-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1rem;
-  align-items: stretch;
+.app-wrapper {
+  position: relative !important;
+  display: grid !important;
+
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+  grid-template-rows: 74px minmax(0, 1fr) !important;
+
+  overflow: hidden !important;
 }
 
-.dashboard-stat-row > * {
-  min-width: 0;
-  height: 100%;
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.app-header {
+  position: relative !important;
+
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+
+  width: 100% !important;
+  height: 74px !important;
+  min-height: 74px !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: #fff !important;
+  border-bottom: 1px solid var(--shanduko-border) !important;
 }
 
-.dashboard-stat-row .info-box {
-  width: 100%;
-  min-height: 118px;
-  height: 118px;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.app-sidebar {
+  position: relative !important;
+  inset: auto !important;
+
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+
+  width: 260px !important;
+  min-width: 260px !important;
+  max-width: 260px !important;
+
+  height: calc(100vh - 74px) !important;
+  min-height: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  background: var(--shanduko-sidebar) !important;
+  border-right: 1px solid var(--shanduko-border) !important;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
-.dashboard-stat-row .info-box-icon {
-  width: 58px;
-  min-width: 58px;
-  height: 58px;
-  margin: 0 1rem;
-  flex: 0 0 58px;
+/* ============================================================
+   MAIN
+   ============================================================ */
+
+.app-main {
+  position: relative !important;
+  inset: auto !important;
+
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  height: calc(100vh - 74px) !important;
+  min-height: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  background: var(--shanduko-page) !important;
 }
 
-.dashboard-stat-row .info-box-content {
-  min-width: 0;
-  padding-right: 1rem;
+/* ============================================================
+   REMOVE BOOTSTRAP CANVAS CONSTRAINTS
+   ============================================================ */
+
+.app-main > *,
+.app-main .container,
+.app-main .container-fluid,
+.app-main .row {
+  width: 100% !important;
+  max-width: none !important;
 }
 
-.dashboard-stat-row .info-box-text {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.app-main .container,
+.app-main .container-fluid {
+  padding-left: 28px !important;
+  padding-right: 28px !important;
 }
 
-.dashboard-stat-row .info-box-number {
-  line-height: 1.25;
-  white-space: nowrap;
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.app-content-header {
+  width: 100% !important;
+  max-width: none !important;
+
+  padding: 24px 28px 14px !important;
+
+  background: transparent !important;
 }
 
-.dashboard-stat-row .progress-description {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.app-content-header h1 {
+  margin: 0 !important;
+
+  font-size: 28px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+
+  color: var(--shanduko-text) !important;
 }
 
-/* ---------- CARDS ---------- */
-
-.card {
-  background: #ffffff;
-  color: #273142;
+.page-subtitle {
+  margin-top: 5px !important;
+  font-size: 14px !important;
+  color: var(--shanduko-muted) !important;
 }
 
-.card-header,
-.card-body,
-.card-footer {
-  background: #ffffff;
-  color: #273142;
+/* ============================================================
+   CONTENT
+   ============================================================ */
+
+.app-content {
+  width: 100% !important;
+  max-width: none !important;
+
+  padding: 12px 28px 32px !important;
 }
 
-.card-title {
-  color: #273142;
+/* ============================================================
+   BIGGER DASHBOARD SCALE
+   ============================================================ */
+
+.dashboard-stat-grid {
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+
+  gap: 18px !important;
+
+  width: 100% !important;
 }
 
-/* ---------- TABLES ---------- */
+.shanduko-stat-card {
+  width: 100% !important;
 
-.table {
-  --bs-table-color: #273142;
-  --bs-table-bg: #ffffff;
-  --bs-table-border-color: #edf0f4;
-  color: #273142;
-  background: #ffffff;
+  min-height: 150px !important;
+  height: 150px !important;
+
+  padding: 0 !important;
+
+  border-radius: 14px !important;
 }
 
-.table thead th {
-  color: #667085;
-  background: #f8f9fc;
-  font-weight: 600;
-  border-bottom-color: #e9ecf2;
+.shanduko-stat-card .info-box-icon {
+  width: 64px !important;
+  min-width: 64px !important;
+
+  height: 64px !important;
+
+  margin: auto 16px auto 18px !important;
+
+  font-size: 21px !important;
 }
 
-.table tbody td {
-  color: #344054;
-  background: #ffffff;
-  vertical-align: middle;
+.shanduko-stat-card .info-box-text {
+  font-size: 13px !important;
 }
 
-.table tbody tr:hover td {
-  background: #fafbff;
-  color: #273142;
+.shanduko-stat-card .info-box-number {
+  font-size: 22px !important;
+  line-height: 1.25 !important;
+
+  margin: 4px 0 !important;
 }
 
-/* ---------- FORMS ---------- */
-
-.form-label {
-  color: #344054;
-  font-weight: 500;
+.shanduko-stat-card .info-box-note {
+  font-size: 11px !important;
 }
 
-.form-control,
-.form-select {
-  color: #273142;
-  background-color: #ffffff;
-  border-color: #dfe3ea;
+/* ============================================================
+   CARDS
+   ============================================================ */
+
+.shanduko-card {
+  width: 100% !important;
+
+  border-radius: 14px !important;
+
+  border: 1px solid var(--shanduko-border) !important;
+
+  background: #fff !important;
+
+  box-shadow: 0 4px 18px rgba(31, 41, 55, .045) !important;
+
+  overflow: hidden !important;
 }
 
-.form-control::placeholder {
-  color: #98a2b3;
+.shanduko-card .card-header {
+  min-height: 62px !important;
+
+  padding: 16px 20px !important;
+
+  background: #fff !important;
 }
 
-.form-control:focus,
-.form-select:focus {
-  color: #273142;
-  background-color: #ffffff;
-  border-color: var(--shanduko-primary);
+.shanduko-card .card-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+
+  color: var(--shanduko-text) !important;
 }
 
-/* ---------- MUTED TEXT ---------- */
+.shanduko-card .card-body {
+  padding: 20px !important;
 
-.text-muted,
-.text-secondary {
+  background: #fff !important;
+  color: var(--shanduko-text) !important;
+}
+
+/* ============================================================
+   DASHBOARD GRID
+   ============================================================ */
+
+.dashboard-grid {
+  width: 100% !important;
+
+  --bs-gutter-x: 18px !important;
+  --bs-gutter-y: 18px !important;
+}
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+
+.collections-chart {
+  height: 340px !important;
+}
+
+.trend-chart {
+  width: 100% !important;
+  height: 280px !important;
+}
+
+.chart-axis {
+  font-size: 11px !important;
+}
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+
+.shanduko-table {
+  width: 100% !important;
+
+  font-size: 13px !important;
+
+  color: #344054 !important;
+
+  background: #fff !important;
+}
+
+.shanduko-table thead th {
+  padding: 15px 18px !important;
+
+  font-size: 12px !important;
+
   color: #667085 !important;
+  background: #f8f9fc !important;
 }
 
-/* ---------- LINKS ---------- */
+.shanduko-table tbody td {
+  padding: 16px 18px !important;
 
-.app-main a:not(.btn):not(.nav-link) {
-  color: var(--shanduko-primary);
+  color: #344054 !important;
+  background: #fff !important;
 }
 
-.app-main a:not(.btn):not(.nav-link):hover {
-  color: var(--shanduko-primary-dark);
+/* ============================================================
+   SIDEBAR TYPOGRAPHY
+   ============================================================ */
+
+.sidebar-brand {
+  height: 74px !important;
+  min-height: 74px !important;
+
+  border-bottom: 1px solid var(--shanduko-border) !important;
 }
 
-/* ---------- DARK SIDEBAR ---------- */
+.brand-link {
+  height: 74px !important;
+  min-height: 74px !important;
 
-/*
-   Explicitly scope white sidebar text so the global body color
-   can never bleed into it.
-*/
+  padding: 0 20px !important;
 
-.app-sidebar,
-.app-sidebar .sidebar-wrapper,
-.app-sidebar .sidebar-brand,
-.app-sidebar .brand-link {
-  color: #ffffff;
+  color: #1f2937 !important;
 }
 
-.app-sidebar .nav-link,
-.app-sidebar .nav-link p,
-.app-sidebar .nav-icon {
-  color: #c8cedb;
+.brand-mark {
+  width: 40px !important;
+  height: 40px !important;
+
+  border-radius: 11px !important;
 }
 
-.app-sidebar .nav-link:hover,
-.app-sidebar .nav-link:hover p,
-.app-sidebar .nav-link:hover .nav-icon,
-.app-sidebar .nav-link.active,
-.app-sidebar .nav-link.active p,
-.app-sidebar .nav-link.active .nav-icon {
-  color: #ffffff;
+.brand-text {
+  font-size: 19px !important;
+  font-weight: 600 !important;
 }
 
-.app-sidebar .nav-header {
-  color: #778096;
+.sidebar-menu .nav-header {
+  padding: 18px 18px 8px !important;
+
+  font-size: 11px !important;
+  font-weight: 700 !important;
+
+  letter-spacing: .1em !important;
 }
 
-/* ---------- HEADER ---------- */
+.sidebar-menu .nav-link {
+  min-height: 48px !important;
 
-.app-header,
-.app-header .navbar-nav,
+  margin: 4px 10px !important;
+  padding: 12px 14px !important;
+
+  border-radius: 10px !important;
+
+  font-size: 14px !important;
+}
+
+.sidebar-menu .nav-link p {
+  font-size: 14px !important;
+}
+
+.sidebar-menu .nav-icon {
+  width: 22px !important;
+
+  margin-right: 10px !important;
+
+  font-size: 17px !important;
+}
+
+/* ============================================================
+   HEADER SCALE
+   ============================================================ */
+
 .app-header .nav-link {
-  color: #596275;
+  font-size: 14px !important;
 }
-
-.app-header .nav-link:hover {
-  color: var(--shanduko-primary);
-}
-
-/* ---------- SEARCH ---------- */
 
 .top-search {
-  background: #f5f6fa;
-  color: #596275;
+  width: 340px !important;
+  min-width: 340px !important;
+
+  height: 44px !important;
 }
 
 .top-search input {
-  color: #273142;
+  font-size: 13px !important;
 }
 
-.top-search input::placeholder {
-  color: #98a2b3;
+.avatar-sm {
+  width: 40px !important;
+  height: 40px !important;
+
+  font-size: 12px !important;
 }
 
-/* ---------- BREADCRUMBS ---------- */
-
-.breadcrumb-item {
-  color: #667085;
-}
-
-.breadcrumb-item.active {
-  color: #273142;
-}
-
-.breadcrumb-item a {
-  color: var(--shanduko-primary);
-}
-
-/* ---------- ACCOUNT SELECTION ---------- */
-
-.account-choice {
-  color: #273142;
-  background: #ffffff;
-}
-
-.account-choice strong {
-  color: #273142;
-}
-
-.account-choice small {
-  color: #667085;
-}
-
-.account-choice.selected {
-  color: #273142;
-}
-
-/* ---------- AUDIT / CONTROL ROWS ---------- */
-
-.control-row {
-  color: #344054;
-}
-
-.control-row strong {
-  color: #273142;
-}
-
-.control-row small {
-  color: #667085;
-}
-
-/* ---------- FOOTER ---------- */
+/* ============================================================
+   FOOTER
+   ============================================================ */
 
 .app-footer {
-  color: #667085;
+  width: 100% !important;
+  max-width: none !important;
+
+  padding: 12px 28px !important;
+
+  color: #667085 !important;
+  background: var(--shanduko-page) !important;
 }
 
-.app-footer strong {
-  color: #344054;
+/* ============================================================
+   NO FAKE CANVAS
+   ============================================================ */
+
+body::before,
+body::after,
+.app-wrapper::before,
+.app-wrapper::after,
+.app-main::before,
+.app-main::after {
+  display: none !important;
+  content: none !important;
 }
 
-/* ---------- RESPONSIVE BANNERS ---------- */
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 1199.98px) {
-  .dashboard-stat-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  .app-wrapper {
+    grid-template-columns: 240px minmax(0, 1fr) !important;
+  }
+
+  .app-sidebar {
+    width: 240px !important;
+    min-width: 240px !important;
+    max-width: 240px !important;
+  }
+
+  .dashboard-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+
+  .app-wrapper {
+    display: block !important;
+  }
+
+  .app-sidebar {
+    position: fixed !important;
+    z-index: 1038 !important;
+
+    width: 260px !important;
+    max-width: 260px !important;
+    min-width: 260px !important;
+
+    height: 100vh !important;
+  }
+
+  .app-main {
+    width: 100vw !important;
+    height: calc(100vh - 74px) !important;
   }
 }
 
 @media (max-width: 575.98px) {
-  .dashboard-stat-row {
-    grid-template-columns: 1fr;
+
+  .dashboard-stat-grid {
+    grid-template-columns: 1fr !important;
   }
 
-  .dashboard-stat-row .info-box {
-    height: 108px;
-    min-height: 108px;
+  .app-main .container,
+  .app-main .container-fluid,
+  .app-content-header,
+  .app-content {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .top-search {
+    display: none !important;
   }
 }
-

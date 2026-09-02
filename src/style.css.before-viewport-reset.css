@@ -1,0 +1,554 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+:root{--purple:#635bff;--text:#30375a;--muted:#a0a5b8;--line:#eef0f6;--bg:#d6f4da}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Poppins,Arial,sans-serif;color:var(--text);background:var(--bg)}
+body{font-size:10px}.figma-shell{width:min(92vw,920px);height:min(88vh,630px);min-height:590px;margin:35px auto;background:#fff;border-radius:15px;overflow:hidden;display:grid;grid-template-columns:165px 1fr;grid-template-rows:58px 1fr;box-shadow:0 12px 35px rgba(60,80,70,.08)}
+.figma-sidebar{grid-row:1/3;padding:23px 13px 16px;background:#fff;display:flex;flex-direction:column;border-right:1px solid #f2f3f7}.figma-brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:#1f2747;font-size:15px;margin:0 7px 20px}.brand-symbol{width:27px;height:27px;border-radius:5px;background:#6258f4;color:#fff;display:grid;place-items:center;font-size:16px}.figma-nav{display:flex;flex-direction:column;gap:5px}.figma-nav-item{height:32px;padding:0 12px;border-radius:8px;display:flex;align-items:center;gap:13px;color:#858ca1;text-decoration:none;font-size:9px;font-weight:500}.figma-nav-item i{font-size:13px;width:14px;text-align:center}.figma-nav-item.active{color:#fff;background:#635bff;box-shadow:0 5px 13px rgba(99,91,255,.22)}.pro-card{margin:42px 12px 0;padding:15px 9px 13px;height:126px;border-radius:10px;background:linear-gradient(155deg,#6158ef,#665bf4);color:#fff;text-align:center;position:relative;overflow:hidden;display:flex;align-items:center;flex-direction:column}.pro-card:before{content:"";position:absolute;width:100px;height:100px;right:-40px;top:-38px;border-radius:50%;background:rgba(255,255,255,.1)}.pro-orb{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#6258f4;margin-bottom:5px}.pro-card strong{font-size:9px}.pro-card small{font-size:6px;line-height:1.5;opacity:.85;margin-top:3px}.pro-card button{border:0;border-radius:4px;background:#fff;color:#6258f4;font-size:7px;font-weight:600;padding:5px 14px;margin-top:8px}
+.figma-header{grid-column:2;display:grid;grid-template-columns:1fr 245px auto;align-items:center;gap:18px;padding:0 24px;border-bottom:1px solid #f5f5f8}.header-title{font-size:17px;font-weight:600;color:#252d50}.figma-search{height:29px;background:#f7f8fb;border-radius:7px;display:flex;align-items:center;padding:0 11px;gap:7px;color:#665fff}.figma-search input{border:0;outline:0;background:transparent;width:100%;font:500 8px Poppins;color:var(--text)}.figma-search input::placeholder{color:#b0b4c3}.header-actions{display:flex;align-items:center;gap:11px}.icon-button,.profile-button{border:0;background:transparent;color:#6d7489;font:500 8px Poppins;display:flex;align-items:center;gap:5px;padding:0;position:relative}.language{white-space:nowrap}.icon-button>i:last-child,.profile-button>i{font-size:7px;margin-left:3px}.notification-dot{position:absolute;width:4px;height:4px;background:#ff9d45;border-radius:50%;right:0;top:-2px}.profile-photo{width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,#b8d0ff,#e9b67d);color:#fff;display:grid;place-items:center;font-weight:600}.profile-copy{display:flex;flex-direction:column;text-align:left;line-height:1.35}.profile-copy strong{font-size:8px;color:#30375a}.profile-copy small{font-size:6px;color:#a0a5b8}
+.figma-main{grid-column:2;min-width:0;overflow:auto;background:#fff}.page-container{padding:16px 15px 16px}.dashboard-view{display:flex;flex-direction:column;gap:13px}.figma-card{background:#fff;border:1px solid #f0f1f6;border-radius:10px;box-shadow:0 3px 11px rgba(38,45,75,.035);padding:13px 15px;min-width:0}.figma-card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}.figma-card h3{font-size:10px;margin:0;font-weight:600;color:#252d50}.figma-card-head small{font-size:6px;color:#a4a9b8}.sales-summary{padding-bottom:12px}.export-btn{border:1px solid #e9ebf2;border-radius:5px;background:#fff;color:#5f667c;font:500 7px Poppins;padding:5px 8px}.sales-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.sales-stat{height:72px;border-radius:9px;padding:9px 10px;display:flex;flex-direction:column;position:relative}.sales-stat.pink{background:#ffe2e6}.sales-stat.yellow{background:#fff2d6}.sales-stat.green{background:#dcf9e8}.sales-stat.purple{background:#f0e1ff}.stat-icon{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:8px;margin-bottom:2px}.pink .stat-icon{background:#ff6b86}.yellow .stat-icon{background:#ff9c6b}.green .stat-icon{background:#45d979}.purple .stat-icon{background:#b879f5}.sales-stat strong{font-size:12px;line-height:1.15;color:#252d50}.sales-stat>span:not(.stat-icon){font-size:7px;font-weight:500;color:#4f5870}.sales-stat small{font-size:5px;color:#8990a2;margin-top:2px}
+.top-row>div{min-width:0}.visitor-card{height:165px}.line-chart{height:112px;width:100%;overflow:visible}.line-chart path{fill:none;stroke-width:2}.purple-line{stroke:#8b43f1}.red-line{stroke:#ff4b55}.green-line{stroke:#27d46d}.focus-line{stroke:#ffb0b0;stroke-dasharray:3 3}.focus-dot{fill:#ff5b62}.months{display:flex;justify-content:space-between;color:#b1b5c1;font-size:5px;margin-top:-1px}.chart-legend{display:flex;justify-content:center;gap:10px;font-size:5px;color:#858b9c;margin-top:6px}.chart-legend span{display:flex;align-items:center;gap:3px}.chart-legend i{width:5px;height:5px;border-radius:1px;background:#635bff}.chart-legend i.red{background:#ff4b55}.chart-legend i.green{background:#27d46d}.chart-legend i.purple{background:#8b43f1}
+.middle-grid{display:grid;grid-template-columns:1.55fr 1fr .88fr;gap:13px}.revenue-card,.satisfaction-card,.target-card{height:169px}.mini-chart{height:105px;display:grid;grid-template-columns:20px 1fr;grid-template-rows:1fr 12px;column-gap:5px}.y-labels{grid-row:1;display:flex;flex-direction:column;justify-content:space-between;color:#b4b8c4;font-size:5px}.chart-bars{display:flex;align-items:end;justify-content:space-around;border-left:1px solid #f2f3f7;border-bottom:1px solid #f2f3f7;background:repeating-linear-gradient(to bottom,transparent 0,transparent 24px,#f4f5f8 25px)}.revenue-bar-group{height:100%;display:flex;align-items:end;gap:3px}.revenue-bar-group i,.revenue-bar-group b{width:5px;display:block;background:#0798f5}.revenue-bar-group b{background:#16d69c}.x-labels{grid-column:2;display:flex;justify-content:space-around;color:#b1b5c1;font-size:4px;padding-top:3px}.revenue-card .chart-legend{margin-top:3px}.revenue-card .chart-legend span:first-child i{background:#0798f5}.revenue-card .chart-legend span:last-child i{background:#16d69c}
+.satisfaction-chart{width:100%;height:104px}.s-green,.s-blue{fill:none;stroke-width:2}.s-green{stroke:#23d39a}.s-blue{stroke:#1597f4}.s-fill{fill:rgba(62,163,242,.15)}.satisfaction-legend{display:flex;justify-content:center;gap:15px;font-size:5px;color:#9096a6;text-align:center}.satisfaction-legend i{display:inline-block;width:5px;height:2px;background:#1597f4;margin-right:3px;vertical-align:middle}.satisfaction-legend span:last-child i{background:#23d39a}.satisfaction-legend b{color:#596174;font-size:6px}
+.target-bars{height:104px;display:flex;align-items:end;justify-content:space-around;padding:0 4px;border-bottom:1px solid #f2f3f7}.target-bars>div{height:100%;display:flex;align-items:end;gap:3px}.target-bars b,.target-bars i{display:block;width:6px;border-radius:2px 2px 0 0;background:#24bc9a}.target-bars i{background:#ffbf00}.target-legend{display:flex;flex-direction:column;gap:3px;margin-top:6px;font-size:5px;color:#858b9c}.target-legend span{display:flex;align-items:center}.target-legend i{width:8px;height:8px;border-radius:2px;background:#24bc9a;margin-right:4px}.target-legend i.target{background:#ffbf00}.target-legend b{margin-left:auto;color:#2d9d74}
+.bottom-grid{display:grid;grid-template-columns:1.55fr 1fr .88fr;gap:13px}.products-card,.country-card,.service-card{height:168px}.product-head,.product-row{display:grid;grid-template-columns:25px 1.6fr 1fr 30px;gap:6px;align-items:center}.product-head{color:#b1b5c1;font-size:5px;margin:13px 0 5px}.product-row{height:27px;border-top:1px solid #f3f4f7;color:#858b9c;font-size:5px}.product-row strong{font-size:5px;color:#60687c;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.product-progress{height:3px;background:#e9eaff;border-radius:3px;overflow:hidden}.product-progress i{height:100%;display:block;background:#695dff;border-radius:3px}.product-row:nth-child(3) .product-progress i{background:#21d59b}.product-row:nth-child(4) .product-progress i{background:#9c52ff}.product-row em{font-style:normal;border:1px solid #a5a8ff;border-radius:3px;color:#695dff;text-align:center;padding:2px 1px}.map-placeholder{height:117px;position:relative;background:radial-gradient(ellipse at 40% 48%,#eceef2 0 18%,transparent 19%),radial-gradient(ellipse at 68% 40%,#e9ebef 0 16%,transparent 17%),radial-gradient(ellipse at 76% 70%,#edf0f2 0 10%,transparent 11%);overflow:hidden}.map-placeholder span{position:absolute;font-size:36px;line-height:1}.africa{left:31%;top:33%;color:#ffb100}.europe{left:59%;top:18%;color:#7452f1}.asia{left:75%;top:34%;color:#19d6a0}.americas{left:12%;top:37%;color:#ff4c59}.australia{left:79%;top:67%;color:#19d6a0}.service-chart{height:102px;display:flex;align-items:end;justify-content:space-around;border-bottom:1px solid #f1f2f6}.service-chart>div{height:100%;display:flex;align-items:end;gap:3px}.service-chart i,.service-chart b{display:block;width:5px;background:#0798f5;border-radius:2px 2px 0 0}.service-chart b{background:#12d69d}.six{margin-top:4px}.service-legend{display:flex;justify-content:center;gap:16px;margin-top:7px;font-size:5px;color:#8c92a1;text-align:center}.service-legend i{display:inline-block;width:5px;height:5px;border-radius:50%;background:#0798f5;margin-right:3px}.service-legend span:last-child i{background:#12d69d}.service-legend b{color:#555d70;font-size:6px}
+@media(max-width:850px){.figma-shell{width:96vw}.figma-sidebar{padding-left:8px;padding-right:8px}.figma-header{grid-template-columns:1fr 180px auto;padding:0 15px}.middle-grid,.bottom-grid{grid-template-columns:1fr 1fr}.middle-grid>div:last-child,.bottom-grid>div:last-child{grid-column:auto}.sales-stat-grid{gap:7px}}
+@media(max-width:700px){body{background:#fff}.figma-shell{width:100vw;height:100vh;min-height:100vh;margin:0;border-radius:0;grid-template-columns:145px 1fr}.figma-header{grid-template-columns:1fr auto;}.figma-search{display:none}.header-actions .language{display:none}.profile-copy{display:none}.page-container{padding:12px}.middle-grid,.bottom-grid{grid-template-columns:1fr}.sales-stat-grid{grid-template-columns:1fr 1fr}.visitor-card{height:150px}}
+
+/* ============================================================
+   FULL SCREEN APP
+   ============================================================ */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Remove the centered presentation frame */
+.app-wrapper {
+  width: 100vw;
+  min-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  border-radius: 0 !important;
+  overflow: hidden;
+}
+
+/* Let the main content use the full viewport */
+.app-main {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Remove any accidental max-width constraint */
+.app-content,
+.app-content-header,
+.app-footer,
+.container-fluid {
+  width: 100%;
+  max-width: none;
+}
+
+/* Keep sensible page gutters */
+.app-content {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.app-content-header {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* On smaller screens */
+@media (max-width: 767.98px) {
+  .app-content,
+  .app-content-header {
+    padding-left: .75rem;
+    padding-right: .75rem;
+  }
+}
+/* ============================================================
+   SHANDUKO — TRUE FULLSCREEN APPLICATION
+   ============================================================ */
+
+html,
+body {
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  overflow-x: hidden !important;
+  background: #f5f6fa !important;
+}
+
+/* Kill centered/mockup framing */
+.app-wrapper,
+.dashboard-shell,
+.dashboard-container,
+.app-shell,
+.main-shell,
+.page-shell,
+#app {
+  width: 100vw !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* AdminLTE viewport */
+.app-wrapper {
+  position: relative !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Header must span the viewport */
+.app-header {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Sidebar stays full-height */
+.app-sidebar {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Main content consumes all available width */
+.app-main {
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+/* Remove any Figma-style centered content wrapper */
+.app-content-header,
+.app-content,
+.app-footer {
+  max-width: none !important;
+}
+
+/* Keep content gutters, but no outer frame */
+.app-content {
+  width: 100% !important;
+}
+
+/* Prevent Bootstrap containers from creating a narrow canvas */
+.app-main .container,
+.app-main .container-fluid {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Do not let rows create horizontal overflow */
+.app-main .row {
+  --bs-gutter-x: 1rem;
+  width: auto;
+  max-width: none;
+}
+
+/* Desktop */
+@media (min-width: 992px) {
+  .app-main {
+    width: calc(100vw - var(--lte-sidebar-width, 250px)) !important;
+  }
+}
+
+/* Tablet/mobile */
+@media (max-width: 991.98px) {
+  .app-main {
+    width: 100% !important;
+  }
+}
+
+/* No rounded outer page */
+body > div,
+body > #root,
+#root > div {
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* ============================================================
+   END FULLSCREEN OVERRIDE
+   ============================================================ */
+
+
+/* ============================================================
+   SHANDUKO — FULLSCREEN + LARGE UI PASS
+   ============================================================ */
+
+/* ---------- TRUE VIEWPORT ---------- */
+
+html,
+body {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+body {
+  background: #f5f6fa !important;
+  font-size: 15px !important;
+}
+
+/* Kill every possible presentation-frame constraint */
+
+.app-wrapper,
+.app-shell,
+.dashboard-shell,
+.dashboard-container,
+.page-shell,
+.main-shell,
+#app,
+#root {
+  position: relative !important;
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ---------- ADMINLTE LAYOUT ---------- */
+
+.app-header {
+  width: 100% !important;
+  min-height: 76px !important;
+  height: 76px !important;
+}
+
+.app-sidebar {
+  width: 270px !important;
+  max-width: 270px !important;
+  min-width: 270px !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+}
+
+.app-main {
+  width: calc(100vw - 270px) !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: calc(100vh - 76px) !important;
+  margin: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Let the content occupy the available width */
+
+.app-content-header,
+.app-content,
+.app-main .container,
+.app-main .container-fluid {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* ---------- BIGGER PAGE TYPOGRAPHY ---------- */
+
+.app-content-header {
+  padding: 22px 28px 14px !important;
+}
+
+.app-content-header h1 {
+  font-size: 1.65rem !important;
+  font-weight: 600 !important;
+}
+
+.page-subtitle {
+  font-size: .9rem !important;
+}
+
+.app-content {
+  padding: 14px 28px 30px !important;
+}
+
+/* ---------- BIGGER SIDEBAR ---------- */
+
+.brand-link {
+  min-height: 76px !important;
+  padding-left: 22px !important;
+  gap: 12px !important;
+}
+
+.brand-mark {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 11px !important;
+  font-size: 1rem !important;
+}
+
+.brand-text {
+  font-size: 1.08rem !important;
+}
+
+.sidebar-menu .nav-header {
+  font-size: .72rem !important;
+  padding: 18px 18px 8px !important;
+}
+
+.sidebar-menu .nav-link {
+  margin: 4px 10px !important;
+  padding: 12px 14px !important;
+  min-height: 46px !important;
+  border-radius: 10px !important;
+  font-size: .9rem !important;
+}
+
+.sidebar-menu .nav-icon {
+  width: 22px !important;
+  font-size: 1.05rem !important;
+  margin-right: 10px !important;
+}
+
+.sidebar-menu .nav-link p {
+  font-size: .9rem !important;
+  margin: 0 !important;
+}
+
+/* ---------- HEADER ---------- */
+
+.app-header .nav-link {
+  font-size: .92rem !important;
+}
+
+.top-search {
+  min-width: 340px !important;
+  height: 42px !important;
+}
+
+.top-search input {
+  font-size: .86rem !important;
+}
+
+.avatar-sm {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: .75rem !important;
+}
+
+/* ---------- DASHBOARD STAT CARDS ---------- */
+
+.dashboard-stat-grid {
+  width: 100% !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+}
+
+.shanduko-stat-card {
+  width: 100% !important;
+  height: 138px !important;
+  min-height: 138px !important;
+}
+
+.shanduko-stat-card .info-box-icon {
+  width: 64px !important;
+  min-width: 64px !important;
+  height: 64px !important;
+  margin-left: 18px !important;
+  margin-right: 16px !important;
+  font-size: 1.15rem !important;
+}
+
+.shanduko-stat-card .info-box-text {
+  font-size: .82rem !important;
+}
+
+.shanduko-stat-card .info-box-number {
+  font-size: 1.38rem !important;
+  margin: 4px 0 !important;
+}
+
+.shanduko-stat-card .info-box-note {
+  font-size: .74rem !important;
+}
+
+/* ---------- DASHBOARD CARDS ---------- */
+
+.dashboard-grid {
+  --bs-gutter-x: 18px !important;
+  --bs-gutter-y: 18px !important;
+}
+
+.shanduko-card {
+  border-radius: 12px !important;
+}
+
+.shanduko-card .card-header {
+  min-height: 64px !important;
+  padding: 16px 18px !important;
+}
+
+.shanduko-card .card-title {
+  font-size: 1rem !important;
+}
+
+.shanduko-card .card-body {
+  padding: 18px !important;
+}
+
+/* ---------- CHARTS ---------- */
+
+.collections-chart {
+  height: 350px !important;
+}
+
+.trend-chart {
+  height: 270px !important;
+}
+
+.chart-axis {
+  font-size: .74rem !important;
+}
+
+/* ---------- TABLES ---------- */
+
+.shanduko-table {
+  font-size: .86rem !important;
+}
+
+.shanduko-table thead th {
+  padding: 14px 16px !important;
+  font-size: .76rem !important;
+}
+
+.shanduko-table tbody td {
+  padding: 15px 16px !important;
+}
+
+/* ---------- FORMS ---------- */
+
+.form-label {
+  font-size: .84rem !important;
+}
+
+.form-control,
+.form-select,
+.input-group-text {
+  min-height: 44px !important;
+  font-size: .86rem !important;
+}
+
+.account-choice {
+  min-height: 88px !important;
+  padding: 16px !important;
+}
+
+/* ---------- CONTROL / AUDIT ---------- */
+
+.control-row,
+.check-row {
+  min-height: 52px !important;
+  font-size: .84rem !important;
+}
+
+/* ---------- REMOVE OUTER FRAME ARTIFACTS ---------- */
+
+body::before,
+body::after,
+.app-wrapper::before,
+.app-wrapper::after,
+.dashboard-shell::before,
+.dashboard-shell::after {
+  display: none !important;
+}
+
+/* ---------- LARGE DESKTOP ---------- */
+
+@media (min-width: 1400px) {
+  .app-content {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+
+  .dashboard-stat-grid {
+    gap: 20px !important;
+  }
+
+  .shanduko-stat-card {
+    height: 148px !important;
+    min-height: 148px !important;
+  }
+
+  .shanduko-stat-card .info-box-number {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 1199.98px) {
+  .dashboard-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .app-sidebar {
+    width: 250px !important;
+    min-width: 250px !important;
+  }
+
+  .app-main {
+    width: calc(100vw - 250px) !important;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 991.98px) {
+  .app-main {
+    width: 100vw !important;
+  }
+
+  .app-sidebar {
+    width: 270px !important;
+    min-width: 270px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .dashboard-stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-content {
+    padding: 12px !important;
+  }
+}
+
+/* ============================================================
+   END FULLSCREEN + LARGE UI PASS
+   ============================================================ */
+
