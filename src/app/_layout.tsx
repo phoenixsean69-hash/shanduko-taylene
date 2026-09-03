@@ -14,7 +14,11 @@ export default function RootLayout() {
             backgroundColor: "#F4F7F5",
           },
         }}
-      />
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="add-member" />
+        <Stack.Screen name="submissions" />
+      </Stack>
     </>
   );
 }

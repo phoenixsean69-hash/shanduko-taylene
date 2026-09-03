@@ -1,9 +1,9 @@
 ﻿import { router } from "expo-router";
 import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 
 export default function MembersScreen() {
@@ -52,7 +52,7 @@ export default function MembersScreen() {
 
         <Pressable
           style={styles.primaryButton}
-          onPress={() => router.push("/member-registry")}
+          onPress={() => router.push("/(tabs)/submissions")}
         >
           <Text style={styles.primaryText}>Open Registry</Text>
         </Pressable>
