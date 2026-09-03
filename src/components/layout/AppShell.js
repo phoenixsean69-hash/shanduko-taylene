@@ -1,2 +1,3 @@
-import {Header} from './Header.js'; import {Sidebar} from './Sidebar.js';
-export function AppShell(){return `<div class="app-shell">${Sidebar()}<div class="main-column">${Header()}<main class="main-content"><div class="page-heading"><div><span class="eyebrow">SHANDUKO HOUSING COOPERATIVE</span><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle"></p></div><div class="breadcrumb-wrap">Home <i class="bi bi-chevron-right"></i> <strong id="pageCrumb">Dashboard</strong></div></div><div class="page-container" id="page"></div></main></div></div>`}
+﻿import {Header} from './Header.js'; import {Sidebar} from './Sidebar.js';
+export function AppShell(){return `<div class="app-shell">${Sidebar()}<div class="main-column">${Header()}<main class="main-content"><div class="page-heading"><div><span class="eyebrow">SHANDUKO HOUSING COOPERATIVE</span><p id="pageSubtitle"></p></div><div class="breadcrumb-wrap">Home <i class="bi bi-chevron-right"></i> <strong id="pageCrumb">Dashboard</strong></div></div><div class="page-container" id="page"></div></main></div></div>`}
+
