@@ -10,8 +10,8 @@
             <div class="col-md-6"><label class="form-label">National ID Number</label><input class="form-control" value="63-1234567-X-45" required></div>
             <div class="col-md-6"><label class="form-label">Spouse National ID</label><input class="form-control" value="63-7654321-Y-45"></div>
             <div class="col-md-6"><label class="form-label">Stand / Plot Number</label><input class="form-control" value="Stand 1402, Phase 2" required></div>
-            <div class="col-md-3"><label class="upload-tile"><input type="file" accept="image/*" hidden><i class="bi bi-person-bounding-box"></i><strong>Member photo</strong><small>Upload image</small></label></div>
-            <div class="col-md-3"><label class="upload-tile"><input type="file" accept="image/*" hidden><i class="bi bi-camera"></i><strong>Spouse photo</strong><small>Upload image</small></label></div>
+            <div class="col-md-3"><div class="upload-tile"><i class="bi bi-person-bounding-box"></i><strong>Member photo</strong><small>Upload image</small></div></div>
+            <div class="col-md-3"><div class="upload-tile"><i class="bi bi-camera"></i><strong>Spouse photo</strong><small>Upload image</small></div></div>
           </div>
         </div>
       </section>
@@ -44,4 +44,3 @@
     </form>
   `;
 }
-
