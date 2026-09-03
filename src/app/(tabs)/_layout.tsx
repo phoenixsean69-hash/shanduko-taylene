@@ -1,62 +1,58 @@
-import { useTheme } from '@/hooks/use-theme';
-import { Tabs } from 'expo-router';
-import { Image } from 'react-native';
+﻿import { NativeTabs } from "expo-router/unstable-native-tabs";
 
-export default function TabLayout() {
-  const theme = useTheme();
-
+export default function TabsLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          borderTopColor: '#D9E2DE',
-          backgroundColor: '#FFFFFF',
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 70,
+    <NativeTabs
+      backgroundColor="#FFFFFF"
+      indicatorColor="#E7F3EE"
+      labelStyle={{
+        default: {
+          color: "#7B8C87",
         },
-        tabBarActiveTintColor: '#175744',
-        tabBarInactiveTintColor: '#7B8C87',
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '500',
-          marginTop: 4,
+        selected: {
+          color: "#175744",
         },
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <Image
-              source={require('@/assets/images/tabIcons/home.png')}
-              style={{
-                width: 24,
-                height: 24,
-                tintColor: color,
-              }}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <Image
-              source={require('@/assets/images/tabIcons/explore.png')}
-              style={{
-                width: 24,
-                height: 24,
-                tintColor: color,
-              }}
-            />
-          ),
-        }}
-      />
-    </Tabs>
+      <NativeTabs.Trigger name="index">
+        <NativeTabs.Trigger.Label>
+          Home
+        </NativeTabs.Trigger.Label>
+
+        <NativeTabs.Trigger.Icon
+          src={{
+            ios: {
+              name: "house.fill",
+            },
+            android: {
+              name: "home",
+            },
+            web: {
+              name: "house",
+            },
+          }}
+        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="submissions">
+        <NativeTabs.Trigger.Label>
+          Submissions
+        </NativeTabs.Trigger.Label>
+
+        <NativeTabs.Trigger.Icon
+          src={{
+            ios: {
+              name: "doc.text.fill",
+            },
+            android: {
+              name: "description",
+            },
+            web: {
+              name: "description",
+            },
+          }}
+        />
+      </NativeTabs.Trigger>
+    </NativeTabs>
   );
 }

@@ -1,12 +1,12 @@
-import { router } from "expo-router";
-import {
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+﻿import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
 } from "react-native";
+import { router } from "expo-router";
 
 const COLORS = {
   green: "#175744",
