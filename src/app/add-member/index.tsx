@@ -1,12 +1,13 @@
-﻿import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+﻿import { router } from "expo-router";
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
-import { router } from "expo-router";
+import { useAddMember } from "./_layout";
 
 const COLORS = {
   green: "#175744",
@@ -18,6 +19,8 @@ const COLORS = {
 };
 
 export default function AddMemberScreen() {
+  const { form, setForm } = useAddMember();
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView
@@ -25,29 +28,19 @@ export default function AddMemberScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.topBar}>
-          <Text
-            onPress={() => router.back()}
-            style={styles.back}
-          >
+          <Text onPress={() => router.back()} style={styles.back}>
             ‹ Back
           </Text>
 
-          <Text style={styles.step}>
-            1 of 6
-          </Text>
+          <Text style={styles.step}>1 of 6</Text>
         </View>
 
-        <Text style={styles.eyebrow}>
-          MEMBER REGISTRY
-        </Text>
+        <Text style={styles.eyebrow}>MEMBER REGISTRY</Text>
 
-        <Text style={styles.title}>
-          Add Member
-        </Text>
+        <Text style={styles.title}>Add Member</Text>
 
         <Text style={styles.subtitle}>
-          Start with the primary member's legal identity and
-          allocated stand.
+          Start with the primary member's legal identity and allocated stand.
         </Text>
 
         <View style={styles.progress}>
@@ -64,13 +57,8 @@ export default function AddMemberScreen() {
             <Text style={styles.number}>01</Text>
 
             <View>
-              <Text style={styles.cardTitle}>
-                Primary Member
-              </Text>
-
-              <Text style={styles.cardSubtitle}>
-                Legal identity and stand information
-              </Text>
+              <Text style={styles.cardTitle}>Primary Member</Text>
+              <Text style={styles.cardSubtitle}>Legal identity and stand information</Text>
             </View>
           </View>
 
@@ -78,62 +66,32 @@ export default function AddMemberScreen() {
             <Field
               label="FULL NAME"
               placeholder="Enter full legal name"
+              value={form.fullName}
+              onChangeText={(v) => setForm({ fullName: v })}
             />
 
             <Field
               label="NATIONAL ID NUMBER"
               placeholder="Enter national ID"
+              value={form.idNumber}
+              onChangeText={(v) => setForm({ idNumber: v })}
             />
 
             <Field
               label="STAND / PLOT NUMBER"
               placeholder="Allocated stand or plot"
-            />
-          </View>
-        </View>
-
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <Text style={styles.number}>02</Text>
-
-            <View>
-              <Text style={styles.cardTitle}>
-                Spouse
-              </Text>
-
-              <Text style={styles.cardSubtitle}>
-                Complete where a spouse is registered
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.cardBody}>
-            <Field
-              label="SPOUSE FULL NAME"
-              placeholder="Enter spouse name"
-            />
-
-            <Field
-              label="SPOUSE NATIONAL ID"
-              placeholder="Enter spouse national ID"
+              value={form.stand}
+              onChangeText={(v) => setForm({ stand: v })}
             />
           </View>
         </View>
 
         <View style={styles.actions}>
-          <Text
-            onPress={() => router.back()}
-            style={styles.cancel}
-          >
+          <Text onPress={() => router.back()} style={styles.cancel}>
             Cancel
           </Text>
 
-          <Text
-            onPress={() =>
-              router.push("/add-member/household")
-            }
-            style={styles.continue}
-          >
+          <Text onPress={() => router.push("/add-member/spouse")} style={styles.continue}>
             Continue →
           </Text>
         </View>
@@ -145,9 +103,13 @@ export default function AddMemberScreen() {
 function Field({
   label,
   placeholder,
+  value,
+  onChangeText,
 }: {
   label: string;
   placeholder: string;
+  value?: string;
+  onChangeText?: (v: string) => void;
 }) {
   return (
     <View style={styles.field}>
@@ -159,6 +121,8 @@ function Field({
         placeholder={placeholder}
         placeholderTextColor="#A0ADA8"
         style={styles.input}
+        value={value}
+        onChangeText={onChangeText}
       />
     </View>
   );
