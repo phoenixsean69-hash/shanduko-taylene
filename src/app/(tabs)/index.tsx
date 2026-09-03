@@ -89,7 +89,7 @@ export default function HomeScreen() {
           </View>
 
           <Pressable
-            onPress={() => router.push("/submissions")}
+            onPress={() => router.push("/(tabs)/submissions")}
           >
             <Text style={styles.viewAll}>
               View all
@@ -352,3 +352,4 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
 });
+

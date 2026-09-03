@@ -14,6 +14,7 @@ export default function TabsLayout() {
         },
       }}
     >
+      {/* HOME */}
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>
           Home
@@ -34,6 +35,28 @@ export default function TabsLayout() {
         />
       </NativeTabs.Trigger>
 
+      {/* MEMBERS */}
+      <NativeTabs.Trigger name="members">
+        <NativeTabs.Trigger.Label>
+          Members
+        </NativeTabs.Trigger.Label>
+
+        <NativeTabs.Trigger.Icon
+          src={{
+            ios: {
+              name: "person.2.fill",
+            },
+            android: {
+              name: "group",
+            },
+            web: {
+              name: "group",
+            },
+          }}
+        />
+      </NativeTabs.Trigger>
+
+      {/* SUBMISSIONS */}
       <NativeTabs.Trigger name="submissions">
         <NativeTabs.Trigger.Label>
           Submissions
@@ -49,6 +72,35 @@ export default function TabsLayout() {
             },
             web: {
               name: "description",
+            },
+          }}
+        />
+      </NativeTabs.Trigger>
+
+      {/* EXPLORE
+          Intentionally NO ICON */}
+      <NativeTabs.Trigger name="explore">
+        <NativeTabs.Trigger.Label>
+          Explore
+        </NativeTabs.Trigger.Label>
+      </NativeTabs.Trigger>
+
+      {/* SETTINGS */}
+      <NativeTabs.Trigger name="settings">
+        <NativeTabs.Trigger.Label>
+          Settings
+        </NativeTabs.Trigger.Label>
+
+        <NativeTabs.Trigger.Icon
+          src={{
+            ios: {
+              name: "gearshape.fill",
+            },
+            android: {
+              name: "settings",
+            },
+            web: {
+              name: "settings",
             },
           }}
         />

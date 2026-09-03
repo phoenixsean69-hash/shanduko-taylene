@@ -1,19 +1,18 @@
 ﻿import { StyleSheet, Text, View } from "react-native";
 
-export default function ExploreScreen() {
+export default function SettingsScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.eyebrow}>SHANDUKO</Text>
-      <Text style={styles.title}>Explore</Text>
+      <Text style={styles.title}>Settings</Text>
       <Text style={styles.subtitle}>
-        Cooperative information and services.
+        Application and account preferences.
       </Text>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Coming Soon</Text>
+        <Text style={styles.cardTitle}>Settings</Text>
         <Text style={styles.cardText}>
-          Cooperative resources, announcements and useful information will
-          appear here.
+          Configure your Shanduko mobile experience.
         </Text>
       </View>
     </View>
