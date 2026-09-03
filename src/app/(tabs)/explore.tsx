@@ -1,5 +1,6 @@
 ﻿import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ExploreScreen() {
   return (
@@ -13,7 +14,10 @@ export default function ExploreScreen() {
           </Text>
         </View>
 
-        <View style={styles.card}>
+        <Pressable
+          style={styles.card}
+          onPress={() => router.push("/explore/announcements")}
+        >
           <View style={styles.cardIcon}>
             <Ionicons name="megaphone" size={24} color="#175744" />
           </View>
@@ -21,9 +25,12 @@ export default function ExploreScreen() {
           <Text style={styles.cardText}>
             Stay updated with important cooperative news and upcoming events.
           </Text>
-        </View>
+        </Pressable>
 
-        <View style={styles.card}>
+        <Pressable
+          style={styles.card}
+          onPress={() => router.push("/explore/policies")}
+        >
           <View style={styles.cardIcon}>
             <Ionicons name="document-text" size={24} color="#175744" />
           </View>
@@ -31,9 +38,12 @@ export default function ExploreScreen() {
           <Text style={styles.cardText}>
             Review cooperative policies, bylaws and operational guidelines.
           </Text>
-        </View>
+        </Pressable>
 
-        <View style={styles.card}>
+        <Pressable
+          style={styles.card}
+          onPress={() => router.push("/explore/contact")}
+        >
           <View style={styles.cardIcon}>
             <Ionicons name="call" size={24} color="#175744" />
           </View>
@@ -41,9 +51,12 @@ export default function ExploreScreen() {
           <Text style={styles.cardText}>
             Reach out to cooperative management for assistance and inquiries.
           </Text>
-        </View>
+        </Pressable>
 
-        <View style={styles.card}>
+        <Pressable
+          style={styles.card}
+          onPress={() => router.push("/explore/faq")}
+        >
           <View style={styles.cardIcon}>
             <Ionicons name="help-circle" size={24} color="#175744" />
           </View>
@@ -51,7 +64,7 @@ export default function ExploreScreen() {
           <Text style={styles.cardText}>
             Find answers to frequently asked questions about membership and procedures.
           </Text>
-        </View>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
