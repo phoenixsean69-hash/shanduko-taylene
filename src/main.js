@@ -12,7 +12,6 @@ import { pageMeta } from './data/appData.js';
 import { Dashboard } from './pages/Dashboard.js';
 import { Members } from './pages/Members.js';
 import { NewMember } from './pages/NewMember.js';
-import { Transactions } from './pages/Transactions.js';
 import { Login } from './pages/Login.js';
 
 import {
@@ -27,7 +26,6 @@ const routes = {
   dashboard: Dashboard,
   members: Members,
   'new-member': NewMember,
-  transactions: Transactions,
   'admin-ledger': AdminLedger,
   'development-ledger': DevelopmentLedger,
   audit: Audit,
@@ -37,7 +35,6 @@ const headerTitles = {
   dashboard: 'Dashboard',
   members: 'Member Registry',
   'new-member': 'Add Member',
-  transactions: 'Transactions',
   'admin-ledger': 'Admin Fees Ledger',
   'development-ledger': 'Development Ledger',
   audit: 'Audit & Controls',
@@ -423,99 +420,6 @@ function wirePhotoUploads() {
 }
 
 /* ============================================================
-   TRANSACTIONS
-   ============================================================ */
-
-function wireTransactions() {
-  const form =
-    document.querySelector('#transactionForm');
-
-  if (form) {
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-
-      const required =
-        [...form.querySelectorAll('[required]')];
-
-      const invalid =
-        required.find(field =>
-          !field.value.trim()
-        );
-
-      if (invalid) {
-        invalid.focus();
-
-        showToast(
-          'Complete the transaction fields before committing.'
-        );
-
-        return;
-      }
-
-      const selected =
-        document.querySelector(
-          'input[name="ledger"]:checked'
-        );
-
-      const ledgerName =
-        selected?.value === 'admin'
-          ? 'Admin Fees'
-          : 'Development Fees';
-
-      showToast(
-        `Transaction ready for ${ledgerName} Sub-Ledger backend routing.`
-      );
-    });
-  }
-
-  document
-    .querySelectorAll('.module-tab')
-    .forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab;
-
-        document
-          .querySelectorAll('.module-tab')
-          .forEach(item => {
-            item.classList.toggle('active', item === tab);
-          });
-
-        document
-          .querySelectorAll('.tab-panel')
-          .forEach(panel => {
-            panel.classList.toggle(
-              'active',
-              panel.dataset.panel === target
-            );
-          });
-      });
-    });
-
-  document
-    .querySelectorAll('.account-option')
-    .forEach(option => {
-      option.addEventListener('click', () => {
-        document
-          .querySelectorAll('.account-option')
-          .forEach(item =>
-            item.classList.remove('selected')
-          );
-
-        option.classList.add('selected');
-
-        const radio =
-          option.querySelector(
-            'input[type="radio"]'
-          );
-
-        if (radio) {
-          radio.checked = true;
-        }
-      });
-    });
-}
-
-/* ============================================================
    EXPORT TABLE
    ============================================================ */
 
@@ -598,10 +502,6 @@ async function wirePage(key) {
   if (key === 'new-member') {
     wireMemberForm();
     wirePhotoUploads();
-  }
-
-  if (key === 'transactions') {
-    wireTransactions();
   }
 }
 
@@ -726,7 +626,7 @@ document.addEventListener('click', async event => {
   ) {
     closePopovers();
     location.hash =
-      '#/transactions';
+      '#/admin-ledger';
     return;
   }
 

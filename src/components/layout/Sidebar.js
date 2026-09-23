@@ -8,11 +8,10 @@ const groups = [
     ],
   },
   {
-    title: 'FINANCE',
+    title: 'FINANCE TRACKING',
     items: [
-      ['transactions', 'Transactions', 'bi-arrow-left-right'],
-      ['admin-ledger', 'Admin Fees Ledger', 'bi-wallet2'],
-      ['development-ledger', 'Development Ledger', 'bi-building'],
+      ['admin-ledger', 'Admin Finance Tracking', 'bi-wallet2'],
+      ['development-ledger', 'Development Finance Tracking', 'bi-building'],
     ],
   },
   {

@@ -83,7 +83,7 @@ export function Header() {
           data-action="notification-review"
         >
           <i class="bi bi-receipt"></i>
-          <span>2 receipts awaiting review</span>
+          <span>Finance records ready for review</span>
         </button>
 
         <button

@@ -14,12 +14,11 @@ export const developmentLedger=[
 ];
 export const bankBranches=['NMB Bank - Excellence Centre','CABS - Central Branch','CBZ Bank - Kwame Nkrumah','EcoCash Business Wallet'];
 export const pageMeta={
-dashboard:['Dashboard','Operational overview of member, receipt and ledger activity'],
+dashboard:['Dashboard','Operational overview of member records and finance tracking'],
 members:['Member Registry','Comprehensive cooperative member and household identity records'],
 'new-member':['Create New Cooperative Member Record','Primary member, spouse, dependants, beneficiary and photo evidence'],
-transactions:['Central Transaction Processing Node','Route incoming funds into the correct isolated sub-ledger'],
 'admin-ledger':['Admin Fees Ledger View','Operational administration, compliance certificates and staff overheads'],
 'development-ledger':['Development Fees Ledger View','Civil engineering, trenching, road layers and electrical connectivity'],
-audit:['Audit & Controls','Trace paper receipts, bank deposits, ledger allocation and verification events']
+audit:['Audit & Controls','Trace finance records, ledger classification and verification events']
 };
 export const money=v=>`$${Number(v).toLocaleString('en-US',{minimumFractionDigits:2})}`;
