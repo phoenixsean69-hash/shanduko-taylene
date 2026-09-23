@@ -8,3 +8,6 @@ dist
 *.backup
 *.before-*.css
 backup-*/
+# Appwrite CLI generated agent skills
+.agents/
+.claude/
