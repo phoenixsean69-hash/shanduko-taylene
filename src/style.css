@@ -1261,4 +1261,372 @@ body {
   }
 
 }
+/* SHANDUKO TYPOGRAPHY SYSTEM V1:START */
 
+/*
+  Final typography authority for the web client.
+  Purpose:
+  - Poppins everywhere
+  - no tiny 7px/8px/9px operational text
+  - consistent hierarchy across sidebar, header, cards, forms and tables
+  - preserve compact chart annotations without sacrificing readability
+*/
+
+:root {
+  --sh-font-family: "Poppins", sans-serif;
+
+  --sh-text-xs: 12px;
+  --sh-text-sm: 13px;
+  --sh-text-md: 14px;
+  --sh-text-base: 15px;
+  --sh-text-lg: 17px;
+  --sh-text-xl: 20px;
+  --sh-text-2xl: 26px;
+  --sh-text-page: clamp(28px, 1.45vw, 32px);
+}
+
+html,
+body {
+  font-family: var(--sh-font-family) !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--sh-font-family) !important;
+}
+
+button,
+input,
+select,
+textarea {
+  font-size: var(--sh-text-base) !important;
+}
+
+/* ---------- BRAND + SIDEBAR ---------- */
+
+.brand strong {
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+}
+
+.brand small {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.35 !important;
+}
+
+.nav-group-title {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.3 !important;
+  letter-spacing: .1em !important;
+}
+
+.nav-item,
+.nav-item span {
+  font-size: var(--sh-text-base) !important;
+  line-height: 1.35 !important;
+}
+
+.nav-item i {
+  font-size: 17px !important;
+}
+
+.sidebar-security strong {
+  font-size: var(--sh-text-md) !important;
+}
+
+.sidebar-security small {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.4 !important;
+}
+
+/* ---------- TOP HEADER ---------- */
+
+.header-title {
+  font-size: var(--sh-text-2xl) !important;
+  line-height: 1.2 !important;
+}
+
+.header-search input {
+  font-size: var(--sh-text-md) !important;
+}
+
+.header-control {
+  font-size: var(--sh-text-md) !important;
+}
+
+.header-icon {
+  font-size: 17px !important;
+}
+
+.profile-control,
+.profile-control strong {
+  font-size: var(--sh-text-md) !important;
+}
+
+.profile-control small {
+  font-size: var(--sh-text-xs) !important;
+}
+
+.header-popover,
+.header-popover button,
+.header-popover span,
+.header-popover strong {
+  font-size: var(--sh-text-sm) !important;
+  line-height: 1.4 !important;
+}
+
+/* ---------- PAGE HEADING ---------- */
+
+.eyebrow {
+  font-size: var(--sh-text-xs) !important;
+}
+
+.page-heading h1 {
+  font-size: var(--sh-text-page) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.02em !important;
+}
+
+.page-heading p {
+  font-size: var(--sh-text-md) !important;
+  line-height: 1.5 !important;
+}
+
+.breadcrumb-wrap {
+  font-size: var(--sh-text-xs) !important;
+}
+
+/* ---------- DASHBOARD STATS ---------- */
+
+.stat-label {
+  font-size: var(--sh-text-sm) !important;
+}
+
+.stat-copy strong {
+  font-size: 24px !important;
+  line-height: 1.2 !important;
+}
+
+.stat-copy small {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.35 !important;
+}
+
+/* ---------- CARDS ---------- */
+
+.surface-card-header h2 {
+  font-size: var(--sh-text-lg) !important;
+  line-height: 1.3 !important;
+}
+
+.surface-card-header p {
+  font-size: var(--sh-text-sm) !important;
+  line-height: 1.45 !important;
+}
+
+.period-chip {
+  font-size: var(--sh-text-xs) !important;
+}
+
+.text-link {
+  font-size: var(--sh-text-sm) !important;
+}
+
+/* ---------- CHART SUPPORT TEXT ---------- */
+
+.chart-labels,
+.months,
+.legend {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.35 !important;
+}
+
+.control-row {
+  font-size: var(--sh-text-sm) !important;
+}
+
+/* ---------- TABLES ---------- */
+
+.data-table {
+  font-size: var(--sh-text-md) !important;
+}
+
+.data-table th {
+  font-size: var(--sh-text-sm) !important;
+  line-height: 1.35 !important;
+}
+
+.data-table td,
+.data-table strong {
+  font-size: var(--sh-text-md) !important;
+  line-height: 1.45 !important;
+}
+
+.data-table small,
+.data-table code {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.4 !important;
+}
+
+.status-badge,
+.ledger-badge {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.3 !important;
+}
+
+.table-search input {
+  font-size: var(--sh-text-md) !important;
+}
+
+.table-note {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.4 !important;
+}
+
+/* ---------- BUTTONS ---------- */
+
+.primary-button,
+.secondary-button,
+.success-button,
+.btn {
+  font-size: var(--sh-text-md) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+
+.primary-button i,
+.secondary-button i,
+.success-button i,
+.btn i {
+  font-size: var(--sh-text-md) !important;
+}
+
+/* ---------- FORMS ---------- */
+
+.form-label,
+.form-grid label,
+.sub-panel label,
+.compact-form label,
+.field-block label,
+#memberForm .form-label {
+  font-size: var(--sh-text-sm) !important;
+  line-height: 1.4 !important;
+}
+
+.form-control,
+.form-select,
+.form-grid input,
+.sub-panel input,
+.compact-form input,
+.compact-form select,
+.search-field input,
+.three-fields input {
+  font-size: var(--sh-text-base) !important;
+  line-height: 1.4 !important;
+}
+
+.sub-panel h3 {
+  font-size: var(--sh-text-base) !important;
+}
+
+.upload-tile strong,
+.photo-box strong {
+  font-size: var(--sh-text-md) !important;
+}
+
+.upload-tile small,
+.photo-box small {
+  font-size: var(--sh-text-xs) !important;
+}
+
+/* ---------- TRANSACTIONS + LEDGERS ---------- */
+
+.proposal-banner {
+  font-size: var(--sh-text-md) !important;
+}
+
+.proposal-banner span,
+.proposal-header > div:first-child span {
+  font-size: var(--sh-text-xs) !important;
+}
+
+.module-tabs button {
+  font-size: var(--sh-text-sm) !important;
+}
+
+.notice-box {
+  font-size: var(--sh-text-sm) !important;
+  line-height: 1.5 !important;
+}
+
+.account-option strong {
+  font-size: var(--sh-text-md) !important;
+}
+
+.account-option small {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.4 !important;
+}
+
+.ledger-label,
+.ledger-summary span {
+  font-size: var(--sh-text-xs) !important;
+}
+
+.ledger-summary strong {
+  font-size: 18px !important;
+}
+
+/* ---------- AUDIT ---------- */
+
+.audit-event strong {
+  font-size: var(--sh-text-md) !important;
+}
+
+.audit-event p {
+  font-size: var(--sh-text-xs) !important;
+  line-height: 1.45 !important;
+}
+
+.audit-event time {
+  font-size: var(--sh-text-xs) !important;
+}
+
+.check-list > div {
+  font-size: var(--sh-text-sm) !important;
+}
+
+.toast-message {
+  font-size: var(--sh-text-sm) !important;
+  line-height: 1.4 !important;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 780px) {
+  html,
+  body {
+    font-size: 15px !important;
+  }
+
+  .page-heading h1 {
+    font-size: 26px !important;
+  }
+
+  .header-title {
+    font-size: 22px !important;
+  }
+
+  .data-table,
+  .data-table td,
+  .data-table strong {
+    font-size: 13px !important;
+  }
+}
+
+/* SHANDUKO TYPOGRAPHY SYSTEM V1:END */
