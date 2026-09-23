@@ -1,14 +1,85 @@
-import { members } from '../../data/appData.js';
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
 
-export function MemberTable() {
+function renderRows(members) {
+  return members.map(member => {
+    const fullName =
+      `${member.firstNames || ''} ${member.surname || ''}`.trim();
+
+    return `
+      <tr>
+        <td>
+          <code>${escapeHtml(member.registerOrder)}</code>
+        </td>
+
+        <td>
+          <strong>${escapeHtml(fullName)}</strong>
+          <small>${escapeHtml(member.nationalId)}</small>
+        </td>
+
+        <td>
+          <strong>${escapeHtml(member.standNumber)}</strong>
+        </td>
+
+        <td>
+          ${escapeHtml(member.whatsappContact)}
+        </td>
+
+        <td>
+          <span class="ledger-badge admin">
+            Source Register
+          </span>
+        </td>
+
+        <td>
+          <span class="status-badge">
+            Registered
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+export function MemberTable({
+  members = [],
+  loading = false,
+  error = '',
+} = {}) {
+  const body = loading
+    ? `
+      <tr>
+        <td colspan="6" class="registry-state">
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          Loading the cooperative register from Appwrite...
+        </td>
+      </tr>
+    `
+    : error
+      ? `
+        <tr>
+          <td colspan="6" class="registry-state registry-state-error">
+            <i class="bi bi-exclamation-triangle"></i>
+            ${escapeHtml(error)}
+          </td>
+        </tr>
+      `
+      : renderRows(members);
+
   return `
     <section class="surface-card">
 
       <header class="surface-card-header">
         <div>
-          <h2>Comprehensive Cooperative Member Registry</h2>
+          <h2>78 Stands Membership Register</h2>
           <p>
-            Primary member, spouse, stand, next of kin and beneficiary records
+            Live Shanduko cooperative source register from Appwrite
           </p>
         </div>
 
@@ -28,13 +99,15 @@ export function MemberTable() {
           <i class="bi bi-search"></i>
           <input
             id="memberSearch"
-            placeholder="Search member, stand or ID..."
+            placeholder="Search name, stand, National ID or contact..."
+            ${loading ? 'disabled' : ''}
           >
         </label>
 
         <span class="table-note">
-          Identity photos are required for primary member,
-          spouse and named beneficiary.
+          ${loading
+            ? 'Connecting to Appwrite...'
+            : `${members.length} authoritative register records loaded`}
         </span>
 
       </div>
@@ -45,48 +118,17 @@ export function MemberTable() {
 
           <thead>
             <tr>
-              <th>Member ID</th>
-              <th>Primary Member</th>
+              <th>Register #</th>
+              <th>Member</th>
               <th>Stand / Plot</th>
-              <th>Spouse</th>
-              <th>Beneficiary</th>
+              <th>WhatsApp Contact</th>
+              <th>Source</th>
               <th>Status</th>
             </tr>
           </thead>
 
           <tbody id="memberRows">
-            ${members.map(member => `
-              <tr>
-
-                <td>
-                  <code>${member.id}</code>
-                </td>
-
-                <td>
-                  <strong>${member.name}</strong>
-                  <small>${member.nationalId}</small>
-                </td>
-
-                <td>${member.stand}</td>
-
-                <td>${member.spouse}</td>
-
-                <td>${member.beneficiary}</td>
-
-                <td>
-                  <span
-                    class="status-badge ${
-                      member.status === 'Pending'
-                        ? 'pending'
-                        : ''
-                    }"
-                  >
-                    ${member.status}
-                  </span>
-                </td>
-
-              </tr>
-            `).join('')}
+            ${body}
           </tbody>
 
         </table>

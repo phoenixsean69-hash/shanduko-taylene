@@ -2,13 +2,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './style.css';
 
+import { account } from './lib/appwrite.js';
+import { listMembershipRegister } from './services/membershipRegister.js';
+
 import { AppShell } from './components/layout/AppShell.js';
+import { MemberTable } from './components/members/MemberTable.js';
 import { pageMeta } from './data/appData.js';
 
 import { Dashboard } from './pages/Dashboard.js';
 import { Members } from './pages/Members.js';
 import { NewMember } from './pages/NewMember.js';
 import { Transactions } from './pages/Transactions.js';
+import { Login } from './pages/Login.js';
 
 import {
   AdminLedger,
@@ -37,6 +42,10 @@ const headerTitles = {
   'development-ledger': 'Development Ledger',
   audit: 'Audit & Controls',
 };
+
+let currentUser = null;
+let sessionChecked = false;
+
 function getRoute() {
   const current =
     location.hash.replace(/^#\/?/, '') || 'dashboard';
@@ -44,12 +53,27 @@ function getRoute() {
   return routes[current] ? current : 'dashboard';
 }
 
+async function resolveSession() {
+  if (sessionChecked) {
+    return currentUser;
+  }
+
+  try {
+    currentUser = await account.get();
+  } catch {
+    currentUser = null;
+  }
+
+  sessionChecked = true;
+
+  return currentUser;
+}
+
 /* ============================================================
    HEADER POPOVERS
    ============================================================ */
 
 function closePopovers() {
-
   document
     .querySelectorAll('[data-popover]')
     .forEach(popover => {
@@ -68,7 +92,6 @@ function closePopovers() {
 }
 
 function togglePopover(name) {
-
   const popover =
     document.querySelector(
       `[data-popover="${name}"]`
@@ -82,7 +105,6 @@ function togglePopover(name) {
   closePopovers();
 
   if (!alreadyOpen) {
-
     popover.classList.add('open');
 
     document
@@ -91,12 +113,51 @@ function togglePopover(name) {
   }
 }
 
+function syncProfile(user) {
+  if (!user) return;
+
+  const name =
+    user.name?.trim() ||
+    user.email?.split('@')[0] ||
+    'Administrator';
+
+  const profileName =
+    document.querySelector('.profile-copy strong');
+
+  const profileEmail =
+    document.querySelector('.profile-copy small');
+
+  const profileAvatar =
+    document.querySelector('.profile-avatar');
+
+  const popoverTitle =
+    document.querySelector(
+      '[data-popover="profile"] > strong'
+    );
+
+  if (profileName) {
+    profileName.textContent = name;
+  }
+
+  if (profileEmail) {
+    profileEmail.textContent = user.email || 'Admin Control Account';
+  }
+
+  if (profileAvatar) {
+    profileAvatar.textContent =
+      name.charAt(0).toUpperCase();
+  }
+
+  if (popoverTitle) {
+    popoverTitle.textContent = name;
+  }
+}
+
 /* ============================================================
    PAGE META
    ============================================================ */
 
 function updateMeta(key) {
-
   const [title, subtitle] =
     pageMeta[key] || pageMeta.dashboard;
 
@@ -129,28 +190,122 @@ function updateMeta(key) {
   document
     .querySelectorAll('.nav-item')
     .forEach(item => {
-
       item.classList.toggle(
         'active',
         item.dataset.page === key
       );
-
     });
 }
 
 /* ============================================================
-   MEMBER SEARCH
+   AUTH
+   ============================================================ */
+
+function showLoginError(message) {
+  const error =
+    document.querySelector('#loginError');
+
+  if (!error) return;
+
+  error.textContent = message;
+  error.hidden = false;
+}
+
+function wireLogin() {
+  const form =
+    document.querySelector('#loginForm');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+
+    const email =
+      document.querySelector('#loginEmail')
+        ?.value.trim();
+
+    const password =
+      document.querySelector('#loginPassword')
+        ?.value;
+
+    const button =
+      document.querySelector('#loginButton');
+
+    if (!email || !password) {
+      showLoginError(
+        'Enter your administrator email and password.'
+      );
+      return;
+    }
+
+    const error =
+      document.querySelector('#loginError');
+
+    if (error) {
+      error.hidden = true;
+      error.textContent = '';
+    }
+
+    if (button) {
+      button.disabled = true;
+      button.querySelector('span').textContent =
+        'Signing in...';
+    }
+
+    try {
+      await account.createEmailPasswordSession({
+        email,
+        password,
+      });
+
+      currentUser = await account.get();
+      sessionChecked = true;
+
+      location.hash = '#/members';
+
+      await render();
+    } catch (error) {
+      showLoginError(
+        error?.message ||
+        'Sign-in failed. Check your account details.'
+      );
+
+      if (button) {
+        button.disabled = false;
+        button.querySelector('span').textContent =
+          'Sign in securely';
+      }
+    }
+  });
+}
+
+async function signOut() {
+  try {
+    await account.deleteSession({
+      sessionId: 'current',
+    });
+  } catch {
+    // The local UI must still return to the protected login state.
+  }
+
+  currentUser = null;
+  sessionChecked = true;
+
+  document.body.innerHTML = Login();
+  wireLogin();
+}
+
+/* ============================================================
+   MEMBER REGISTRY
    ============================================================ */
 
 function wireMemberSearch() {
-
   const search =
     document.querySelector('#memberSearch');
 
   if (!search) return;
 
   search.addEventListener('input', event => {
-
     const query =
       event.target.value
         .trim()
@@ -159,16 +314,42 @@ function wireMemberSearch() {
     document
       .querySelectorAll('#memberRows tr')
       .forEach(row => {
-
         row.hidden =
           query.length > 0 &&
           !row.innerText
             .toLowerCase()
             .includes(query);
-
       });
-
   });
+}
+
+async function loadMemberRegistry() {
+  const page =
+    document.querySelector('#page');
+
+  if (!page) return;
+
+  try {
+    const members =
+      await listMembershipRegister();
+
+    page.innerHTML =
+      MemberTable({ members });
+
+    wireMemberSearch();
+  } catch (error) {
+    const status =
+      Number(error?.code || 0);
+
+    const message =
+      status === 401 || status === 403
+        ? 'Your account does not have permission to read the cooperative register.'
+        : error?.message ||
+          'Could not load the cooperative register from Appwrite.';
+
+    page.innerHTML =
+      MemberTable({ error: message });
+  }
 }
 
 /* ============================================================
@@ -176,14 +357,12 @@ function wireMemberSearch() {
    ============================================================ */
 
 function wireMemberForm() {
-
   const form =
     document.querySelector('#memberForm');
 
   if (!form) return;
 
   form.addEventListener('submit', event => {
-
     event.preventDefault();
 
     const requiredFields =
@@ -195,7 +374,6 @@ function wireMemberForm() {
       );
 
     if (invalid) {
-
       invalid.focus();
 
       showToast(
@@ -206,7 +384,7 @@ function wireMemberForm() {
     }
 
     showToast(
-      'Member record validated and ready for registry storage.'
+      'Member record validated. Backend creation will be connected in the next phase.'
     );
   });
 }
@@ -216,15 +394,12 @@ function wireMemberForm() {
    ============================================================ */
 
 function wirePhotoUploads() {
-
   document
     .querySelectorAll(
       '#memberForm .upload-tile input[type="file"]'
     )
     .forEach(input => {
-
       input.addEventListener('change', () => {
-
         const tile =
           input.closest('.upload-tile');
 
@@ -234,7 +409,6 @@ function wirePhotoUploads() {
         if (!tile || !caption) return;
 
         if (input.files?.length) {
-
           tile.classList.add('has-file');
 
           caption.textContent =
@@ -244,9 +418,7 @@ function wirePhotoUploads() {
             'Photo selected for the member record.'
           );
         }
-
       });
-
     });
 }
 
@@ -255,14 +427,11 @@ function wirePhotoUploads() {
    ============================================================ */
 
 function wireTransactions() {
-
   const form =
     document.querySelector('#transactionForm');
 
   if (form) {
-
     form.addEventListener('submit', event => {
-
       event.preventDefault();
 
       const required =
@@ -274,7 +443,6 @@ function wireTransactions() {
         );
 
       if (invalid) {
-
         invalid.focus();
 
         showToast(
@@ -295,11 +463,9 @@ function wireTransactions() {
           : 'Development Fees';
 
       showToast(
-        `Transaction committed to ${ledgerName} Sub-Ledger.`
+        `Transaction ready for ${ledgerName} Sub-Ledger backend routing.`
       );
-
     });
-
   }
 
   document
@@ -317,7 +483,10 @@ function wireTransactions() {
         document
           .querySelectorAll('.tab-panel')
           .forEach(panel => {
-            panel.classList.toggle('active', panel.dataset.panel === target);
+            panel.classList.toggle(
+              'active',
+              panel.dataset.panel === target
+            );
           });
       });
     });
@@ -325,9 +494,7 @@ function wireTransactions() {
   document
     .querySelectorAll('.account-option')
     .forEach(option => {
-
       option.addEventListener('click', () => {
-
         document
           .querySelectorAll('.account-option')
           .forEach(item =>
@@ -344,9 +511,7 @@ function wireTransactions() {
         if (radio) {
           radio.checked = true;
         }
-
       });
-
     });
 }
 
@@ -355,7 +520,6 @@ function wireTransactions() {
    ============================================================ */
 
 function exportTable(button) {
-
   const card =
     button.closest('.surface-card');
 
@@ -363,7 +527,6 @@ function exportTable(button) {
     card?.querySelector('table');
 
   if (!table) {
-
     showToast(
       'No table is available for export.'
     );
@@ -376,10 +539,8 @@ function exportTable(button) {
 
   const csv =
     rows.map(row => {
-
       return [...row.children]
         .map(cell => {
-
           const value =
             cell.innerText
               .replace(/\s+/g, ' ')
@@ -387,10 +548,8 @@ function exportTable(button) {
               .replace(/"/g, '""');
 
           return `"${value}"`;
-
         })
         .join(',');
-
     }).join('\n');
 
   const blob =
@@ -431,10 +590,9 @@ function exportTable(button) {
    PAGE WIRING
    ============================================================ */
 
-function wirePage(key) {
-
+async function wirePage(key) {
   if (key === 'members') {
-    wireMemberSearch();
+    await loadMemberRegistry();
   }
 
   if (key === 'new-member') {
@@ -451,7 +609,22 @@ function wirePage(key) {
    ROUTER
    ============================================================ */
 
-function render() {
+async function render() {
+  const user =
+    await resolveSession();
+
+  if (!user) {
+    document.body.innerHTML = Login();
+    wireLogin();
+    return;
+  }
+
+  if (!document.querySelector('.app-shell')) {
+    document.body.innerHTML =
+      AppShell();
+  }
+
+  syncProfile(user);
 
   const key = getRoute();
 
@@ -467,37 +640,25 @@ function render() {
 
   closePopovers();
 
-  wirePage(key);
+  await wirePage(key);
 }
 
 /* ============================================================
    GLOBAL CLICK HANDLER
    ============================================================ */
 
-document.addEventListener('click', event => {
-
-  /* ---------------------------------------------
-     LANGUAGE
-     --------------------------------------------- */
-
+document.addEventListener('click', async event => {
   const language =
     event.target.closest(
       '[data-action="language"]'
     );
 
   if (language) {
-
     event.preventDefault();
     event.stopPropagation();
-
     togglePopover('language');
-
     return;
   }
-
-  /* ---------------------------------------------
-     NOTIFICATIONS
-     --------------------------------------------- */
 
   const notifications =
     event.target.closest(
@@ -505,18 +666,11 @@ document.addEventListener('click', event => {
     );
 
   if (notifications) {
-
     event.preventDefault();
     event.stopPropagation();
-
     togglePopover('notifications');
-
     return;
   }
-
-  /* ---------------------------------------------
-     PROFILE
-     --------------------------------------------- */
 
   const profile =
     event.target.closest(
@@ -524,18 +678,11 @@ document.addEventListener('click', event => {
     );
 
   if (profile) {
-
     event.preventDefault();
     event.stopPropagation();
-
     togglePopover('profile');
-
     return;
   }
-
-  /* ---------------------------------------------
-     LANGUAGE OPTION
-     --------------------------------------------- */
 
   const languageOption =
     event.target.closest(
@@ -543,7 +690,6 @@ document.addEventListener('click', event => {
     );
 
   if (languageOption) {
-
     const value =
       languageOption.dataset.language;
 
@@ -556,7 +702,6 @@ document.addEventListener('click', event => {
       control?.querySelector('span');
 
     if (text) {
-
       text.textContent =
         value === 'sn'
           ? 'Shona'
@@ -574,82 +719,48 @@ document.addEventListener('click', event => {
     return;
   }
 
-  /* ---------------------------------------------
-     NOTIFICATION - TRANSACTIONS
-     --------------------------------------------- */
-
   if (
     event.target.closest(
       '[data-action="notification-review"]'
     )
   ) {
-
     closePopovers();
-
     location.hash =
       '#/transactions';
-
     return;
   }
-
-  /* ---------------------------------------------
-     NOTIFICATION - MEMBER
-     --------------------------------------------- */
 
   if (
     event.target.closest(
       '[data-action="notification-member"]'
     )
   ) {
-
     closePopovers();
-
     location.hash =
       '#/new-member';
-
     return;
   }
-
-  /* ---------------------------------------------
-     PROFILE - AUDIT
-     --------------------------------------------- */
 
   if (
     event.target.closest(
       '[data-action="profile-audit"]'
     )
   ) {
-
     closePopovers();
-
     location.hash =
       '#/audit';
-
     return;
   }
-
-  /* ---------------------------------------------
-     PROFILE - SIGN OUT
-     --------------------------------------------- */
 
   if (
     event.target.closest(
       '[data-action="profile-signout"]'
     )
   ) {
-
     closePopovers();
-
-    showToast(
-      'Authentication is not connected yet.'
-    );
-
+    await signOut();
     return;
   }
-
-  /* ---------------------------------------------
-     EXPORT
-     --------------------------------------------- */
 
   const exportButton =
     event.target.closest(
@@ -662,27 +773,18 @@ document.addEventListener('click', event => {
       .toLowerCase()
       .includes('export')
   ) {
-
     event.preventDefault();
-
     exportTable(exportButton);
-
     return;
   }
-
-  /* ---------------------------------------------
-     CLOSE POPOVERS
-     --------------------------------------------- */
 
   if (
     !event.target.closest(
       '[data-popover]'
     )
   ) {
-
     closePopovers();
   }
-
 });
 
 /* ============================================================
@@ -690,7 +792,6 @@ document.addEventListener('click', event => {
    ============================================================ */
 
 document.addEventListener('click', event => {
-
   const link =
     event.target.closest(
       'a[href^="#/"]'
@@ -706,7 +807,6 @@ document.addEventListener('click', event => {
    ============================================================ */
 
 document.addEventListener('keydown', event => {
-
   const input =
     event.target;
 
@@ -726,7 +826,6 @@ document.addEventListener('keydown', event => {
     '#/members';
 
   setTimeout(() => {
-
     const search =
       document.querySelector(
         '#memberSearch'
@@ -740,22 +839,16 @@ document.addEventListener('keydown', event => {
     search.dispatchEvent(
       new Event('input')
     );
-
-  }, 0);
-
+  }, 300);
 });
 
 /* ============================================================
    START APPLICATION
    ============================================================ */
 
-document.body.innerHTML =
-  AppShell();
-
 window.addEventListener(
   'hashchange',
-  render
+  () => void render()
 );
 
-render();
-
+void render();

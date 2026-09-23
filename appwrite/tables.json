@@ -904,52 +904,65 @@
   },
   {
     "$id": "membership_register",
+    "$permissions": [
+      "read(\"team:shanduko-admins\")"
+    ],
     "databaseId": "shanduko",
     "name": "78 Stands Membership Register",
     "enabled": true,
     "rowSecurity": false,
-    "$permissions": [],
     "columns": [
       {
         "key": "standNumber",
         "type": "string",
-        "size": 20,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 20,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "surname",
         "type": "string",
-        "size": 120,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 120,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "firstNames",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "nationalId",
         "type": "string",
-        "size": 80,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 80,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "whatsappContact",
         "type": "string",
-        "size": 50,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 50,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "registerOrder",
         "type": "integer",
         "required": true,
         "array": false,
+        "default": null,
         "min": 1,
         "max": 78
       }
@@ -958,84 +971,105 @@
   },
   {
     "$id": "cooperative_profile",
+    "$permissions": [
+      "read(\"team:shanduko-admins\")"
+    ],
     "databaseId": "shanduko",
     "name": "Cooperative Profile",
     "enabled": true,
     "rowSecurity": false,
-    "$permissions": [],
     "columns": [
       {
         "key": "cooperativeName",
         "type": "string",
-        "size": 220,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 220,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "address",
         "type": "string",
-        "size": 220,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 220,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "city",
         "type": "string",
-        "size": 100,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 100,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "area",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "registrationReference",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "membershipRegisterTitle",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       }
     ],
     "indexes": []
   },
   {
     "$id": "cooperative_contacts",
+    "$permissions": [
+      "read(\"team:shanduko-admins\")"
+    ],
     "databaseId": "shanduko",
     "name": "Cooperative Contacts",
     "enabled": true,
     "rowSecurity": false,
-    "$permissions": [],
     "columns": [
       {
         "key": "contactName",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "phone",
         "type": "string",
-        "size": 50,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 50,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "displayOrder",
         "type": "integer",
         "required": true,
         "array": false,
+        "default": null,
         "min": 1,
         "max": 100
       }
