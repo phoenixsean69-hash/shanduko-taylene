@@ -1,0 +1,705 @@
+[
+  {
+    "$id": "members",
+    "databaseId": "shanduko",
+    "name": "Members",
+    "enabled": true,
+    "rowSecurity": true,
+    "$permissions": [
+      "create(\"users\")",
+      "read(\"team:shanduko-admins\")",
+      "update(\"team:shanduko-admins\")",
+      "delete(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "memberCode",
+        "type": "string",
+        "size": 40,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "ownerUserId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "createdByUserId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "fullName",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "nationalId",
+        "type": "string",
+        "size": 80,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "standNumber",
+        "type": "string",
+        "size": 120,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "spouseFullName",
+        "type": "string",
+        "size": 180,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "spouseNationalId",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "nextOfKinName",
+        "type": "string",
+        "size": 180,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "nextOfKinRelationship",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "nextOfKinPhone",
+        "type": "string",
+        "size": 50,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryName",
+        "type": "string",
+        "size": 180,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryRelationship",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryAllocationPct",
+        "type": "double",
+        "required": false,
+        "array": false,
+        "min": 0,
+        "max": 100,
+        "default": 100
+      },
+      {
+        "key": "status",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "pending",
+          "active",
+          "suspended",
+          "archived"
+        ],
+        "required": false,
+        "array": false,
+        "default": "pending"
+      },
+      {
+        "key": "verificationStatus",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "pending",
+          "verified",
+          "rejected"
+        ],
+        "required": false,
+        "array": false,
+        "default": "pending"
+      },
+      {
+        "key": "memberPhotoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "spousePhotoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryPhotoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "verifiedByUserId",
+        "type": "string",
+        "size": 36,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "verifiedAt",
+        "type": "datetime",
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "notes",
+        "type": "text",
+        "required": false,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "member_code_unique",
+        "type": "unique",
+        "columns": ["memberCode"]
+      },
+      {
+        "key": "national_id_unique",
+        "type": "unique",
+        "columns": ["nationalId"]
+      },
+      {
+        "key": "stand_number_unique",
+        "type": "unique",
+        "columns": ["standNumber"]
+      },
+      {
+        "key": "owner_user_idx",
+        "type": "key",
+        "columns": ["ownerUserId"]
+      },
+      {
+        "key": "member_status_idx",
+        "type": "key",
+        "columns": ["status"]
+      },
+      {
+        "key": "member_name_search",
+        "type": "fulltext",
+        "columns": ["fullName"]
+      }
+    ]
+  },
+  {
+    "$id": "transactions",
+    "databaseId": "shanduko",
+    "name": "Transactions",
+    "enabled": true,
+    "rowSecurity": true,
+    "$permissions": [
+      "create(\"team:shanduko-admins\")",
+      "read(\"team:shanduko-admins\")",
+      "update(\"team:shanduko-admins\")",
+      "delete(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "receiptNumber",
+        "type": "string",
+        "size": 80,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberCode",
+        "type": "string",
+        "size": 40,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberName",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "standNumber",
+        "type": "string",
+        "size": 120,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "ledgerType",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "admin",
+          "development"
+        ],
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "depositDate",
+        "type": "datetime",
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "amountCents",
+        "type": "integer",
+        "required": true,
+        "array": false,
+        "min": 1,
+        "max": 2147483647
+      },
+      {
+        "key": "currency",
+        "type": "string",
+        "format": "enum",
+        "elements": ["USD"],
+        "required": false,
+        "array": false,
+        "default": "USD"
+      },
+      {
+        "key": "bankBranch",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "status",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "committed",
+          "reversed"
+        ],
+        "required": false,
+        "array": false,
+        "default": "committed"
+      },
+      {
+        "key": "ledgerEntryId",
+        "type": "string",
+        "size": 36,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "createdByUserId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "receipt_unique",
+        "type": "unique",
+        "columns": ["receiptNumber"]
+      },
+      {
+        "key": "tx_member_idx",
+        "type": "key",
+        "columns": ["memberId"]
+      },
+      {
+        "key": "tx_ledger_idx",
+        "type": "key",
+        "columns": ["ledgerType"]
+      },
+      {
+        "key": "tx_deposit_idx",
+        "type": "key",
+        "columns": ["depositDate"]
+      }
+    ]
+  },
+  {
+    "$id": "admin_ledger",
+    "databaseId": "shanduko",
+    "name": "Admin Fees Ledger",
+    "enabled": true,
+    "rowSecurity": true,
+    "$permissions": [
+      "create(\"team:shanduko-admins\")",
+      "read(\"team:shanduko-admins\")",
+      "update(\"team:shanduko-admins\")",
+      "delete(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "transactionId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "receiptNumber",
+        "type": "string",
+        "size": 80,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberCode",
+        "type": "string",
+        "size": 40,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberName",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "standNumber",
+        "type": "string",
+        "size": 120,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "depositDate",
+        "type": "datetime",
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "amountCents",
+        "type": "integer",
+        "required": true,
+        "array": false,
+        "min": 1,
+        "max": 2147483647
+      },
+      {
+        "key": "bankBranch",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "status",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "pending",
+          "verified",
+          "reversed"
+        ],
+        "required": false,
+        "array": false,
+        "default": "verified"
+      },
+      {
+        "key": "createdByUserId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "admin_tx_unique",
+        "type": "unique",
+        "columns": ["transactionId"]
+      },
+      {
+        "key": "admin_receipt_unique",
+        "type": "unique",
+        "columns": ["receiptNumber"]
+      },
+      {
+        "key": "admin_member_idx",
+        "type": "key",
+        "columns": ["memberId"]
+      },
+      {
+        "key": "admin_deposit_idx",
+        "type": "key",
+        "columns": ["depositDate"]
+      }
+    ]
+  },
+  {
+    "$id": "development_ledger",
+    "databaseId": "shanduko",
+    "name": "Development Fees Ledger",
+    "enabled": true,
+    "rowSecurity": true,
+    "$permissions": [
+      "create(\"team:shanduko-admins\")",
+      "read(\"team:shanduko-admins\")",
+      "update(\"team:shanduko-admins\")",
+      "delete(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "transactionId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "receiptNumber",
+        "type": "string",
+        "size": 80,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberCode",
+        "type": "string",
+        "size": 40,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "memberName",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "standNumber",
+        "type": "string",
+        "size": 120,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "depositDate",
+        "type": "datetime",
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "amountCents",
+        "type": "integer",
+        "required": true,
+        "array": false,
+        "min": 1,
+        "max": 2147483647
+      },
+      {
+        "key": "bankBranch",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "status",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "pending",
+          "verified",
+          "reversed"
+        ],
+        "required": false,
+        "array": false,
+        "default": "verified"
+      },
+      {
+        "key": "createdByUserId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "dev_tx_unique",
+        "type": "unique",
+        "columns": ["transactionId"]
+      },
+      {
+        "key": "dev_receipt_unique",
+        "type": "unique",
+        "columns": ["receiptNumber"]
+      },
+      {
+        "key": "dev_member_idx",
+        "type": "key",
+        "columns": ["memberId"]
+      },
+      {
+        "key": "dev_deposit_idx",
+        "type": "key",
+        "columns": ["depositDate"]
+      }
+    ]
+  },
+  {
+    "$id": "audit_events",
+    "databaseId": "shanduko",
+    "name": "Audit Events",
+    "enabled": true,
+    "rowSecurity": false,
+    "$permissions": [
+      "read(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "entityType",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "member",
+          "transaction",
+          "admin_ledger",
+          "development_ledger",
+          "auth",
+          "system"
+        ],
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "entityId",
+        "type": "string",
+        "size": 64,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "action",
+        "type": "string",
+        "size": 100,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "actorUserId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "actorRole",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "summary",
+        "type": "text",
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beforeJson",
+        "type": "text",
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "afterJson",
+        "type": "text",
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "verificationResult",
+        "type": "string",
+        "format": "enum",
+        "elements": [
+          "not_required",
+          "pending",
+          "passed",
+          "failed"
+        ],
+        "required": false,
+        "array": false,
+        "default": "not_required"
+      },
+      {
+        "key": "deviceContext",
+        "type": "text",
+        "required": false,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "audit_entity_idx",
+        "type": "key",
+        "columns": ["entityType", "entityId"]
+      },
+      {
+        "key": "audit_actor_idx",
+        "type": "key",
+        "columns": ["actorUserId"]
+      },
+      {
+        "key": "audit_action_idx",
+        "type": "key",
+        "columns": ["action"]
+      }
+    ]
+  }
+]
