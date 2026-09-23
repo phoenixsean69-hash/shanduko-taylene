@@ -2,22 +2,46 @@ const groups = [
   {
     title: 'WORKSPACE',
     items: [
-      ['dashboard', 'Dashboard', 'bi-grid-1x2-fill'],
-      ['members', 'Member Registry', 'bi-people-fill'],
-      ['new-member', 'Add Member', 'bi-person-plus-fill'],
+      [
+        'dashboard',
+        'Dashboard',
+        'bi-grid-1x2-fill'
+      ],
+      [
+        'members',
+        'Member Registry',
+        'bi-people-fill'
+      ],
+      [
+        'new-member',
+        'Add Member',
+        'bi-person-plus-fill'
+      ],
     ],
   },
   {
     title: 'FINANCE TRACKING',
     items: [
-      ['admin-ledger', 'Admin Finance Tracking', 'bi-wallet2'],
-      ['development-ledger', 'Development Finance Tracking', 'bi-building'],
+      [
+        'admin-ledger',
+        'Admin Finance Tracking',
+        'bi-wallet2'
+      ],
+      [
+        'development-ledger',
+        'Development Finance Tracking',
+        'bi-building'
+      ],
     ],
   },
   {
     title: 'CONTROL',
     items: [
-      ['audit', 'Audit & Controls', 'bi-shield-check'],
+      [
+        'audit',
+        'Audit & Controls',
+        'bi-shield-check'
+      ],
     ],
   },
 ];
@@ -26,7 +50,10 @@ export function Sidebar() {
   return `
     <aside class="figma-sidebar">
 
-      <a href="#/dashboard" class="brand">
+      <a
+        href="#/dashboard"
+        class="brand"
+      >
         <span class="brand-mark">
           <i class="bi bi-buildings-fill"></i>
         </span>
@@ -38,6 +65,7 @@ export function Sidebar() {
       </a>
 
       <nav class="sidebar-nav">
+
         ${groups.map(group => `
           <div class="nav-group">
 
@@ -45,28 +73,39 @@ export function Sidebar() {
               ${group.title}
             </div>
 
-            ${group.items.map(([key, label, icon]) => `
-              <a
-                href="#/${key}"
-                class="nav-item"
-                data-page="${key}"
-              >
-                <i class="bi ${icon}"></i>
-                <span>${label}</span>
-              </a>
-            `).join('')}
+            ${group.items.map(
+              ([
+                key,
+                label,
+                icon
+              ]) => `
+                <a
+                  href="#/${key}"
+                  class="nav-item"
+                  data-page="${key}"
+                >
+                  <i class="bi ${icon}"></i>
+                  <span>${label}</span>
+                </a>
+              `
+            ).join('')}
 
           </div>
         `).join('')}
+
       </nav>
 
       <div class="sidebar-security">
+
         <div class="security-icon">
           <i class="bi bi-shield-lock-fill"></i>
         </div>
 
-        <strong>Registry v1.0</strong>
-        <small>Audit-ready cooperative records</small>
+        <strong>Live Registry</strong>
+        <small>
+          Authenticated Appwrite data
+        </small>
+
       </div>
 
     </aside>

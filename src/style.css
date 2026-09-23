@@ -2047,3 +2047,129 @@ textarea {
 }
 
 /* SHANDUKO FINANCE TRACKING V1:END */
+
+/* SHANDUKO REAL DATA V1:START */
+
+.real-data-state,
+.real-data-empty {
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.real-data-error {
+  color: #a92f2f;
+}
+
+.dashboard-finance-grid {
+  padding: 18px;
+}
+
+.cooperative-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 18px;
+}
+
+.cooperative-profile-grid > div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #f8faf9;
+}
+
+.cooperative-profile-grid span,
+.cooperative-profile-grid strong {
+  display: block;
+}
+
+.cooperative-profile-grid span {
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cooperative-profile-grid strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.official-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0 18px 18px;
+}
+
+.official-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+
+.official-contact > i {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  border-radius: 9px;
+  background: #e7f3ee;
+  color: var(--green);
+}
+
+.official-contact strong,
+.official-contact small {
+  display: block;
+}
+
+.official-contact strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.official-contact small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#memberForm .auth-error {
+  width: 100%;
+}
+
+#memberForm button:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+@media (max-width: 1000px) {
+  .cooperative-profile-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .official-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .cooperative-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* SHANDUKO REAL DATA V1:END */

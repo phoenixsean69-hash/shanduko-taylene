@@ -1,1 +1,167 @@
-const events=[['bi-receipt-cutoff','Paper receipt matched','SHND-2026-B0892 reconciled to NMB Bank - Excellence Centre.','26/06/2026'],['bi-diagram-3','Ledger allocation locked','Development Fees sub-ledger selected before financial fields were committed.','26/06/2026'],['bi-bank','Deposit context captured','CABS - Central Branch recorded for SHND-2026-B0899.','26/06/2026'],['bi-person-check','Member identity verified','John Tatenda Moyo linked to Stand 1402, Phase 2.','Today']];export function Audit(){return `<div class="audit-grid"><section class="surface-card"><header class="surface-card-header"><div><h2>Audit Trail</h2><p>Administrator review history</p></div></header><div class="audit-list">${events.map(([i,t,x,time])=>`<div class="audit-event"><span class="audit-icon"><i class="bi ${i}"></i></span><div><strong>${t}</strong><p>${x}</p></div><time>${time}</time></div>`).join('')}</div></section><section class="surface-card"><header class="surface-card-header"><div><h2>Control Checklist</h2><p>Required financial logging validations</p></div></header><div class="check-list">${['Receipt Number captured from physical carbon book','ISO deposit date captured','Amount uses fixed-point decimal notation','Bank clearing branch selected','Ledger allocation selected before commit','Member / stand association recorded'].map(t=>`<div><i class="bi bi-check-circle-fill"></i><span>${t}</span></div>`).join('')}</div></section></div>`}
+import {
+  formatDate,
+} from '../services/liveData.js';
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function iconFor(entityType) {
+  const icons = {
+    member: 'bi-person-check',
+    transaction: 'bi-journal-text',
+    admin_ledger: 'bi-wallet2',
+    development_ledger: 'bi-building',
+    auth: 'bi-person-lock',
+    system: 'bi-gear',
+  };
+
+  return icons[entityType] ||
+    'bi-shield-check';
+}
+
+export function Audit({
+  events = [],
+  loading = false,
+  error = '',
+} = {}) {
+  let eventsHtml = '';
+
+  if (loading) {
+    eventsHtml = `
+      <div class="real-data-state">
+        <span
+          class="spinner-border spinner-border-sm"
+          aria-hidden="true"
+        ></span>
+        Loading real audit events...
+      </div>
+    `;
+  } else if (error) {
+    eventsHtml = `
+      <div class="real-data-state real-data-error">
+        ${escapeHtml(error)}
+      </div>
+    `;
+  } else if (!events.length) {
+    eventsHtml = `
+      <div class="real-data-empty">
+        No audit events have been recorded in Appwrite yet.
+      </div>
+    `;
+  } else {
+    eventsHtml = `
+      <div class="audit-list">
+        ${events.map(event => `
+          <div class="audit-event">
+
+            <span class="audit-icon">
+              <i
+                class="bi ${iconFor(
+                  event.entityType
+                )}"
+              ></i>
+            </span>
+
+            <div>
+              <strong>
+                ${escapeHtml(
+                  event.action ||
+                  'Audit event'
+                )}
+              </strong>
+
+              <p>
+                ${escapeHtml(
+                  event.summary ||
+                  `${event.entityType || 'record'} ${event.entityId || ''}`
+                )}
+              </p>
+
+              <small>
+                Actor:
+                ${escapeHtml(
+                  event.actorRole ||
+                  event.actorUserId ||
+                  'system'
+                )}
+              </small>
+            </div>
+
+            <time>
+              ${formatDate(
+                event.$createdAt
+              )}
+            </time>
+
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="audit-grid">
+
+      <section class="surface-card">
+
+        <header class="surface-card-header">
+          <div>
+            <h2>Audit Trail</h2>
+            <p>
+              Live rows from Appwrite audit_events
+            </p>
+          </div>
+        </header>
+
+        ${eventsHtml}
+
+      </section>
+
+      <section class="surface-card">
+
+        <header class="surface-card-header">
+          <div>
+            <h2>Current Control State</h2>
+            <p>
+              Based on actual stored audit data
+            </p>
+          </div>
+        </header>
+
+        <div class="check-list">
+
+          <div>
+            <i class="bi bi-database-check"></i>
+            <span>
+              Audit events stored:
+              ${events.length}
+            </span>
+          </div>
+
+          <div>
+            <i class="bi bi-shield-lock"></i>
+            <span>
+              Browser access is authenticated
+            </span>
+          </div>
+
+          <div>
+            <i class="bi bi-journal-check"></i>
+            <span>
+              No sample audit events are displayed
+            </span>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  `;
+}

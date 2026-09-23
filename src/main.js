@@ -2,25 +2,60 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './style.css';
 
-import { account } from './lib/appwrite.js';
-import { listMembershipRegister } from './services/membershipRegister.js';
+import {
+  account
+} from './lib/appwrite.js';
 
-import { AppShell } from './components/layout/AppShell.js';
-import { MemberTable } from './components/members/MemberTable.js';
-import { pageMeta } from './data/appData.js';
+import {
+  createMemberRecord,
+  listAdminLedger,
+  listAuditEvents,
+  listDevelopmentLedger,
+  listMemberRecords,
+  loadDashboardData,
+} from './services/liveData.js';
 
-import { Dashboard } from './pages/Dashboard.js';
-import { Members } from './pages/Members.js';
-import { NewMember } from './pages/NewMember.js';
-import { Login } from './pages/Login.js';
+import {
+  AppShell
+} from './components/layout/AppShell.js';
+
+import {
+  MemberTable
+} from './components/members/MemberTable.js';
+
+import {
+  pageMeta
+} from './data/appData.js';
+
+import {
+  Dashboard
+} from './pages/Dashboard.js';
+
+import {
+  Members
+} from './pages/Members.js';
+
+import {
+  NewMember
+} from './pages/NewMember.js';
 
 import {
   AdminLedger,
-  DevelopmentLedger
+  DevelopmentLedger,
+  LedgerView,
 } from './pages/Ledger.js';
 
-import { Audit } from './pages/Audit.js';
-import { showToast } from './components/common/Toast.js';
+import {
+  Audit
+} from './pages/Audit.js';
+
+import {
+  Login
+} from './pages/Login.js';
+
+import {
+  showToast
+} from './components/common/Toast.js';
 
 const routes = {
   dashboard: Dashboard,
@@ -35,8 +70,8 @@ const headerTitles = {
   dashboard: 'Dashboard',
   members: 'Member Registry',
   'new-member': 'Add Member',
-  'admin-ledger': 'Admin Fees Ledger',
-  'development-ledger': 'Development Ledger',
+  'admin-ledger': 'Admin Finance Tracking',
+  'development-ledger': 'Development Finance Tracking',
   audit: 'Audit & Controls',
 };
 
@@ -45,9 +80,12 @@ let sessionChecked = false;
 
 function getRoute() {
   const current =
-    location.hash.replace(/^#\/?/, '') || 'dashboard';
+    location.hash.replace(/^#\/?/, '') ||
+    'dashboard';
 
-  return routes[current] ? current : 'dashboard';
+  return routes[current]
+    ? current
+    : 'dashboard';
 }
 
 async function resolveSession() {
@@ -56,7 +94,8 @@ async function resolveSession() {
   }
 
   try {
-    currentUser = await account.get();
+    currentUser =
+      await account.get();
   } catch {
     currentUser = null;
   }
@@ -65,10 +104,6 @@ async function resolveSession() {
 
   return currentUser;
 }
-
-/* ============================================================
-   HEADER POPOVERS
-   ============================================================ */
 
 function closePopovers() {
   document
@@ -84,7 +119,10 @@ function closePopovers() {
       '[data-action="profile"]'
     )
     .forEach(button => {
-      button.setAttribute('aria-expanded', 'false');
+      button.setAttribute(
+        'aria-expanded',
+        'false'
+      );
     });
 }
 
@@ -94,7 +132,9 @@ function togglePopover(name) {
       `[data-popover="${name}"]`
     );
 
-  if (!popover) return;
+  if (!popover) {
+    return;
+  }
 
   const alreadyOpen =
     popover.classList.contains('open');
@@ -105,13 +145,20 @@ function togglePopover(name) {
     popover.classList.add('open');
 
     document
-      .querySelector(`[data-action="${name}"]`)
-      ?.setAttribute('aria-expanded', 'true');
+      .querySelector(
+        `[data-action="${name}"]`
+      )
+      ?.setAttribute(
+        'aria-expanded',
+        'true'
+      );
   }
 }
 
 function syncProfile(user) {
-  if (!user) return;
+  if (!user) {
+    return;
+  }
 
   const name =
     user.name?.trim() ||
@@ -119,13 +166,19 @@ function syncProfile(user) {
     'Administrator';
 
   const profileName =
-    document.querySelector('.profile-copy strong');
+    document.querySelector(
+      '.profile-copy strong'
+    );
 
   const profileEmail =
-    document.querySelector('.profile-copy small');
+    document.querySelector(
+      '.profile-copy small'
+    );
 
   const profileAvatar =
-    document.querySelector('.profile-avatar');
+    document.querySelector(
+      '.profile-avatar'
+    );
 
   const popoverTitle =
     document.querySelector(
@@ -137,7 +190,9 @@ function syncProfile(user) {
   }
 
   if (profileEmail) {
-    profileEmail.textContent = user.email || 'Admin Control Account';
+    profileEmail.textContent =
+      user.email ||
+      'Admin Control Account';
   }
 
   if (profileAvatar) {
@@ -150,38 +205,48 @@ function syncProfile(user) {
   }
 }
 
-/* ============================================================
-   PAGE META
-   ============================================================ */
-
 function updateMeta(key) {
   const [title, subtitle] =
-    pageMeta[key] || pageMeta.dashboard;
+    pageMeta[key] ||
+    pageMeta.dashboard;
 
   const titleElement =
-    document.querySelector('#pageTitle');
+    document.querySelector(
+      '#pageTitle'
+    );
 
   const subtitleElement =
-    document.querySelector('#pageSubtitle');
+    document.querySelector(
+      '#pageSubtitle'
+    );
 
   const crumbElement =
-    document.querySelector('#pageCrumb');
+    document.querySelector(
+      '#pageCrumb'
+    );
 
   const headerTitle =
-    document.querySelector('.header-title');
+    document.querySelector(
+      '.header-title'
+    );
 
-  if (titleElement)
+  if (titleElement) {
     titleElement.textContent = title;
+  }
 
-  if (subtitleElement)
-    subtitleElement.textContent = subtitle;
+  if (subtitleElement) {
+    subtitleElement.textContent =
+      subtitle;
+  }
 
-  if (crumbElement)
+  if (crumbElement) {
     crumbElement.textContent = title;
+  }
 
   if (headerTitle) {
     headerTitle.textContent =
-      headerTitles[key] || title;
+      headerTitles[key] ||
+      title;
   }
 
   document
@@ -194,15 +259,15 @@ function updateMeta(key) {
     });
 }
 
-/* ============================================================
-   AUTH
-   ============================================================ */
-
 function showLoginError(message) {
   const error =
-    document.querySelector('#loginError');
+    document.querySelector(
+      '#loginError'
+    );
 
-  if (!error) return;
+  if (!error) {
+    return;
+  }
 
   error.textContent = message;
   error.hidden = false;
@@ -210,70 +275,104 @@ function showLoginError(message) {
 
 function wireLogin() {
   const form =
-    document.querySelector('#loginForm');
+    document.querySelector(
+      '#loginForm'
+    );
 
-  if (!form) return;
+  if (!form) {
+    return;
+  }
 
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
+  form.addEventListener(
+    'submit',
+    async event => {
+      event.preventDefault();
 
-    const email =
-      document.querySelector('#loginEmail')
-        ?.value.trim();
+      const email =
+        document
+          .querySelector(
+            '#loginEmail'
+          )
+          ?.value.trim();
 
-    const password =
-      document.querySelector('#loginPassword')
-        ?.value;
+      const password =
+        document
+          .querySelector(
+            '#loginPassword'
+          )
+          ?.value;
 
-    const button =
-      document.querySelector('#loginButton');
+      const button =
+        document.querySelector(
+          '#loginButton'
+        );
 
-    if (!email || !password) {
-      showLoginError(
-        'Enter your administrator email and password.'
-      );
-      return;
-    }
+      if (!email || !password) {
+        showLoginError(
+          'Enter your administrator email and password.'
+        );
 
-    const error =
-      document.querySelector('#loginError');
+        return;
+      }
 
-    if (error) {
-      error.hidden = true;
-      error.textContent = '';
-    }
+      const error =
+        document.querySelector(
+          '#loginError'
+        );
 
-    if (button) {
-      button.disabled = true;
-      button.querySelector('span').textContent =
-        'Signing in...';
-    }
-
-    try {
-      await account.createEmailPasswordSession({
-        email,
-        password,
-      });
-
-      currentUser = await account.get();
-      sessionChecked = true;
-
-      location.hash = '#/members';
-
-      await render();
-    } catch (error) {
-      showLoginError(
-        error?.message ||
-        'Sign-in failed. Check your account details.'
-      );
+      if (error) {
+        error.hidden = true;
+        error.textContent = '';
+      }
 
       if (button) {
-        button.disabled = false;
-        button.querySelector('span').textContent =
-          'Sign in securely';
+        button.disabled = true;
+
+        const span =
+          button.querySelector('span');
+
+        if (span) {
+          span.textContent =
+            'Signing in...';
+        }
+      }
+
+      try {
+        await account
+          .createEmailPasswordSession({
+            email,
+            password,
+          });
+
+        currentUser =
+          await account.get();
+
+        sessionChecked = true;
+
+        location.hash =
+          '#/dashboard';
+
+        await render();
+      } catch (error) {
+        showLoginError(
+          error?.message ||
+          'Sign-in failed.'
+        );
+
+        if (button) {
+          button.disabled = false;
+
+          const span =
+            button.querySelector('span');
+
+          if (span) {
+            span.textContent =
+              'Sign in securely';
+          }
+        }
       }
     }
-  });
+  );
 }
 
 async function signOut() {
@@ -282,113 +381,107 @@ async function signOut() {
       sessionId: 'current',
     });
   } catch {
-    // The local UI must still return to the protected login state.
+    // Return the UI to its protected state even if the remote
+    // session was already invalid.
   }
 
   currentUser = null;
   sessionChecked = true;
 
-  document.body.innerHTML = Login();
+  document.body.innerHTML =
+    Login();
+
   wireLogin();
 }
 
-/* ============================================================
-   MEMBER REGISTRY
-   ============================================================ */
-
 function wireMemberSearch() {
   const search =
-    document.querySelector('#memberSearch');
+    document.querySelector(
+      '#memberSearch'
+    );
 
-  if (!search) return;
+  if (!search) {
+    return;
+  }
 
-  search.addEventListener('input', event => {
-    const query =
-      event.target.value
-        .trim()
-        .toLowerCase();
+  search.addEventListener(
+    'input',
+    event => {
+      const query =
+        event.target.value
+          .trim()
+          .toLowerCase();
 
-    document
-      .querySelectorAll('#memberRows tr')
-      .forEach(row => {
-        row.hidden =
-          query.length > 0 &&
-          !row.innerText
-            .toLowerCase()
-            .includes(query);
-      });
-  });
+      document
+        .querySelectorAll(
+          '#memberRows tr'
+        )
+        .forEach(row => {
+          row.hidden =
+            query.length > 0 &&
+            !row.innerText
+              .toLowerCase()
+              .includes(query);
+        });
+    }
+  );
 }
 
-async function loadMemberRegistry() {
+async function loadMembers() {
   const page =
     document.querySelector('#page');
 
-  if (!page) return;
+  if (!page) {
+    return;
+  }
 
   try {
     const members =
-      await listMembershipRegister();
+      await listMemberRecords();
 
     page.innerHTML =
-      MemberTable({ members });
+      MemberTable({
+        members,
+      });
 
     wireMemberSearch();
   } catch (error) {
-    const status =
-      Number(error?.code || 0);
-
-    const message =
-      status === 401 || status === 403
-        ? 'Your account does not have permission to read the cooperative register.'
-        : error?.message ||
-          'Could not load the cooperative register from Appwrite.';
-
     page.innerHTML =
-      MemberTable({ error: message });
+      MemberTable({
+        error:
+          error?.message ||
+          'Could not load member records from Appwrite.',
+      });
   }
 }
 
-/* ============================================================
-   MEMBER FORM
-   ============================================================ */
-
-function wireMemberForm() {
-  const form =
-    document.querySelector('#memberForm');
-
-  if (!form) return;
-
-  form.addEventListener('submit', event => {
-    event.preventDefault();
-
-    const requiredFields =
-      [...form.querySelectorAll('[required]')];
-
-    const invalid =
-      requiredFields.find(field =>
-        !field.value.trim()
-      );
-
-    if (invalid) {
-      invalid.focus();
-
-      showToast(
-        'Please complete all required member fields.'
-      );
-
-      return;
-    }
-
-    showToast(
-      'Member record validated. Backend creation will be connected in the next phase.'
+function setMemberFormError(message) {
+  const error =
+    document.querySelector(
+      '#memberFormError'
     );
-  });
+
+  if (!error) {
+    return;
+  }
+
+  error.textContent = message;
+  error.hidden = false;
 }
 
-/* ============================================================
-   PHOTO UPLOADS
-   ============================================================ */
+function clearMemberFormError() {
+  const error =
+    document.querySelector(
+      '#memberFormError'
+    );
+
+  if (!error) {
+    return;
+  }
+
+  error.textContent = '';
+  error.hidden = true;
+}
 
 function wirePhotoUploads() {
   document
@@ -396,39 +489,237 @@ function wirePhotoUploads() {
       '#memberForm .upload-tile input[type="file"]'
     )
     .forEach(input => {
-      input.addEventListener('change', () => {
-        const tile =
-          input.closest('.upload-tile');
+      input.addEventListener(
+        'change',
+        () => {
+          const tile =
+            input.closest(
+              '.upload-tile'
+            );
 
-        const caption =
-          tile?.querySelector('small');
+          const caption =
+            tile?.querySelector(
+              'small'
+            );
 
-        if (!tile || !caption) return;
+          if (!tile || !caption) {
+            return;
+          }
 
-        if (input.files?.length) {
-          tile.classList.add('has-file');
+          if (input.files?.length) {
+            tile.classList.add(
+              'has-file'
+            );
 
-          caption.textContent =
-            input.files[0].name;
+            caption.textContent =
+              input.files[0].name;
+          } else {
+            tile.classList.remove(
+              'has-file'
+            );
 
-          showToast(
-            'Photo selected for the member record.'
-          );
+            caption.textContent =
+              'Optional';
+          }
         }
-      });
+      );
     });
 }
 
-/* ============================================================
-   EXPORT TABLE
-   ============================================================ */
+function wireMemberForm() {
+  const form =
+    document.querySelector(
+      '#memberForm'
+    );
+
+  if (!form) {
+    return;
+  }
+
+  wirePhotoUploads();
+
+  form.addEventListener(
+    'reset',
+    () => {
+      setTimeout(() => {
+        clearMemberFormError();
+
+        form
+          .querySelectorAll(
+            '.upload-tile'
+          )
+          .forEach(tile => {
+            tile.classList.remove(
+              'has-file'
+            );
+
+            const caption =
+              tile.querySelector(
+                'small'
+              );
+
+            if (caption) {
+              caption.textContent =
+                'Optional';
+            }
+          });
+      }, 0);
+    }
+  );
+
+  form.addEventListener(
+    'submit',
+    async event => {
+      event.preventDefault();
+
+      clearMemberFormError();
+
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      const button =
+        document.querySelector(
+          '#saveMemberButton'
+        );
+
+      if (button) {
+        button.disabled = true;
+        button.innerHTML =
+          '<span class="spinner-border spinner-border-sm"></span> Saving...';
+      }
+
+      try {
+        const member =
+          await createMemberRecord({
+            form,
+            user: currentUser,
+          });
+
+        showToast(
+          `Member ${member.memberCode} saved to Appwrite.`
+        );
+
+        location.hash =
+          '#/members';
+      } catch (error) {
+        let message =
+          error?.message ||
+          'Could not save the member record.';
+
+        if (
+          Number(error?.code) === 409
+        ) {
+          message =
+            'A member with that National ID, stand number or member code already exists.';
+        }
+
+        setMemberFormError(
+          message
+        );
+
+        if (button) {
+          button.disabled = false;
+          button.innerHTML =
+            'Save Real Member Record <i class="bi bi-arrow-right ms-1"></i>';
+        }
+      }
+    }
+  );
+}
+
+async function loadDashboard() {
+  const page =
+    document.querySelector('#page');
+
+  if (!page) {
+    return;
+  }
+
+  try {
+    const data =
+      await loadDashboardData();
+
+    page.innerHTML =
+      Dashboard({
+        data,
+      });
+  } catch (error) {
+    page.innerHTML =
+      Dashboard({
+        error:
+          error?.message ||
+          'Could not load live dashboard data.',
+      });
+  }
+}
+
+async function loadLedger(kind) {
+  const page =
+    document.querySelector('#page');
+
+  if (!page) {
+    return;
+  }
+
+  try {
+    const rows =
+      kind === 'development'
+        ? await listDevelopmentLedger()
+        : await listAdminLedger();
+
+    page.innerHTML =
+      LedgerView({
+        kind,
+        rows,
+      });
+  } catch (error) {
+    page.innerHTML =
+      LedgerView({
+        kind,
+        error:
+          error?.message ||
+          'Could not load live finance records.',
+      });
+  }
+}
+
+async function loadAudit() {
+  const page =
+    document.querySelector('#page');
+
+  if (!page) {
+    return;
+  }
+
+  try {
+    const events =
+      await listAuditEvents();
+
+    page.innerHTML =
+      Audit({
+        events,
+      });
+  } catch (error) {
+    page.innerHTML =
+      Audit({
+        error:
+          error?.message ||
+          'Could not load audit data.',
+      });
+  }
+}
 
 function exportTable(button) {
   const card =
-    button.closest('.surface-card');
+    button.closest(
+      '.surface-card'
+    );
 
   const table =
-    card?.querySelector('table');
+    card?.querySelector(
+      'table'
+    );
 
   if (!table) {
     showToast(
@@ -460,7 +751,8 @@ function exportTable(button) {
     new Blob(
       [csv],
       {
-        type: 'text/csv;charset=utf-8;'
+        type:
+          'text/csv;charset=utf-8;',
       }
     );
 
@@ -477,274 +769,328 @@ function exportTable(button) {
       .toISOString()
       .slice(0, 10)}.csv`;
 
-  document.body.appendChild(link);
+  document.body
+    .appendChild(link);
 
   link.click();
-
   link.remove();
 
   URL.revokeObjectURL(url);
 
   showToast(
-    'Ledger exported successfully.'
+    'Real finance tracking table exported.'
   );
 }
 
-/* ============================================================
-   PAGE WIRING
-   ============================================================ */
-
 async function wirePage(key) {
+  if (key === 'dashboard') {
+    await loadDashboard();
+  }
+
   if (key === 'members') {
-    await loadMemberRegistry();
+    await loadMembers();
   }
 
   if (key === 'new-member') {
     wireMemberForm();
-    wirePhotoUploads();
+  }
+
+  if (key === 'admin-ledger') {
+    await loadLedger('admin');
+  }
+
+  if (key === 'development-ledger') {
+    await loadLedger(
+      'development'
+    );
+  }
+
+  if (key === 'audit') {
+    await loadAudit();
   }
 }
-
-/* ============================================================
-   ROUTER
-   ============================================================ */
 
 async function render() {
   const user =
     await resolveSession();
 
   if (!user) {
-    document.body.innerHTML = Login();
+    document.body.innerHTML =
+      Login();
+
     wireLogin();
+
     return;
   }
 
-  if (!document.querySelector('.app-shell')) {
+  if (
+    !document.querySelector(
+      '.app-shell'
+    )
+  ) {
     document.body.innerHTML =
       AppShell();
   }
 
   syncProfile(user);
 
-  const key = getRoute();
+  const key =
+    getRoute();
 
   const page =
-    document.querySelector('#page');
+    document.querySelector(
+      '#page'
+    );
 
-  if (!page) return;
+  if (!page) {
+    return;
+  }
 
   page.innerHTML =
     routes[key]();
 
   updateMeta(key);
-
   closePopovers();
 
   await wirePage(key);
 }
 
-/* ============================================================
-   GLOBAL CLICK HANDLER
-   ============================================================ */
-
-document.addEventListener('click', async event => {
-  const language =
-    event.target.closest(
-      '[data-action="language"]'
-    );
-
-  if (language) {
-    event.preventDefault();
-    event.stopPropagation();
-    togglePopover('language');
-    return;
-  }
-
-  const notifications =
-    event.target.closest(
-      '[data-action="notifications"]'
-    );
-
-  if (notifications) {
-    event.preventDefault();
-    event.stopPropagation();
-    togglePopover('notifications');
-    return;
-  }
-
-  const profile =
-    event.target.closest(
-      '[data-action="profile"]'
-    );
-
-  if (profile) {
-    event.preventDefault();
-    event.stopPropagation();
-    togglePopover('profile');
-    return;
-  }
-
-  const languageOption =
-    event.target.closest(
-      '[data-language]'
-    );
-
-  if (languageOption) {
-    const value =
-      languageOption.dataset.language;
-
-    const control =
-      document.querySelector(
+document.addEventListener(
+  'click',
+  async event => {
+    const language =
+      event.target.closest(
         '[data-action="language"]'
       );
 
-    const text =
-      control?.querySelector('span');
+    if (language) {
+      event.preventDefault();
+      event.stopPropagation();
 
-    if (text) {
-      text.textContent =
+      togglePopover(
+        'language'
+      );
+
+      return;
+    }
+
+    const notifications =
+      event.target.closest(
+        '[data-action="notifications"]'
+      );
+
+    if (notifications) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      togglePopover(
+        'notifications'
+      );
+
+      return;
+    }
+
+    const profile =
+      event.target.closest(
+        '[data-action="profile"]'
+      );
+
+    if (profile) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      togglePopover(
+        'profile'
+      );
+
+      return;
+    }
+
+    const languageOption =
+      event.target.closest(
+        '[data-language]'
+      );
+
+    if (languageOption) {
+      const value =
+        languageOption.dataset.language;
+
+      const control =
+        document.querySelector(
+          '[data-action="language"]'
+        );
+
+      const text =
+        control?.querySelector(
+          'span'
+        );
+
+      if (text) {
+        text.textContent =
+          value === 'sn'
+            ? 'Shona'
+            : 'Eng (US)';
+      }
+
+      closePopovers();
+
+      showToast(
         value === 'sn'
-          ? 'Shona'
-          : 'Eng (US)';
+          ? 'Language set to Shona.'
+          : 'Language set to English (US).'
+      );
+
+      return;
+    }
+
+    if (
+      event.target.closest(
+        '[data-action="notification-review"]'
+      )
+    ) {
+      closePopovers();
+
+      location.hash =
+        '#/admin-ledger';
+
+      return;
+    }
+
+    if (
+      event.target.closest(
+        '[data-action="notification-member"]'
+      )
+    ) {
+      closePopovers();
+
+      location.hash =
+        '#/new-member';
+
+      return;
+    }
+
+    if (
+      event.target.closest(
+        '[data-action="profile-audit"]'
+      )
+    ) {
+      closePopovers();
+
+      location.hash =
+        '#/audit';
+
+      return;
+    }
+
+    if (
+      event.target.closest(
+        '[data-action="profile-signout"]'
+      )
+    ) {
+      closePopovers();
+
+      await signOut();
+
+      return;
+    }
+
+    const exportButton =
+      event.target.closest(
+        '.ledger-view .secondary-button'
+      );
+
+    if (
+      exportButton &&
+      exportButton.innerText
+        .toLowerCase()
+        .includes('export')
+    ) {
+      event.preventDefault();
+
+      exportTable(
+        exportButton
+      );
+
+      return;
+    }
+
+    if (
+      !event.target.closest(
+        '[data-popover]'
+      )
+    ) {
+      closePopovers();
+    }
+  }
+);
+
+document.addEventListener(
+  'click',
+  event => {
+    const link =
+      event.target.closest(
+        'a[href^="#/"]'
+      );
+
+    if (!link) {
+      return;
     }
 
     closePopovers();
-
-    showToast(
-      value === 'sn'
-        ? 'Language set to Shona.'
-        : 'Language set to English (US).'
-    );
-
-    return;
   }
+);
 
-  if (
-    event.target.closest(
-      '[data-action="notification-review"]'
-    )
-  ) {
-    closePopovers();
+document.addEventListener(
+  'keydown',
+  event => {
+    const input =
+      event.target;
+
+    if (
+      input?.id !== 'globalSearch' ||
+      event.key !== 'Enter'
+    ) {
+      return;
+    }
+
+    const query =
+      input.value.trim();
+
+    if (!query) {
+      return;
+    }
+
     location.hash =
-      '#/admin-ledger';
-    return;
-  }
+      '#/members';
 
-  if (
-    event.target.closest(
-      '[data-action="notification-member"]'
-    )
-  ) {
-    closePopovers();
-    location.hash =
-      '#/new-member';
-    return;
-  }
+    const applySearch = () => {
+      const search =
+        document.querySelector(
+          '#memberSearch'
+        );
 
-  if (
-    event.target.closest(
-      '[data-action="profile-audit"]'
-    )
-  ) {
-    closePopovers();
-    location.hash =
-      '#/audit';
-    return;
-  }
+      if (!search) {
+        setTimeout(
+          applySearch,
+          120
+        );
 
-  if (
-    event.target.closest(
-      '[data-action="profile-signout"]'
-    )
-  ) {
-    closePopovers();
-    await signOut();
-    return;
-  }
+        return;
+      }
 
-  const exportButton =
-    event.target.closest(
-      '.ledger-view .secondary-button'
-    );
+      search.value = query;
 
-  if (
-    exportButton &&
-    exportButton.innerText
-      .toLowerCase()
-      .includes('export')
-  ) {
-    event.preventDefault();
-    exportTable(exportButton);
-    return;
-  }
-
-  if (
-    !event.target.closest(
-      '[data-popover]'
-    )
-  ) {
-    closePopovers();
-  }
-});
-
-/* ============================================================
-   GLOBAL ROUTE LINKS
-   ============================================================ */
-
-document.addEventListener('click', event => {
-  const link =
-    event.target.closest(
-      'a[href^="#/"]'
-    );
-
-  if (!link) return;
-
-  closePopovers();
-});
-
-/* ============================================================
-   GLOBAL SEARCH
-   ============================================================ */
-
-document.addEventListener('keydown', event => {
-  const input =
-    event.target;
-
-  if (
-    input?.id !== 'globalSearch' ||
-    event.key !== 'Enter'
-  ) {
-    return;
-  }
-
-  const query =
-    input.value.trim();
-
-  if (!query) return;
-
-  location.hash =
-    '#/members';
-
-  setTimeout(() => {
-    const search =
-      document.querySelector(
-        '#memberSearch'
+      search.dispatchEvent(
+        new Event('input')
       );
+    };
 
-    if (!search) return;
-
-    search.value =
-      query;
-
-    search.dispatchEvent(
-      new Event('input')
+    setTimeout(
+      applySearch,
+      120
     );
-  }, 300);
-});
-
-/* ============================================================
-   START APPLICATION
-   ============================================================ */
+  }
+);
 
 window.addEventListener(
   'hashchange',

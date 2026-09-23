@@ -7,44 +7,16 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;');
 }
 
-function renderRows(members) {
-  return members.map(member => {
-    const fullName =
-      `${member.firstNames || ''} ${member.surname || ''}`.trim();
+function sourceLabel(member) {
+  return member.createdSource === 'legacy_register'
+    ? 'Source Register'
+    : 'Admin Entry';
+}
 
-    return `
-      <tr>
-        <td>
-          <code>${escapeHtml(member.registerOrder)}</code>
-        </td>
-
-        <td>
-          <strong>${escapeHtml(fullName)}</strong>
-          <small>${escapeHtml(member.nationalId)}</small>
-        </td>
-
-        <td>
-          <strong>${escapeHtml(member.standNumber)}</strong>
-        </td>
-
-        <td>
-          ${escapeHtml(member.whatsappContact)}
-        </td>
-
-        <td>
-          <span class="ledger-badge admin">
-            Source Register
-          </span>
-        </td>
-
-        <td>
-          <span class="status-badge">
-            Registered
-          </span>
-        </td>
-      </tr>
-    `;
-  }).join('');
+function statusClass(status) {
+  return status === 'pending'
+    ? 'pending'
+    : '';
 }
 
 export function MemberTable({
@@ -52,34 +24,104 @@ export function MemberTable({
   loading = false,
   error = '',
 } = {}) {
-  const body = loading
-    ? `
+  let body = '';
+
+  if (loading) {
+    body = `
       <tr>
-        <td colspan="6" class="registry-state">
-          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-          Loading the cooperative register from Appwrite...
+        <td colspan="7" class="registry-state">
+          <span
+            class="spinner-border spinner-border-sm"
+            aria-hidden="true"
+          ></span>
+          Loading real member records from Appwrite...
         </td>
       </tr>
-    `
-    : error
-      ? `
-        <tr>
-          <td colspan="6" class="registry-state registry-state-error">
-            <i class="bi bi-exclamation-triangle"></i>
-            ${escapeHtml(error)}
-          </td>
-        </tr>
-      `
-      : renderRows(members);
+    `;
+  } else if (error) {
+    body = `
+      <tr>
+        <td
+          colspan="7"
+          class="registry-state registry-state-error"
+        >
+          <i class="bi bi-exclamation-triangle"></i>
+          ${escapeHtml(error)}
+        </td>
+      </tr>
+    `;
+  } else if (!members.length) {
+    body = `
+      <tr>
+        <td colspan="7" class="registry-state">
+          No member records exist in Appwrite yet.
+        </td>
+      </tr>
+    `;
+  } else {
+    body = members.map(member => `
+      <tr>
+
+        <td>
+          <code>
+            ${escapeHtml(member.memberCode)}
+          </code>
+        </td>
+
+        <td>
+          <strong>
+            ${escapeHtml(member.fullName)}
+          </strong>
+
+          <small>
+            ${escapeHtml(member.nationalId)}
+          </small>
+        </td>
+
+        <td>
+          ${escapeHtml(member.standNumber)}
+        </td>
+
+        <td>
+          ${escapeHtml(member.whatsappContact)}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            member.spouseFullName || '—'
+          )}
+        </td>
+
+        <td>
+          <span class="ledger-badge admin">
+            ${escapeHtml(sourceLabel(member))}
+          </span>
+        </td>
+
+        <td>
+          <span
+            class="status-badge ${
+              statusClass(member.status)
+            }"
+          >
+            ${escapeHtml(
+              member.status || 'pending'
+            )}
+          </span>
+        </td>
+
+      </tr>
+    `).join('');
+  }
 
   return `
     <section class="surface-card">
 
       <header class="surface-card-header">
         <div>
-          <h2>78 Stands Membership Register</h2>
+          <h2>Cooperative Member Registry</h2>
           <p>
-            Live Shanduko cooperative source register from Appwrite
+            Live operational member records from Appwrite
           </p>
         </div>
 
@@ -97,17 +139,20 @@ export function MemberTable({
 
         <label class="table-search">
           <i class="bi bi-search"></i>
+
           <input
             id="memberSearch"
-            placeholder="Search name, stand, National ID or contact..."
+            placeholder="Search member, stand, ID or contact..."
             ${loading ? 'disabled' : ''}
           >
         </label>
 
         <span class="table-note">
-          ${loading
-            ? 'Connecting to Appwrite...'
-            : `${members.length} authoritative register records loaded`}
+          ${
+            loading
+              ? 'Connecting to Appwrite...'
+              : `${members.length} real records loaded`
+          }
         </span>
 
       </div>
@@ -118,10 +163,11 @@ export function MemberTable({
 
           <thead>
             <tr>
-              <th>Register #</th>
+              <th>Member ID</th>
               <th>Member</th>
               <th>Stand / Plot</th>
-              <th>WhatsApp Contact</th>
+              <th>WhatsApp</th>
+              <th>Spouse</th>
               <th>Source</th>
               <th>Status</th>
             </tr>

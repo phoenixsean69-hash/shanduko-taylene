@@ -1075,5 +1075,269 @@
       }
     ],
     "indexes": []
+  },
+  {
+    "$id": "member_records",
+    "databaseId": "shanduko",
+    "name": "Member Records",
+    "enabled": true,
+    "rowSecurity": false,
+    "$permissions": [
+      "create(\"team:shanduko-admins\")",
+      "read(\"team:shanduko-admins\")",
+      "update(\"team:shanduko-admins\")",
+      "delete(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "memberCode",
+        "type": "string",
+        "size": 40,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "fullName",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "surname",
+        "type": "string",
+        "size": 120,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "firstNames",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "nationalId",
+        "type": "string",
+        "size": 80,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "standNumber",
+        "type": "string",
+        "size": 40,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "whatsappContact",
+        "type": "string",
+        "size": 50,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "spouseFullName",
+        "type": "string",
+        "size": 180,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "spouseNationalId",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "nextOfKinName",
+        "type": "string",
+        "size": 180,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "nextOfKinRelationship",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "nextOfKinPhone",
+        "type": "string",
+        "size": 50,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryName",
+        "type": "string",
+        "size": 180,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryRelationship",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryAllocationPct",
+        "type": "double",
+        "required": false,
+        "array": false,
+        "min": 0,
+        "max": 100
+      },
+      {
+        "key": "status",
+        "type": "string",
+        "required": true,
+        "array": false,
+        "format": "enum",
+        "elements": [
+          "registered",
+          "pending",
+          "suspended",
+          "archived"
+        ]
+      },
+      {
+        "key": "verificationStatus",
+        "type": "string",
+        "required": true,
+        "array": false,
+        "format": "enum",
+        "elements": [
+          "source_register",
+          "pending",
+          "verified",
+          "rejected"
+        ]
+      },
+      {
+        "key": "createdSource",
+        "type": "string",
+        "required": true,
+        "array": false,
+        "format": "enum",
+        "elements": [
+          "legacy_register",
+          "admin_web"
+        ]
+      },
+      {
+        "key": "sourceRegisterId",
+        "type": "string",
+        "size": 36,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "sourceRegisterOrder",
+        "type": "integer",
+        "required": false,
+        "array": false,
+        "min": 1,
+        "max": 2147483647
+      },
+      {
+        "key": "createdByUserId",
+        "type": "string",
+        "size": 36,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "ownerUserId",
+        "type": "string",
+        "size": 36,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "memberPhotoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "spousePhotoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "beneficiaryPhotoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "notes",
+        "type": "text",
+        "required": false,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "member_records_code_unique",
+        "type": "unique",
+        "columns": [
+          "memberCode"
+        ],
+        "orders": []
+      },
+      {
+        "key": "member_records_national_id_unique",
+        "type": "unique",
+        "columns": [
+          "nationalId"
+        ],
+        "orders": []
+      },
+      {
+        "key": "member_records_stand_unique",
+        "type": "unique",
+        "columns": [
+          "standNumber"
+        ],
+        "orders": []
+      },
+      {
+        "key": "member_records_source_idx",
+        "type": "key",
+        "columns": [
+          "createdSource"
+        ],
+        "orders": []
+      },
+      {
+        "key": "member_records_status_idx",
+        "type": "key",
+        "columns": [
+          "status"
+        ],
+        "orders": []
+      },
+      {
+        "key": "member_records_name_search",
+        "type": "fulltext",
+        "columns": [
+          "fullName"
+        ],
+        "orders": []
+      }
+    ]
   }
 ]

@@ -2,13 +2,16 @@ export function Header() {
   return `
     <header class="app-header">
 
-      <div class="header-title">Dashboard</div>
+      <div class="header-title">
+        Dashboard
+      </div>
 
       <label class="header-search">
         <i class="bi bi-search"></i>
+
         <input
           id="globalSearch"
-          placeholder="Search members, stands or receipts..."
+          placeholder="Search real member records..."
           aria-label="Search"
         >
       </label>
@@ -30,11 +33,10 @@ export function Header() {
           type="button"
           class="header-icon"
           data-action="notifications"
-          aria-label="Notifications"
+          aria-label="Quick actions"
           aria-expanded="false"
         >
           <i class="bi bi-bell"></i>
-          <span></span>
         </button>
 
         <button
@@ -43,11 +45,13 @@ export function Header() {
           data-action="profile"
           aria-expanded="false"
         >
-          <span class="profile-avatar">A</span>
+          <span class="profile-avatar">
+            A
+          </span>
 
           <span class="profile-copy">
             <strong>Administrator</strong>
-            <small>Admin Control Account</small>
+            <small>Authenticated account</small>
           </span>
 
           <i class="bi bi-chevron-down"></i>
@@ -61,12 +65,18 @@ export function Header() {
       >
         <strong>Language</strong>
 
-        <button type="button" data-language="en">
+        <button
+          type="button"
+          data-language="en"
+        >
           <i class="bi bi-translate"></i>
           <span>English (US)</span>
         </button>
 
-        <button type="button" data-language="sn">
+        <button
+          type="button"
+          data-language="sn"
+        >
           <i class="bi bi-chat-square-text"></i>
           <span>Shona</span>
         </button>
@@ -76,14 +86,14 @@ export function Header() {
         class="header-popover notification-popover"
         data-popover="notifications"
       >
-        <strong>Notifications</strong>
+        <strong>Quick actions</strong>
 
         <button
           type="button"
           data-action="notification-review"
         >
-          <i class="bi bi-receipt"></i>
-          <span>Finance records ready for review</span>
+          <i class="bi bi-wallet2"></i>
+          <span>Open finance tracking</span>
         </button>
 
         <button
@@ -91,7 +101,7 @@ export function Header() {
           data-action="notification-member"
         >
           <i class="bi bi-person-plus"></i>
-          <span>Add a new member record</span>
+          <span>Add a member record</span>
         </button>
       </div>
 
