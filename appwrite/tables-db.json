@@ -1,7 +1,7 @@
 [
-  {
-    "$id": "shanduko",
-    "name": "Shanduko Housing Cooperative",
-    "enabled": true
-  }
+    {
+        "$id": "shanduko",
+        "name": "Shanduko Housing Cooperative",
+        "enabled": true
+    }
 ]
