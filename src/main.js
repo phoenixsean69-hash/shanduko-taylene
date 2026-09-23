@@ -7,7 +7,6 @@ import { pageMeta } from './data/appData.js';
 
 import { Dashboard } from './pages/Dashboard.js';
 import { Members } from './pages/Members.js';
-import { NewMember } from './pages/NewMember.js';
 import { Transactions } from './pages/Transactions.js';
 
 import {
@@ -21,7 +20,6 @@ import { showToast } from './components/common/Toast.js';
 const routes = {
   dashboard: Dashboard,
   members: Members,
-  'new-member': NewMember,
   transactions: Transactions,
   'admin-ledger': AdminLedger,
   'development-ledger': DevelopmentLedger,
@@ -294,6 +292,26 @@ function wireTransactions() {
     });
 
   }
+
+  document
+    .querySelectorAll('.module-tab')
+    .forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+
+        document
+          .querySelectorAll('.module-tab')
+          .forEach(item => {
+            item.classList.toggle('active', item === tab);
+          });
+
+        document
+          .querySelectorAll('.tab-panel')
+          .forEach(panel => {
+            panel.classList.toggle('active', panel.dataset.panel === target);
+          });
+      });
+    });
 
   document
     .querySelectorAll('.account-option')
@@ -731,3 +749,4 @@ window.addEventListener(
 );
 
 render();
+
