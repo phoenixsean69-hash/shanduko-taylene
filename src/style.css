@@ -1630,3 +1630,149 @@ textarea {
 }
 
 /* SHANDUKO TYPOGRAPHY SYSTEM V1:END */
+/* SHANDUKO HEADER LAYOUT FIX V1:START */
+
+/*
+  The top bar is navigation context, not the full page heading.
+  Full descriptive titles remain large in .page-heading.
+*/
+
+.app-header {
+  grid-template-columns:
+    minmax(190px, 250px)
+    minmax(300px, 1fr)
+    auto !important;
+  gap: 18px !important;
+  min-height: 72px !important;
+  height: 72px !important;
+  padding-left: 28px !important;
+  padding-right: 28px !important;
+  overflow: visible !important;
+}
+
+.header-title {
+  min-width: 0 !important;
+  font-size: 22px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.header-search {
+  width: 100% !important;
+  max-width: 560px !important;
+  min-width: 0 !important;
+  justify-self: center !important;
+}
+
+.header-search input {
+  min-width: 0 !important;
+}
+
+.header-actions {
+  min-width: max-content !important;
+  justify-self: end !important;
+  white-space: nowrap !important;
+}
+
+.profile-control {
+  min-width: 0 !important;
+}
+
+.profile-copy {
+  min-width: 0 !important;
+}
+
+/* The real page title stays large and readable below the header. */
+.page-heading {
+  position: relative !important;
+  z-index: 1 !important;
+  padding-top: 22px !important;
+  padding-bottom: 18px !important;
+}
+
+.page-heading h1 {
+  max-width: 760px !important;
+}
+
+.page-heading p {
+  max-width: 900px !important;
+}
+
+.breadcrumb-wrap {
+  min-width: 0 !important;
+  max-width: 46% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  text-align: right !important;
+}
+
+/* Mid-size laptops: keep the typography readable, simplify space use. */
+@media (max-width: 1200px) {
+  .app-header {
+    grid-template-columns:
+      minmax(170px, 215px)
+      minmax(260px, 1fr)
+      auto !important;
+    gap: 14px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .header-title {
+    font-size: 20px !important;
+  }
+
+  .header-search {
+    max-width: 480px !important;
+  }
+
+  .profile-control small {
+    display: none !important;
+  }
+}
+
+/* Narrow desktop/tablet: search yields before titles start wrapping. */
+@media (max-width: 980px) {
+  .app-header {
+    grid-template-columns:
+      minmax(160px, 1fr)
+      auto !important;
+  }
+
+  .header-search {
+    display: none !important;
+  }
+
+  .profile-copy {
+    display: none !important;
+  }
+
+  .breadcrumb-wrap {
+    max-width: 40% !important;
+  }
+}
+
+/* Mobile keeps the existing single-column content behavior. */
+@media (max-width: 780px) {
+  .app-header {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    height: 68px !important;
+    min-height: 68px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .header-title {
+    font-size: 20px !important;
+  }
+
+  .breadcrumb-wrap {
+    display: none !important;
+  }
+}
+
+/* SHANDUKO HEADER LAYOUT FIX V1:END */

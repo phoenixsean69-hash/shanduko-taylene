@@ -28,6 +28,15 @@ const routes = {
   audit: Audit,
 };
 
+const headerTitles = {
+  dashboard: 'Dashboard',
+  members: 'Member Registry',
+  'new-member': 'Add Member',
+  transactions: 'Transactions',
+  'admin-ledger': 'Admin Fees Ledger',
+  'development-ledger': 'Development Ledger',
+  audit: 'Audit & Controls',
+};
 function getRoute() {
   const current =
     location.hash.replace(/^#\/?/, '') || 'dashboard';
@@ -114,9 +123,7 @@ function updateMeta(key) {
 
   if (headerTitle) {
     headerTitle.textContent =
-      key === 'dashboard'
-        ? 'Dashboard'
-        : title;
+      headerTitles[key] || title;
   }
 
   document
