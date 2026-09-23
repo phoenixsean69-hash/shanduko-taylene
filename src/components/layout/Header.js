@@ -1,4 +1,4 @@
-﻿export function Header() {
+export function Header() {
   return `
     <header class="app-header">
 
@@ -21,7 +21,7 @@
           data-action="language"
           aria-expanded="false"
         >
-          🇿🇼
+          <i class="bi bi-globe2"></i>
           <span>Eng (US)</span>
           <i class="bi bi-chevron-down"></i>
         </button>
@@ -55,44 +55,64 @@
 
       </div>
 
-      <!-- LANGUAGE MENU -->
-      <div class="header-popover language-popover" data-popover="language">
+      <div
+        class="header-popover language-popover"
+        data-popover="language"
+      >
         <strong>Language</strong>
 
         <button type="button" data-language="en">
-          🇺🇸 English (US)
+          <i class="bi bi-translate"></i>
+          <span>English (US)</span>
         </button>
 
         <button type="button" data-language="sn">
-          🇿🇼 Shona
+          <i class="bi bi-chat-square-text"></i>
+          <span>Shona</span>
         </button>
       </div>
 
-      <!-- NOTIFICATIONS MENU -->
-      <div class="header-popover notification-popover" data-popover="notifications">
+      <div
+        class="header-popover notification-popover"
+        data-popover="notifications"
+      >
         <strong>Notifications</strong>
 
-        <button type="button" data-action="notification-review">
+        <button
+          type="button"
+          data-action="notification-review"
+        >
           <i class="bi bi-receipt"></i>
           <span>2 receipts awaiting review</span>
         </button>
 
-        <button type="button" data-action="notification-member">
+        <button
+          type="button"
+          data-action="notification-member"
+        >
           <i class="bi bi-person-plus"></i>
-          <span>1 new member record queued</span>
+          <span>Add a new member record</span>
         </button>
       </div>
 
-      <!-- PROFILE MENU -->
-      <div class="header-popover profile-popover" data-popover="profile">
+      <div
+        class="header-popover profile-popover"
+        data-popover="profile"
+      >
         <strong>Administrator</strong>
 
-        <button type="button" data-action="profile-audit">
+        <button
+          type="button"
+          data-action="profile-audit"
+        >
           <i class="bi bi-shield-check"></i>
           <span>Open Audit & Controls</span>
         </button>
 
-        <button type="button" data-action="profile-signout">
+        <button
+          type="button"
+          data-action="profile-signout"
+        >
           <i class="bi bi-box-arrow-right"></i>
           <span>Sign out</span>
         </button>

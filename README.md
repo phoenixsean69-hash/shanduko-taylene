@@ -1,5 +1,23 @@
 # Shanduko Housing Cooperative
 
-Vanilla Vite + AdminLTE 4 front end with reusable layout, common, dashboard, members and finance components.
+Shanduko Housing Cooperative web administration client.
 
-The UI is intentionally built without React.
+## Stack
+
+- Vanilla JavaScript
+- Vite
+- Bootstrap 5
+- Bootstrap Icons
+
+## Main modules
+
+- Dashboard
+- Member Registry
+- Add Member
+- Transactions
+- Admin Fees Ledger
+- Development Fees Ledger
+- Audit & Controls
+
+The web client uses reusable layout, dashboard, member,
+finance and common UI components without React.

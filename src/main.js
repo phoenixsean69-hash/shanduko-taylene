@@ -1,4 +1,4 @@
-﻿import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './style.css';
 
@@ -7,6 +7,7 @@ import { pageMeta } from './data/appData.js';
 
 import { Dashboard } from './pages/Dashboard.js';
 import { Members } from './pages/Members.js';
+import { NewMember } from './pages/NewMember.js';
 import { Transactions } from './pages/Transactions.js';
 
 import {
@@ -20,6 +21,7 @@ import { showToast } from './components/common/Toast.js';
 const routes = {
   dashboard: Dashboard,
   members: Members,
+  'new-member': NewMember,
   transactions: Transactions,
   'admin-ledger': AdminLedger,
   'development-ledger': DevelopmentLedger,

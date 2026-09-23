@@ -1,3 +1,75 @@
-﻿const groups=[{title:'WORKSPACE',items:[['dashboard','Dashboard','bi-grid-1x2-fill'],['members','Member Registry','bi-people-fill']]},{title:'FINANCE',items:[['transactions','Transactions','bi-arrow-left-right'],['admin-ledger','Admin Fees Ledger','bi-wallet2'],['development-ledger','Development Ledger','bi-building']]},{title:'CONTROL',items:[['audit','Audit & Controls','bi-shield-check']]}];
-export function Sidebar(){return `<aside class="figma-sidebar"><a href="#/dashboard" class="brand"><span class="brand-mark"><i class="bi bi-buildings-fill"></i></span><span><strong>Shanduko</strong><small>Housing Cooperative</small></span></a><nav class="sidebar-nav">${groups.map(g=>`<div class="nav-group"><div class="nav-group-title">${g.title}</div>${g.items.map(([k,l,i])=>`<a href="#/${k}" class="nav-item" data-page="${k}"><i class="bi ${i}"></i><span>${l}</span></a>`).join('')}</div>`).join('')}</nav><div class="sidebar-security"><div class="security-icon"><i class="bi bi-shield-lock-fill"></i></div><strong>Registry v1.0</strong><small>Audit-ready cooperative records</small></div></aside>`}
+const groups = [
+  {
+    title: 'WORKSPACE',
+    items: [
+      ['dashboard', 'Dashboard', 'bi-grid-1x2-fill'],
+      ['members', 'Member Registry', 'bi-people-fill'],
+      ['new-member', 'Add Member', 'bi-person-plus-fill'],
+    ],
+  },
+  {
+    title: 'FINANCE',
+    items: [
+      ['transactions', 'Transactions', 'bi-arrow-left-right'],
+      ['admin-ledger', 'Admin Fees Ledger', 'bi-wallet2'],
+      ['development-ledger', 'Development Ledger', 'bi-building'],
+    ],
+  },
+  {
+    title: 'CONTROL',
+    items: [
+      ['audit', 'Audit & Controls', 'bi-shield-check'],
+    ],
+  },
+];
 
+export function Sidebar() {
+  return `
+    <aside class="figma-sidebar">
+
+      <a href="#/dashboard" class="brand">
+        <span class="brand-mark">
+          <i class="bi bi-buildings-fill"></i>
+        </span>
+
+        <span>
+          <strong>Shanduko</strong>
+          <small>Housing Cooperative</small>
+        </span>
+      </a>
+
+      <nav class="sidebar-nav">
+        ${groups.map(group => `
+          <div class="nav-group">
+
+            <div class="nav-group-title">
+              ${group.title}
+            </div>
+
+            ${group.items.map(([key, label, icon]) => `
+              <a
+                href="#/${key}"
+                class="nav-item"
+                data-page="${key}"
+              >
+                <i class="bi ${icon}"></i>
+                <span>${label}</span>
+              </a>
+            `).join('')}
+
+          </div>
+        `).join('')}
+      </nav>
+
+      <div class="sidebar-security">
+        <div class="security-icon">
+          <i class="bi bi-shield-lock-fill"></i>
+        </div>
+
+        <strong>Registry v1.0</strong>
+        <small>Audit-ready cooperative records</small>
+      </div>
+
+    </aside>
+  `;
+}

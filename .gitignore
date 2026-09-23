@@ -3,3 +3,8 @@ dist
 .env
 .env.*
 !.env.example
+
+# Local backup / repair artifacts
+*.backup
+*.before-*.css
+backup-*/
