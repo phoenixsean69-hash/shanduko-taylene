@@ -765,7 +765,8 @@
   {
     "$id": "audit_events",
     "$permissions": [
-      "read(\"team:shanduko-admins\")"
+      "read(\"team:shanduko-admins\")",
+      "create(\"team:shanduko-admins\")"
     ],
     "databaseId": "shanduko",
     "name": "Audit Events",
@@ -1078,120 +1079,149 @@
   },
   {
     "$id": "member_records",
-    "databaseId": "shanduko",
-    "name": "Member Records",
-    "enabled": true,
-    "rowSecurity": false,
     "$permissions": [
       "create(\"team:shanduko-admins\")",
       "read(\"team:shanduko-admins\")",
       "update(\"team:shanduko-admins\")",
       "delete(\"team:shanduko-admins\")"
     ],
+    "databaseId": "shanduko",
+    "name": "Member Records",
+    "enabled": true,
+    "rowSecurity": false,
     "columns": [
       {
         "key": "memberCode",
         "type": "string",
-        "size": 40,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 40,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "fullName",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "surname",
         "type": "string",
-        "size": 120,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 120,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "firstNames",
         "type": "string",
-        "size": 180,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "nationalId",
         "type": "string",
-        "size": 80,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 80,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "standNumber",
         "type": "string",
-        "size": 40,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 40,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "whatsappContact",
         "type": "string",
-        "size": 50,
         "required": true,
-        "array": false
+        "array": false,
+        "size": 50,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "spouseFullName",
         "type": "string",
-        "size": 180,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "spouseNationalId",
         "type": "string",
-        "size": 80,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 80,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "nextOfKinName",
         "type": "string",
-        "size": 180,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "nextOfKinRelationship",
         "type": "string",
-        "size": 80,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 80,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "nextOfKinPhone",
         "type": "string",
-        "size": 50,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 50,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "beneficiaryName",
         "type": "string",
-        "size": 180,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 180,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "beneficiaryRelationship",
         "type": "string",
-        "size": 80,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 80,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "beneficiaryAllocationPct",
         "type": "double",
         "required": false,
         "array": false,
+        "default": null,
         "min": 0,
         "max": 100
       },
@@ -1200,6 +1230,7 @@
         "type": "string",
         "required": true,
         "array": false,
+        "default": null,
         "format": "enum",
         "elements": [
           "registered",
@@ -1213,6 +1244,7 @@
         "type": "string",
         "required": true,
         "array": false,
+        "default": null,
         "format": "enum",
         "elements": [
           "source_register",
@@ -1226,6 +1258,7 @@
         "type": "string",
         "required": true,
         "array": false,
+        "default": null,
         "format": "enum",
         "elements": [
           "legacy_register",
@@ -1235,64 +1268,80 @@
       {
         "key": "sourceRegisterId",
         "type": "string",
-        "size": 36,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 36,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "sourceRegisterOrder",
         "type": "integer",
         "required": false,
         "array": false,
+        "default": null,
         "min": 1,
         "max": 2147483647
       },
       {
         "key": "createdByUserId",
         "type": "string",
-        "size": 36,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 36,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "ownerUserId",
         "type": "string",
-        "size": 36,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 36,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "memberPhotoFileId",
         "type": "string",
-        "size": 64,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 64,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "spousePhotoFileId",
         "type": "string",
-        "size": 64,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 64,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "beneficiaryPhotoFileId",
         "type": "string",
-        "size": 64,
         "required": false,
-        "array": false
+        "array": false,
+        "size": 64,
+        "default": null,
+        "encrypt": false
       },
       {
         "key": "notes",
         "type": "text",
         "required": false,
-        "array": false
+        "array": false,
+        "default": null,
+        "encrypt": false
       }
     ],
     "indexes": [
       {
         "key": "member_records_code_unique",
         "type": "unique",
+        "status": "available",
         "columns": [
           "memberCode"
         ],
@@ -1301,6 +1350,7 @@
       {
         "key": "member_records_national_id_unique",
         "type": "unique",
+        "status": "available",
         "columns": [
           "nationalId"
         ],
@@ -1309,6 +1359,7 @@
       {
         "key": "member_records_stand_unique",
         "type": "unique",
+        "status": "available",
         "columns": [
           "standNumber"
         ],
@@ -1317,6 +1368,7 @@
       {
         "key": "member_records_source_idx",
         "type": "key",
+        "status": "available",
         "columns": [
           "createdSource"
         ],
@@ -1325,6 +1377,7 @@
       {
         "key": "member_records_status_idx",
         "type": "key",
+        "status": "available",
         "columns": [
           "status"
         ],
@@ -1333,8 +1386,85 @@
       {
         "key": "member_records_name_search",
         "type": "fulltext",
+        "status": "available",
         "columns": [
           "fullName"
+        ],
+        "orders": []
+      }
+    ]
+  },
+  {
+    "$id": "member_beneficiaries",
+    "databaseId": "shanduko",
+    "name": "Member Beneficiaries",
+    "enabled": true,
+    "rowSecurity": false,
+    "$permissions": [
+      "create(\"team:shanduko-admins\")",
+      "read(\"team:shanduko-admins\")",
+      "update(\"team:shanduko-admins\")",
+      "delete(\"team:shanduko-admins\")"
+    ],
+    "columns": [
+      {
+        "key": "memberRecordId",
+        "type": "string",
+        "size": 36,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "fullName",
+        "type": "string",
+        "size": 180,
+        "required": true,
+        "array": false
+      },
+      {
+        "key": "relationship",
+        "type": "string",
+        "size": 80,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "allocationPct",
+        "type": "double",
+        "required": true,
+        "array": false,
+        "min": 0,
+        "max": 100
+      },
+      {
+        "key": "photoFileId",
+        "type": "string",
+        "size": 64,
+        "required": false,
+        "array": false
+      },
+      {
+        "key": "displayOrder",
+        "type": "integer",
+        "required": true,
+        "array": false,
+        "min": 1,
+        "max": 5
+      },
+      {
+        "key": "createdByUserId",
+        "type": "string",
+        "size": 36,
+        "required": false,
+        "array": false
+      }
+    ],
+    "indexes": [
+      {
+        "key": "beneficiary_member_idx",
+        "type": "key",
+        "columns": [
+          "memberRecordId"
         ],
         "orders": []
       }

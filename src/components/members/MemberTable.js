@@ -9,8 +9,8 @@ function escapeHtml(value) {
 
 function sourceLabel(member) {
   return member.createdSource === 'legacy_register'
-    ? 'Source Register'
-    : 'Admin Entry';
+    ? 'Membership Register'
+    : 'Added by Administrator';
 }
 
 function statusClass(status) {
@@ -29,12 +29,12 @@ export function MemberTable({
   if (loading) {
     body = `
       <tr>
-        <td colspan="7" class="registry-state">
+        <td colspan="10" class="registry-state">
           <span
             class="spinner-border spinner-border-sm"
             aria-hidden="true"
           ></span>
-          Loading real member records from Appwrite...
+          Loading member records...
         </td>
       </tr>
     `;
@@ -42,7 +42,7 @@ export function MemberTable({
     body = `
       <tr>
         <td
-          colspan="7"
+          colspan="10"
           class="registry-state registry-state-error"
         >
           <i class="bi bi-exclamation-triangle"></i>
@@ -53,8 +53,8 @@ export function MemberTable({
   } else if (!members.length) {
     body = `
       <tr>
-        <td colspan="7" class="registry-state">
-          No member records exist in Appwrite yet.
+        <td colspan="10" class="registry-state">
+          No member records found.
         </td>
       </tr>
     `;
@@ -93,6 +93,20 @@ export function MemberTable({
         </td>
 
         <td>
+          <span class="beneficiary-count">
+            ${Number(member.beneficiaryCount || 0)} / 5
+          </span>
+        </td>
+
+        <td>
+          ${
+            member.memberPhotoFileId
+              ? '<i class="bi bi-image text-success" title="Member photo on file"></i>'
+              : '<span class="text-muted">—</span>'
+          }
+        </td>
+
+        <td>
           <span class="ledger-badge admin">
             ${escapeHtml(sourceLabel(member))}
           </span>
@@ -110,6 +124,17 @@ export function MemberTable({
           </span>
         </td>
 
+        <td>
+          <a
+            class="secondary-button member-edit-button"
+            href="#/edit-member?member=${encodeURIComponent(member.$id)}"
+            style="text-decoration:none"
+          >
+            <i class="bi bi-pencil-square"></i>
+            Edit
+          </a>
+        </td>
+
       </tr>
     `).join('');
   }
@@ -121,7 +146,7 @@ export function MemberTable({
         <div>
           <h2>Cooperative Member Registry</h2>
           <p>
-            Live operational member records from Appwrite
+            Membership and household records
           </p>
         </div>
 
@@ -150,8 +175,8 @@ export function MemberTable({
         <span class="table-note">
           ${
             loading
-              ? 'Connecting to Appwrite...'
-              : `${members.length} real records loaded`
+              ? 'Loading records...'
+              : `${members.length} member records`
           }
         </span>
 
@@ -165,11 +190,14 @@ export function MemberTable({
             <tr>
               <th>Member ID</th>
               <th>Member</th>
-              <th>Stand / Plot</th>
+              <th>Stand</th>
               <th>WhatsApp</th>
               <th>Spouse</th>
+              <th>Beneficiaries</th>
+              <th>Photo</th>
               <th>Source</th>
               <th>Status</th>
+              <th></th>
             </tr>
           </thead>
 

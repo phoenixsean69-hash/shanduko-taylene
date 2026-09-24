@@ -1,1 +1,9 @@
-import {MemberForm} from '../components/members/MemberForm.js';export function NewMember(){return MemberForm()}
+import {
+  MemberForm
+} from '../components/members/MemberForm.js';
+
+export function NewMember() {
+  return MemberForm({
+    mode: 'create',
+  });
+}

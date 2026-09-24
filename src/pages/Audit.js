@@ -39,7 +39,7 @@ export function Audit({
           class="spinner-border spinner-border-sm"
           aria-hidden="true"
         ></span>
-        Loading real audit events...
+        Loading audit trail...
       </div>
     `;
   } else if (error) {
@@ -51,7 +51,7 @@ export function Audit({
   } else if (!events.length) {
     eventsHtml = `
       <div class="real-data-empty">
-        No audit events have been recorded in Appwrite yet.
+        No audit events have been recorded yet.
       </div>
     `;
   } else {
@@ -114,7 +114,7 @@ export function Audit({
           <div>
             <h2>Audit Trail</h2>
             <p>
-              Live rows from Appwrite audit_events
+              Recorded system activity and control events
             </p>
           </div>
         </header>

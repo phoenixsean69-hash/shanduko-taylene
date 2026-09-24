@@ -28,8 +28,8 @@ export function LedgerView({
 
   const subtitle =
     development
-      ? 'Live infrastructure and development finance records from Appwrite.'
-      : 'Live administrative finance records from Appwrite.';
+      ? 'Infrastructure and development finance records.'
+      : 'Administrative finance records.';
 
   const total =
     rows.reduce(
@@ -48,7 +48,7 @@ export function LedgerView({
             class="spinner-border spinner-border-sm"
             aria-hidden="true"
           ></span>
-          Loading real finance records...
+          Loading finance records...
         </td>
       </tr>
     `;
@@ -67,7 +67,7 @@ export function LedgerView({
     body = `
       <tr>
         <td colspan="6" class="registry-state">
-          No real ${development ? 'development' : 'admin'}
+          No ${development ? 'development' : 'admin'}
           finance records exist yet.
         </td>
       </tr>
@@ -167,7 +167,7 @@ export function LedgerView({
       <div class="ledger-summary">
 
         <div>
-          <span>Real Records</span>
+          <span>Records</span>
           <strong>${rows.length}</strong>
         </div>
 
@@ -179,8 +179,8 @@ export function LedgerView({
         </div>
 
         <div>
-          <span>Source</span>
-          <strong>Appwrite</strong>
+          <span>Tracking State</span>
+          <strong>Current</strong>
         </div>
 
       </div>

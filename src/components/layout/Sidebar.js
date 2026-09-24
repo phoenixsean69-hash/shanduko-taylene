@@ -101,9 +101,9 @@ export function Sidebar() {
           <i class="bi bi-shield-lock-fill"></i>
         </div>
 
-        <strong>Live Registry</strong>
+        <strong>Registry</strong>
         <small>
-          Authenticated Appwrite data
+          Secure cooperative records
         </small>
 
       </div>

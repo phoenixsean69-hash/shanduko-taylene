@@ -11,7 +11,7 @@ export function Header() {
 
         <input
           id="globalSearch"
-          placeholder="Search real member records..."
+          placeholder="Search members, stands or IDs..."
           aria-label="Search"
         >
       </label>

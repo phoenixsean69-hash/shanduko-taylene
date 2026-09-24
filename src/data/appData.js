@@ -1,31 +1,36 @@
 export const pageMeta = {
   dashboard: [
     'Dashboard',
-    'Live cooperative registry, finance tracking and control activity'
+    'Cooperative registry, finance tracking and control activity'
   ],
 
   members: [
     'Member Registry',
-    'Authoritative operational member records from Appwrite'
+    'Membership and household records'
   ],
 
   'new-member': [
-    'Create New Cooperative Member Record',
-    'Add a real member record and household information'
+    'Add Member',
+    'Create a cooperative member and household record'
+  ],
+
+  'edit-member': [
+    'Edit Member',
+    'Update member, household, images and beneficiary details'
   ],
 
   'admin-ledger': [
     'Admin Finance Tracking',
-    'Live administrative finance records'
+    'Administrative finance records'
   ],
 
   'development-ledger': [
     'Development Finance Tracking',
-    'Live infrastructure and development finance records'
+    'Infrastructure and development finance records'
   ],
 
   audit: [
     'Audit & Controls',
-    'Live audit events recorded by the cooperative system'
+    'System activity and control history'
   ],
 };

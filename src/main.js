@@ -7,21 +7,33 @@ import {
 } from './lib/appwrite.js';
 
 import {
-  createMemberRecord,
+  createBeneficiaryCard,
+  MemberForm,
+} from './components/members/MemberForm.js';
+
+import {
+  MemberTable
+} from './components/members/MemberTable.js';
+
+import {
+  APPWRITE
+} from './lib/appwrite.js';
+
+import {
+  getMemberRecord,
   listAdminLedger,
   listAuditEvents,
   listDevelopmentLedger,
-  listMemberRecords,
+  listMemberBeneficiaries,
+  listMembersWithBeneficiaryCounts,
   loadDashboardData,
+  MAX_BENEFICIARIES,
+  saveMemberRecord,
 } from './services/liveData.js';
 
 import {
   AppShell
 } from './components/layout/AppShell.js';
-
-import {
-  MemberTable
-} from './components/members/MemberTable.js';
 
 import {
   pageMeta
@@ -61,6 +73,11 @@ const routes = {
   dashboard: Dashboard,
   members: Members,
   'new-member': NewMember,
+  'edit-member': () =>
+    MemberForm({
+      mode: 'edit',
+      loading: true,
+    }),
   'admin-ledger': AdminLedger,
   'development-ledger': DevelopmentLedger,
   audit: Audit,
@@ -70,6 +87,7 @@ const headerTitles = {
   dashboard: 'Dashboard',
   members: 'Member Registry',
   'new-member': 'Add Member',
+  'edit-member': 'Edit Member',
   'admin-ledger': 'Admin Finance Tracking',
   'development-ledger': 'Development Finance Tracking',
   audit: 'Audit & Controls',
@@ -78,14 +96,35 @@ const headerTitles = {
 let currentUser = null;
 let sessionChecked = false;
 
-function getRoute() {
-  const current =
-    location.hash.replace(/^#\/?/, '') ||
+function routeState() {
+  const raw =
+    location.hash
+      .replace(/^#\/?/, '') ||
     'dashboard';
 
-  return routes[current]
-    ? current
-    : 'dashboard';
+  const [
+    routePart,
+    queryPart = '',
+  ] =
+    raw.split('?');
+
+  const key =
+    routes[routePart]
+      ? routePart
+      : 'dashboard';
+
+  return {
+    key,
+
+    params:
+      new URLSearchParams(
+        queryPart
+      ),
+  };
+}
+
+function getRoute() {
+  return routeState().key;
 }
 
 async function resolveSession() {
@@ -201,7 +240,8 @@ function syncProfile(user) {
   }
 
   if (popoverTitle) {
-    popoverTitle.textContent = name;
+    popoverTitle.textContent =
+      name;
   }
 }
 
@@ -231,7 +271,8 @@ function updateMeta(key) {
     );
 
   if (titleElement) {
-    titleElement.textContent = title;
+    titleElement.textContent =
+      title;
   }
 
   if (subtitleElement) {
@@ -240,7 +281,8 @@ function updateMeta(key) {
   }
 
   if (crumbElement) {
-    crumbElement.textContent = title;
+    crumbElement.textContent =
+      title;
   }
 
   if (headerTitle) {
@@ -381,8 +423,7 @@ async function signOut() {
       sessionId: 'current',
     });
   } catch {
-    // Return the UI to its protected state even if the remote
-    // session was already invalid.
+    // Session may already be invalid.
   }
 
   currentUser = null;
@@ -437,7 +478,7 @@ async function loadMembers() {
 
   try {
     const members =
-      await listMemberRecords();
+      await listMembersWithBeneficiaryCounts();
 
     page.innerHTML =
       MemberTable({
@@ -450,7 +491,7 @@ async function loadMembers() {
       MemberTable({
         error:
           error?.message ||
-          'Could not load member records from Appwrite.',
+          'Could not load member records.',
       });
   }
 }
@@ -483,12 +524,198 @@ function clearMemberFormError() {
   error.hidden = true;
 }
 
+function updateBeneficiarySummary() {
+  const cards =
+    [
+      ...document.querySelectorAll(
+        '[data-beneficiary-card]'
+      ),
+    ];
+
+  const count =
+    document.querySelector(
+      '#beneficiaryCount'
+    );
+
+  const total =
+    document.querySelector(
+      '#beneficiaryAllocationTotal'
+    );
+
+  const empty =
+    document.querySelector(
+      '#beneficiaryEmptyState'
+    );
+
+  const addButton =
+    document.querySelector(
+      '#addBeneficiaryButton'
+    );
+
+  cards.forEach(
+    (card, index) => {
+      const title =
+        card.querySelector(
+          '.beneficiary-card-head strong'
+        );
+
+      if (title) {
+        title.textContent =
+          `Beneficiary ${index + 1}`;
+      }
+    }
+  );
+
+  const allocation =
+    cards.reduce(
+      (sum, card) => {
+        const value =
+          Number(
+            card.querySelector(
+              '[data-beneficiary-allocation]'
+            )?.value ||
+            0
+          );
+
+        return sum +
+          (
+            Number.isFinite(value)
+              ? value
+              : 0
+          );
+      },
+      0
+    );
+
+  if (count) {
+    count.textContent =
+      String(cards.length);
+  }
+
+  if (total) {
+    total.textContent =
+      allocation.toFixed(2);
+
+    total.classList.toggle(
+      'text-danger',
+      allocation > 100
+    );
+  }
+
+  if (empty) {
+    empty.classList.toggle(
+      'd-none',
+      cards.length > 0
+    );
+  }
+
+  if (addButton) {
+    addButton.disabled =
+      cards.length >=
+      MAX_BENEFICIARIES;
+  }
+}
+
+function wireBeneficiaries() {
+  const list =
+    document.querySelector(
+      '#beneficiaryList'
+    );
+
+  const addButton =
+    document.querySelector(
+      '#addBeneficiaryButton'
+    );
+
+  if (!list || !addButton) {
+    return;
+  }
+
+  addButton.addEventListener(
+    'click',
+    () => {
+      const cards =
+        list.querySelectorAll(
+          '[data-beneficiary-card]'
+        );
+
+      if (
+        cards.length >=
+        MAX_BENEFICIARIES
+      ) {
+        showToast(
+          'A member can have a maximum of 5 beneficiaries.'
+        );
+
+        return;
+      }
+
+      list.insertAdjacentHTML(
+        'beforeend',
+        createBeneficiaryCard(
+          cards.length
+        )
+      );
+
+      updateBeneficiarySummary();
+      wirePhotoUploads();
+    }
+  );
+
+  list.addEventListener(
+    'click',
+    event => {
+      const button =
+        event.target.closest(
+          '[data-remove-beneficiary]'
+        );
+
+      if (!button) {
+        return;
+      }
+
+      button
+        .closest(
+          '[data-beneficiary-card]'
+        )
+        ?.remove();
+
+      updateBeneficiarySummary();
+    }
+  );
+
+  list.addEventListener(
+    'input',
+    event => {
+      if (
+        event.target.matches(
+          '[data-beneficiary-allocation]'
+        )
+      ) {
+        updateBeneficiarySummary();
+      }
+    }
+  );
+
+  updateBeneficiarySummary();
+}
+
 function wirePhotoUploads() {
   document
     .querySelectorAll(
       '#memberForm .upload-tile input[type="file"]'
     )
     .forEach(input => {
+      if (
+        input.dataset.photoWired ===
+        'true'
+      ) {
+        return;
+      }
+
+      input.dataset.photoWired =
+        'true';
+
       input.addEventListener(
         'change',
         () => {
@@ -513,13 +740,6 @@ function wirePhotoUploads() {
 
             caption.textContent =
               input.files[0].name;
-          } else {
-            tile.classList.remove(
-              'has-file'
-            );
-
-            caption.textContent =
-              'Optional';
           }
         }
       );
@@ -537,35 +757,7 @@ function wireMemberForm() {
   }
 
   wirePhotoUploads();
-
-  form.addEventListener(
-    'reset',
-    () => {
-      setTimeout(() => {
-        clearMemberFormError();
-
-        form
-          .querySelectorAll(
-            '.upload-tile'
-          )
-          .forEach(tile => {
-            tile.classList.remove(
-              'has-file'
-            );
-
-            const caption =
-              tile.querySelector(
-                'small'
-              );
-
-            if (caption) {
-              caption.textContent =
-                'Optional';
-            }
-          });
-      }, 0);
-    }
-  );
+  wireBeneficiaries();
 
   form.addEventListener(
     'submit',
@@ -590,14 +782,23 @@ function wireMemberForm() {
       }
 
       try {
+        const memberId =
+          form.dataset.formMode === 'edit'
+            ? form.dataset.memberId
+            : null;
+
         const member =
-          await createMemberRecord({
+          await saveMemberRecord({
             form,
-            user: currentUser,
+            user:
+              currentUser,
+            memberId,
           });
 
         showToast(
-          `Member ${member.memberCode} saved to Appwrite.`
+          memberId
+            ? `Member ${member.memberCode} updated successfully.`
+            : `Member ${member.memberCode} saved successfully.`
         );
 
         location.hash =
@@ -608,7 +809,8 @@ function wireMemberForm() {
           'Could not save the member record.';
 
         if (
-          Number(error?.code) === 409
+          Number(error?.code) ===
+          409
         ) {
           message =
             'A member with that National ID, stand number or member code already exists.';
@@ -620,12 +822,76 @@ function wireMemberForm() {
 
         if (button) {
           button.disabled = false;
+
           button.innerHTML =
-            'Save Real Member Record <i class="bi bi-arrow-right ms-1"></i>';
+            form.dataset.formMode === 'edit'
+              ? '<i class="bi bi-check2-circle"></i> Save Changes'
+              : '<i class="bi bi-check2-circle"></i> Save Member Record';
         }
       }
     }
   );
+}
+
+async function loadEditMember() {
+  const page =
+    document.querySelector('#page');
+
+  if (!page) {
+    return;
+  }
+
+  const {
+    params,
+  } =
+    routeState();
+
+  const memberId =
+    params.get('member');
+
+  if (!memberId) {
+    page.innerHTML =
+      MemberForm({
+        mode: 'edit',
+        error:
+          'No member record was selected.',
+      });
+
+    return;
+  }
+
+  try {
+    const [
+      member,
+      beneficiaries,
+    ] =
+      await Promise.all([
+        getMemberRecord(
+          memberId
+        ),
+
+        listMemberBeneficiaries(
+          memberId
+        ),
+      ]);
+
+    page.innerHTML =
+      MemberForm({
+        mode: 'edit',
+        member,
+        beneficiaries,
+      });
+
+    wireMemberForm();
+  } catch (error) {
+    page.innerHTML =
+      MemberForm({
+        mode: 'edit',
+        error:
+          error?.message ||
+          'Could not load the member record.',
+      });
+  }
 }
 
 async function loadDashboard() {
@@ -649,7 +915,7 @@ async function loadDashboard() {
       Dashboard({
         error:
           error?.message ||
-          'Could not load live dashboard data.',
+          'Could not load dashboard data.',
       });
   }
 }
@@ -679,7 +945,7 @@ async function loadLedger(kind) {
         kind,
         error:
           error?.message ||
-          'Could not load live finance records.',
+          'Could not load finance records.',
       });
   }
 }
@@ -778,7 +1044,7 @@ function exportTable(button) {
   URL.revokeObjectURL(url);
 
   showToast(
-    'Real finance tracking table exported.'
+    'Finance tracking table exported.'
   );
 }
 
@@ -793,6 +1059,10 @@ async function wirePage(key) {
 
   if (key === 'new-member') {
     wireMemberForm();
+  }
+
+  if (key === 'edit-member') {
+    await loadEditMember();
   }
 
   if (key === 'admin-ledger') {
@@ -866,11 +1136,7 @@ document.addEventListener(
     if (language) {
       event.preventDefault();
       event.stopPropagation();
-
-      togglePopover(
-        'language'
-      );
-
+      togglePopover('language');
       return;
     }
 
@@ -882,11 +1148,7 @@ document.addEventListener(
     if (notifications) {
       event.preventDefault();
       event.stopPropagation();
-
-      togglePopover(
-        'notifications'
-      );
-
+      togglePopover('notifications');
       return;
     }
 
@@ -898,11 +1160,7 @@ document.addEventListener(
     if (profile) {
       event.preventDefault();
       event.stopPropagation();
-
-      togglePopover(
-        'profile'
-      );
-
+      togglePopover('profile');
       return;
     }
 
@@ -949,10 +1207,8 @@ document.addEventListener(
       )
     ) {
       closePopovers();
-
       location.hash =
         '#/admin-ledger';
-
       return;
     }
 
@@ -962,10 +1218,8 @@ document.addEventListener(
       )
     ) {
       closePopovers();
-
       location.hash =
         '#/new-member';
-
       return;
     }
 
@@ -975,10 +1229,8 @@ document.addEventListener(
       )
     ) {
       closePopovers();
-
       location.hash =
         '#/audit';
-
       return;
     }
 
@@ -988,9 +1240,7 @@ document.addEventListener(
       )
     ) {
       closePopovers();
-
       await signOut();
-
       return;
     }
 

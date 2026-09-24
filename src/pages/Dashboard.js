@@ -136,7 +136,7 @@ export function Dashboard({
           class="spinner-border spinner-border-sm"
           aria-hidden="true"
         ></span>
-        Loading live Shanduko data from Appwrite...
+        Loading dashboard...
       </section>
     `;
   }
@@ -204,8 +204,8 @@ export function Dashboard({
         label: 'Member Records',
         value: String(members.length),
         note:
-          `${legacyMembers} source-register + ` +
-          `${adminCreatedMembers} admin-created`,
+          `${legacyMembers} registered + ` +
+          `${adminCreatedMembers} added through the system`,
         tone: 'pink',
       })}
 
@@ -217,7 +217,7 @@ export function Dashboard({
             adminTotal
           ),
         note:
-          `${adminLedger.length} real tracked records`,
+          `${adminLedger.length} tracked records`,
         tone: 'green',
       })}
 
@@ -229,7 +229,7 @@ export function Dashboard({
             developmentTotal
           ),
         note:
-          `${developmentLedger.length} real tracked records`,
+          `${developmentLedger.length} tracked records`,
         tone: 'purple',
       })}
 
@@ -238,7 +238,7 @@ export function Dashboard({
         label: 'Audit Events',
         value: String(auditEvents.length),
         note:
-          'Real Appwrite audit rows',
+          'Recorded audit events',
         tone: 'amber',
       })}
 
@@ -253,7 +253,7 @@ export function Dashboard({
             <div>
               <h2>Finance Tracking</h2>
               <p>
-                Live values from the two isolated finance tables
+                Administrative and development finance activity
               </p>
             </div>
           </header>
@@ -285,7 +285,7 @@ export function Dashboard({
           <header class="surface-card-header">
             <div>
               <h2>Data Integrity</h2>
-              <p>Current live record state</p>
+              <p>Current record status</p>
             </div>
           </header>
 
@@ -347,7 +347,7 @@ export function Dashboard({
             <div>
               <h2>Cooperative Profile</h2>
               <p>
-                Live source identity and official contacts
+                Registration details and official contacts
               </p>
             </div>
           </header>
@@ -442,7 +442,7 @@ export function Dashboard({
             <div>
               <h2>Recent Finance Records</h2>
               <p>
-                Latest real rows across both finance tracking tables
+                Recent activity across both finance tracking areas
               </p>
             </div>
           </header>
@@ -534,7 +534,7 @@ export function Dashboard({
               `
               : `
                 <div class="real-data-empty">
-                  No real finance tracking records exist yet.
+                  No finance tracking records yet.
                 </div>
               `
           }

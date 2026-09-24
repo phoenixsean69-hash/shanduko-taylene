@@ -19,7 +19,7 @@ export function Login() {
           <h1>Sign in</h1>
           <p>
             Use an authorized Shanduko administrator account to access
-            the real cooperative registry.
+            the cooperative registry.
           </p>
         </div>
 

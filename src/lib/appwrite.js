@@ -26,6 +26,10 @@ export const APPWRITE = Object.freeze({
     import.meta.env.VITE_APPWRITE_MEMBER_RECORDS_TABLE_ID ||
     'member_records',
 
+  beneficiariesTableId:
+    import.meta.env.VITE_APPWRITE_BENEFICIARIES_TABLE_ID ||
+    'member_beneficiaries',
+
   adminLedgerTableId:
     import.meta.env.VITE_APPWRITE_ADMIN_LEDGER_TABLE_ID ||
     'admin_ledger',
@@ -50,7 +54,8 @@ export const APPWRITE = Object.freeze({
     import.meta.env.VITE_APPWRITE_MEMBER_PHOTOS_BUCKET_ID ||
     'member_photos',
 
-  adminTeamId: 'shanduko-admins',
+  adminTeamId:
+    'shanduko-admins',
 });
 
 export const client =

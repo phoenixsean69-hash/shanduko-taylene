@@ -10,16 +10,17 @@ import {
 
 const PAGE_SIZE = 100;
 
+export const MAX_BENEFICIARIES = 5;
+
 function normalize(value) {
   return String(value ?? '').trim();
 }
 
-function optional(data, key, value) {
-  const normalized = normalize(value);
+function nullable(value) {
+  const normalized =
+    normalize(value);
 
-  if (normalized) {
-    data[key] = normalized;
-  }
+  return normalized || null;
 }
 
 export function formatCurrencyFromCents(value) {
@@ -41,7 +42,8 @@ export function formatDate(value) {
     return '—';
   }
 
-  const parsed = new Date(value);
+  const parsed =
+    new Date(value);
 
   if (Number.isNaN(parsed.getTime())) {
     return String(value);
@@ -57,7 +59,10 @@ export function formatDate(value) {
   ).format(parsed);
 }
 
-async function listAllRows(tableId) {
+async function listAllRows(
+  tableId,
+  extraQueries = []
+) {
   const rows = [];
 
   for (
@@ -67,17 +72,26 @@ async function listAllRows(tableId) {
   ) {
     const response =
       await tablesDB.listRows({
-        databaseId: APPWRITE.databaseId,
+        databaseId:
+          APPWRITE.databaseId,
+
         tableId,
+
         queries: [
+          ...extraQueries,
           Query.limit(PAGE_SIZE),
           Query.offset(offset),
         ],
       });
 
-    rows.push(...response.rows);
+    rows.push(
+      ...response.rows
+    );
 
-    if (response.rows.length < PAGE_SIZE) {
+    if (
+      response.rows.length <
+      PAGE_SIZE
+    ) {
       break;
     }
   }
@@ -111,10 +125,16 @@ export async function listMemberRecords() {
 
   return rows.sort((a, b) => {
     const aOrder =
-      Number(a.sourceRegisterOrder || 0);
+      Number(
+        a.sourceRegisterOrder ||
+        0
+      );
 
     const bOrder =
-      Number(b.sourceRegisterOrder || 0);
+      Number(
+        b.sourceRegisterOrder ||
+        0
+      );
 
     if (aOrder && bOrder) {
       return aOrder - bOrder;
@@ -129,8 +149,88 @@ export async function listMemberRecords() {
     }
 
     return normalize(a.fullName)
-      .localeCompare(normalize(b.fullName));
+      .localeCompare(
+        normalize(b.fullName)
+      );
   });
+}
+
+export async function getMemberRecord(
+  memberId
+) {
+  return await tablesDB.getRow({
+    databaseId:
+      APPWRITE.databaseId,
+
+    tableId:
+      APPWRITE.memberRecordsTableId,
+
+    rowId:
+      memberId,
+  });
+}
+
+export async function listAllBeneficiaries() {
+  return await listAllRows(
+    APPWRITE.beneficiariesTableId
+  );
+}
+
+export async function listMemberBeneficiaries(
+  memberId
+) {
+  const rows =
+    await listAllRows(
+      APPWRITE.beneficiariesTableId,
+      [
+        Query.equal(
+          'memberRecordId',
+          [memberId]
+        )
+      ]
+    );
+
+  return rows.sort(
+    (a, b) =>
+      Number(a.displayOrder || 0) -
+      Number(b.displayOrder || 0)
+  );
+}
+
+export async function listMembersWithBeneficiaryCounts() {
+  const [
+    members,
+    beneficiaries,
+  ] = await Promise.all([
+    listMemberRecords(),
+    listAllBeneficiaries(),
+  ]);
+
+  const counts =
+    new Map();
+
+  for (const beneficiary of beneficiaries) {
+    const memberId =
+      String(
+        beneficiary.memberRecordId
+      );
+
+    counts.set(
+      memberId,
+      (counts.get(memberId) || 0) + 1
+    );
+  }
+
+  return members.map(
+    member => ({
+      ...member,
+
+      beneficiaryCount:
+        counts.get(
+          String(member.$id)
+        ) || 0,
+    })
+  );
 }
 
 export async function listAdminLedger() {
@@ -157,12 +257,15 @@ export async function listAuditEvents() {
       APPWRITE.auditTableId
     );
 
-  return rows.sort((a, b) => {
-    return (
-      new Date(b.$createdAt || 0).getTime() -
-      new Date(a.$createdAt || 0).getTime()
-    );
-  });
+  return rows.sort(
+    (a, b) =>
+      new Date(
+        b.$createdAt || 0
+      ).getTime() -
+      new Date(
+        a.$createdAt || 0
+      ).getTime()
+  );
 }
 
 export async function getCooperativeProfile() {
@@ -235,11 +338,13 @@ async function uploadPhoto(file) {
             APPWRITE.adminTeamId
           )
         ),
+
         Permission.update(
           Role.team(
             APPWRITE.adminTeamId
           )
         ),
+
         Permission.delete(
           Role.team(
             APPWRITE.adminTeamId
@@ -251,7 +356,9 @@ async function uploadPhoto(file) {
   return uploaded.$id;
 }
 
-async function safelyDeletePhoto(fileId) {
+async function safelyDeletePhoto(
+  fileId
+) {
   if (!fileId) {
     return;
   }
@@ -264,11 +371,13 @@ async function safelyDeletePhoto(fileId) {
       fileId,
     });
   } catch {
-    // Cleanup is best effort. Never hide the original create error.
+    // Best-effort cleanup only.
   }
 }
 
-function memberCodeFromStand(stand) {
+function memberCodeFromStand(
+  stand
+) {
   const normalized =
     normalize(stand);
 
@@ -281,22 +390,7 @@ function memberCodeFromStand(stand) {
   return `SH-${normalized.padStart(6, '0')}`;
 }
 
-export async function createMemberRecord({
-  form,
-  user,
-}) {
-  if (!form) {
-    throw new Error(
-      'Member form was not found.'
-    );
-  }
-
-  if (!user?.$id) {
-    throw new Error(
-      'An authenticated administrator is required.'
-    );
-  }
-
+function collectMemberValues(form) {
   const values =
     Object.fromEntries(
       new FormData(form).entries()
@@ -329,150 +423,1060 @@ export async function createMemberRecord({
     );
   }
 
-  const memberCode =
-    memberCodeFromStand(
-      standNumber
-    );
+  const status =
+    normalize(values.status) ||
+    'pending';
 
-  const fullName =
-    `${firstNames} ${surname}`.trim();
+  const verificationStatus =
+    normalize(
+      values.verificationStatus
+    ) ||
+    'pending';
 
-  const memberPhoto =
-    form.elements.memberPhoto
-      ?.files?.[0] || null;
+  return {
+    values,
 
-  const spousePhoto =
-    form.elements.spousePhoto
-      ?.files?.[0] || null;
+    data: {
+      memberCode:
+        memberCodeFromStand(
+          standNumber
+        ),
 
-  const beneficiaryPhoto =
-    form.elements.beneficiaryPhoto
-      ?.files?.[0] || null;
+      fullName:
+        `${firstNames} ${surname}`.trim(),
 
-  const uploadedIds = [];
-
-  try {
-    const [
-      memberPhotoFileId,
-      spousePhotoFileId,
-      beneficiaryPhotoFileId,
-    ] = await Promise.all([
-      uploadPhoto(memberPhoto),
-      uploadPhoto(spousePhoto),
-      uploadPhoto(beneficiaryPhoto),
-    ]);
-
-    uploadedIds.push(
-      memberPhotoFileId,
-      spousePhotoFileId,
-      beneficiaryPhotoFileId
-    );
-
-    const data = {
-      memberCode,
-      fullName,
       surname,
       firstNames,
       nationalId,
       standNumber,
       whatsappContact,
-      status: 'pending',
-      verificationStatus: 'pending',
-      createdSource: 'admin_web',
-      createdByUserId: user.$id,
-    };
 
-    optional(
-      data,
-      'spouseFullName',
-      values.spouseFullName
-    );
+      spouseFullName:
+        nullable(
+          values.spouseFullName
+        ),
 
-    optional(
-      data,
-      'spouseNationalId',
-      values.spouseNationalId
-    );
+      spouseNationalId:
+        nullable(
+          values.spouseNationalId
+        ),
 
-    optional(
-      data,
-      'nextOfKinName',
-      values.nextOfKinName
-    );
+      nextOfKinName:
+        nullable(
+          values.nextOfKinName
+        ),
 
-    optional(
-      data,
-      'nextOfKinRelationship',
-      values.nextOfKinRelationship
-    );
+      nextOfKinRelationship:
+        nullable(
+          values.nextOfKinRelationship
+        ),
 
-    optional(
-      data,
-      'nextOfKinPhone',
-      values.nextOfKinPhone
-    );
+      nextOfKinPhone:
+        nullable(
+          values.nextOfKinPhone
+        ),
 
-    optional(
-      data,
-      'beneficiaryName',
-      values.beneficiaryName
-    );
+      status,
+      verificationStatus,
 
-    optional(
-      data,
-      'beneficiaryRelationship',
-      values.beneficiaryRelationship
-    );
+      notes:
+        nullable(
+          values.notes
+        ),
+    },
+  };
+}
 
-    const allocation =
-      Number(
-        String(
-          values.beneficiaryAllocationPct ??
-          ''
-        ).replace('%', '')
+function collectBeneficiarySlots(form) {
+  const cards =
+    [
+      ...form.querySelectorAll(
+        '[data-beneficiary-card]'
+      ),
+    ];
+
+  const populated = [];
+
+  for (const [index, card] of cards.entries()) {
+    const fullName =
+      normalize(
+        card.querySelector(
+          '[data-beneficiary-name]'
+        )?.value
       );
 
+    const relationship =
+      normalize(
+        card.querySelector(
+          '[data-beneficiary-relationship]'
+        )?.value
+      );
+
+    const allocationText =
+      normalize(
+        card.querySelector(
+          '[data-beneficiary-allocation]'
+        )?.value
+      );
+
+    const photoInput =
+      card.querySelector(
+        '[data-beneficiary-photo]'
+      );
+
+    const beneficiaryId =
+      normalize(
+        card.querySelector(
+          '[data-beneficiary-id]'
+        )?.value
+      );
+
+    const currentPhotoFileId =
+      normalize(
+        card.querySelector(
+          '[data-beneficiary-current-photo]'
+        )?.value
+      );
+
+    const removeCurrentPhoto =
+      Boolean(
+        card.querySelector(
+          '[data-beneficiary-remove-photo]'
+        )?.checked
+      );
+
+    const hasAnyValue =
+      fullName ||
+      relationship ||
+      allocationText ||
+      photoInput?.files?.length ||
+      beneficiaryId;
+
+    if (!hasAnyValue) {
+      continue;
+    }
+
+    if (!fullName) {
+      throw new Error(
+        `Beneficiary ${index + 1} requires a full name.`
+      );
+    }
+
+    const allocationPct =
+      Number(allocationText);
+
     if (
-      Number.isFinite(allocation) &&
-      allocation >= 0 &&
-      allocation <= 100
+      !Number.isFinite(
+        allocationPct
+      ) ||
+      allocationPct < 0 ||
+      allocationPct > 100
     ) {
-      data.beneficiaryAllocationPct =
-        allocation;
+      throw new Error(
+        `Beneficiary ${index + 1} allocation must be between 0 and 100.`
+      );
     }
 
-    if (memberPhotoFileId) {
-      data.memberPhotoFileId =
-        memberPhotoFileId;
-    }
+    populated.push({
+      beneficiaryId:
+        beneficiaryId || null,
 
-    if (spousePhotoFileId) {
-      data.spousePhotoFileId =
-        spousePhotoFileId;
-    }
+      fullName,
+      relationship:
+        relationship || null,
 
-    if (beneficiaryPhotoFileId) {
-      data.beneficiaryPhotoFileId =
-        beneficiaryPhotoFileId;
-    }
+      allocationPct,
 
-    return await tablesDB.createRow({
+      displayOrder:
+        populated.length + 1,
+
+      newPhoto:
+        photoInput?.files?.[0] ||
+        null,
+
+      currentPhotoFileId:
+        currentPhotoFileId || null,
+
+      removeCurrentPhoto,
+    });
+  }
+
+  if (
+    populated.length >
+    MAX_BENEFICIARIES
+  ) {
+    throw new Error(
+      `A member can have a maximum of ${MAX_BENEFICIARIES} beneficiaries.`
+    );
+  }
+
+  const allocationTotal =
+    populated.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.allocationPct || 0
+        ),
+      0
+    );
+
+  if (allocationTotal > 100.000001) {
+    throw new Error(
+      'Beneficiary allocations cannot exceed 100% in total.'
+    );
+  }
+
+  return populated;
+}
+
+function compactMemberSnapshot(row) {
+  if (!row) {
+    return null;
+  }
+
+  const keys = [
+    'memberCode',
+    'fullName',
+    'surname',
+    'firstNames',
+    'nationalId',
+    'standNumber',
+    'whatsappContact',
+    'spouseFullName',
+    'spouseNationalId',
+    'nextOfKinName',
+    'nextOfKinRelationship',
+    'nextOfKinPhone',
+    'status',
+    'verificationStatus',
+    'createdSource',
+    'memberPhotoFileId',
+    'spousePhotoFileId',
+    'notes',
+  ];
+
+  return Object.fromEntries(
+    keys.map(
+      key => [
+        key,
+        row[key] ?? null,
+      ]
+    )
+  );
+}
+
+async function writeAudit({
+  memberId,
+  action,
+  user,
+  summary,
+  before,
+  after,
+}) {
+  try {
+    await tablesDB.createRow({
       databaseId:
         APPWRITE.databaseId,
 
       tableId:
-        APPWRITE.memberRecordsTableId,
+        APPWRITE.auditTableId,
 
       rowId:
         ID.unique(),
 
-      data,
+      data: {
+        entityType:
+          'member',
+
+        entityId:
+          memberId,
+
+        action,
+
+        actorUserId:
+          user.$id,
+
+        actorRole:
+          'administrator',
+
+        summary,
+
+        beforeJson:
+          before
+            ? JSON.stringify(before)
+            : null,
+
+        afterJson:
+          after
+            ? JSON.stringify(after)
+            : null,
+
+        verificationResult:
+          'not_required',
+
+        deviceContext:
+          typeof navigator !== 'undefined'
+            ? navigator.userAgent
+            : null,
+      },
     });
   } catch (error) {
-    await Promise.all(
-      uploadedIds
+    console.warn(
+      'Audit event could not be recorded:',
+      error
+    );
+  }
+}
+
+async function syncBeneficiaries({
+  memberId,
+  form,
+  user,
+}) {
+  const desired =
+    collectBeneficiarySlots(
+      form
+    );
+
+  const existing =
+    await listMemberBeneficiaries(
+      memberId
+    );
+
+  const existingMap =
+    new Map(
+      existing.map(
+        row => [
+          String(row.$id),
+          row,
+        ]
+      )
+    );
+
+  const desiredExistingIds =
+    new Set(
+      desired
+        .map(
+          item =>
+            item.beneficiaryId
+        )
         .filter(Boolean)
-        .map(safelyDeletePhoto)
+    );
+
+  for (
+    const beneficiaryId of desiredExistingIds
+  ) {
+    if (
+      !existingMap.has(
+        beneficiaryId
+      )
+    ) {
+      throw new Error(
+        'A beneficiary record changed while you were editing. Reload the member and try again.'
+      );
+    }
+  }
+
+  const createdRows = [];
+  const modifiedRows = [];
+  const deletedRows = [];
+  const newPhotoIds = [];
+  const oldPhotosToDelete = [];
+
+  try {
+    for (const item of desired) {
+      let photoFileId =
+        item.currentPhotoFileId ||
+        null;
+
+      if (item.newPhoto) {
+        const uploadedId =
+          await uploadPhoto(
+            item.newPhoto
+          );
+
+        newPhotoIds.push(
+          uploadedId
+        );
+
+        if (photoFileId) {
+          oldPhotosToDelete.push(
+            photoFileId
+          );
+        }
+
+        photoFileId =
+          uploadedId;
+      }
+      else if (
+        item.removeCurrentPhoto
+      ) {
+        if (photoFileId) {
+          oldPhotosToDelete.push(
+            photoFileId
+          );
+        }
+
+        photoFileId =
+          null;
+      }
+
+      const data = {
+        memberRecordId:
+          memberId,
+
+        fullName:
+          item.fullName,
+
+        relationship:
+          item.relationship,
+
+        allocationPct:
+          item.allocationPct,
+
+        photoFileId,
+
+        displayOrder:
+          item.displayOrder,
+
+        createdByUserId:
+          user.$id,
+      };
+
+      if (item.beneficiaryId) {
+        const before =
+          existingMap.get(
+            item.beneficiaryId
+          );
+
+        modifiedRows.push(
+          before
+        );
+
+        await tablesDB.updateRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.beneficiariesTableId,
+
+          rowId:
+            item.beneficiaryId,
+
+          data,
+        });
+      }
+      else {
+        const created =
+          await tablesDB.createRow({
+            databaseId:
+              APPWRITE.databaseId,
+
+            tableId:
+              APPWRITE.beneficiariesTableId,
+
+            rowId:
+              ID.unique(),
+
+            data,
+          });
+
+        createdRows.push(
+          created
+        );
+      }
+    }
+
+    for (const oldRow of existing) {
+      if (
+        desiredExistingIds.has(
+          String(oldRow.$id)
+        )
+      ) {
+        continue;
+      }
+
+      deletedRows.push(
+        oldRow
+      );
+
+      await tablesDB.deleteRow({
+        databaseId:
+          APPWRITE.databaseId,
+
+        tableId:
+          APPWRITE.beneficiariesTableId,
+
+        rowId:
+          oldRow.$id,
+      });
+
+      if (oldRow.photoFileId) {
+        oldPhotosToDelete.push(
+          oldRow.photoFileId
+        );
+      }
+    }
+  } catch (error) {
+    for (const created of createdRows) {
+      try {
+        await tablesDB.deleteRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.beneficiariesTableId,
+
+          rowId:
+            created.$id,
+        });
+      } catch {
+        // Best effort rollback.
+      }
+    }
+
+    for (const oldRow of modifiedRows) {
+      try {
+        await tablesDB.updateRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.beneficiariesTableId,
+
+          rowId:
+            oldRow.$id,
+
+          data: {
+            memberRecordId:
+              oldRow.memberRecordId,
+
+            fullName:
+              oldRow.fullName,
+
+            relationship:
+              oldRow.relationship ??
+              null,
+
+            allocationPct:
+              oldRow.allocationPct,
+
+            photoFileId:
+              oldRow.photoFileId ??
+              null,
+
+            displayOrder:
+              oldRow.displayOrder,
+
+            createdByUserId:
+              oldRow.createdByUserId ??
+              null,
+          },
+        });
+      } catch {
+        // Best effort rollback.
+      }
+    }
+
+    for (const oldRow of deletedRows) {
+      try {
+        await tablesDB.createRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.beneficiariesTableId,
+
+          rowId:
+            oldRow.$id,
+
+          data: {
+            memberRecordId:
+              oldRow.memberRecordId,
+
+            fullName:
+              oldRow.fullName,
+
+            relationship:
+              oldRow.relationship ??
+              null,
+
+            allocationPct:
+              oldRow.allocationPct,
+
+            photoFileId:
+              oldRow.photoFileId ??
+              null,
+
+            displayOrder:
+              oldRow.displayOrder,
+
+            createdByUserId:
+              oldRow.createdByUserId ??
+              null,
+          },
+        });
+      } catch {
+        // Best effort rollback.
+      }
+    }
+
+    await Promise.all(
+      newPhotoIds.map(
+        safelyDeletePhoto
+      )
+    );
+
+    throw error;
+  }
+
+  await Promise.all(
+    [...new Set(
+      oldPhotosToDelete.filter(Boolean)
+    )].map(
+      safelyDeletePhoto
+    )
+  );
+
+  return await listMemberBeneficiaries(
+    memberId
+  );
+}
+
+function buildMemberUpdateData({
+  form,
+  currentMember,
+  user,
+  createMode,
+}) {
+  const {
+    values,
+    data,
+  } =
+    collectMemberValues(
+      form
+    );
+
+  if (createMode) {
+    data.createdSource =
+      'admin_web';
+
+    data.createdByUserId =
+      user.$id;
+  }
+  else {
+    data.createdSource =
+      currentMember.createdSource;
+
+    data.createdByUserId =
+      currentMember.createdByUserId ??
+      user.$id;
+  }
+
+  return {
+    values,
+    data,
+  };
+}
+
+async function prepareMemberPhotos({
+  form,
+  currentMember,
+}) {
+  const newMemberPhoto =
+    form.elements.memberPhoto
+      ?.files?.[0] ||
+    null;
+
+  const newSpousePhoto =
+    form.elements.spousePhoto
+      ?.files?.[0] ||
+    null;
+
+  const removeMemberPhoto =
+    Boolean(
+      form.elements.removeMemberPhoto
+        ?.checked
+    );
+
+  const removeSpousePhoto =
+    Boolean(
+      form.elements.removeSpousePhoto
+        ?.checked
+    );
+
+  const uploadedIds = [];
+  const oldPhotosToDelete = [];
+
+  let memberPhotoFileId =
+    currentMember?.memberPhotoFileId ||
+    null;
+
+  let spousePhotoFileId =
+    currentMember?.spousePhotoFileId ||
+    null;
+
+  if (newMemberPhoto) {
+    const uploadedId =
+      await uploadPhoto(
+        newMemberPhoto
+      );
+
+    uploadedIds.push(
+      uploadedId
+    );
+
+    if (memberPhotoFileId) {
+      oldPhotosToDelete.push(
+        memberPhotoFileId
+      );
+    }
+
+    memberPhotoFileId =
+      uploadedId;
+  }
+  else if (removeMemberPhoto) {
+    if (memberPhotoFileId) {
+      oldPhotosToDelete.push(
+        memberPhotoFileId
+      );
+    }
+
+    memberPhotoFileId =
+      null;
+  }
+
+  if (newSpousePhoto) {
+    const uploadedId =
+      await uploadPhoto(
+        newSpousePhoto
+      );
+
+    uploadedIds.push(
+      uploadedId
+    );
+
+    if (spousePhotoFileId) {
+      oldPhotosToDelete.push(
+        spousePhotoFileId
+      );
+    }
+
+    spousePhotoFileId =
+      uploadedId;
+  }
+  else if (removeSpousePhoto) {
+    if (spousePhotoFileId) {
+      oldPhotosToDelete.push(
+        spousePhotoFileId
+      );
+    }
+
+    spousePhotoFileId =
+      null;
+  }
+
+  return {
+    uploadedIds,
+    oldPhotosToDelete,
+    memberPhotoFileId,
+    spousePhotoFileId,
+  };
+}
+
+function restoreMemberData(
+  member
+) {
+  return {
+    memberCode:
+      member.memberCode,
+
+    fullName:
+      member.fullName,
+
+    surname:
+      member.surname,
+
+    firstNames:
+      member.firstNames,
+
+    nationalId:
+      member.nationalId,
+
+    standNumber:
+      member.standNumber,
+
+    whatsappContact:
+      member.whatsappContact,
+
+    spouseFullName:
+      member.spouseFullName ??
+      null,
+
+    spouseNationalId:
+      member.spouseNationalId ??
+      null,
+
+    nextOfKinName:
+      member.nextOfKinName ??
+      null,
+
+    nextOfKinRelationship:
+      member.nextOfKinRelationship ??
+      null,
+
+    nextOfKinPhone:
+      member.nextOfKinPhone ??
+      null,
+
+    status:
+      member.status,
+
+    verificationStatus:
+      member.verificationStatus,
+
+    createdSource:
+      member.createdSource,
+
+    sourceRegisterId:
+      member.sourceRegisterId ??
+      null,
+
+    sourceRegisterOrder:
+      member.sourceRegisterOrder ??
+      null,
+
+    createdByUserId:
+      member.createdByUserId ??
+      null,
+
+    ownerUserId:
+      member.ownerUserId ??
+      null,
+
+    memberPhotoFileId:
+      member.memberPhotoFileId ??
+      null,
+
+    spousePhotoFileId:
+      member.spousePhotoFileId ??
+      null,
+
+    notes:
+      member.notes ??
+      null,
+  };
+}
+
+export async function saveMemberRecord({
+  form,
+  user,
+  memberId = null,
+}) {
+  if (!form) {
+    throw new Error(
+      'Member form was not found.'
+    );
+  }
+
+  if (!user?.$id) {
+    throw new Error(
+      'An authenticated administrator is required.'
+    );
+  }
+
+  const createMode =
+    !memberId;
+
+  const currentMember =
+    createMode
+      ? null
+      : await getMemberRecord(
+          memberId
+        );
+
+  collectBeneficiarySlots(
+    form
+  );
+
+  const {
+    data,
+  } =
+    buildMemberUpdateData({
+      form,
+      currentMember,
+      user,
+      createMode,
+    });
+
+  const photoState =
+    await prepareMemberPhotos({
+      form,
+      currentMember,
+    });
+
+  data.memberPhotoFileId =
+    photoState.memberPhotoFileId;
+
+  data.spousePhotoFileId =
+    photoState.spousePhotoFileId;
+
+  let savedMember = null;
+
+  try {
+    if (createMode) {
+      savedMember =
+        await tablesDB.createRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.memberRecordsTableId,
+
+          rowId:
+            ID.unique(),
+
+          data,
+        });
+    }
+    else {
+      savedMember =
+        await tablesDB.updateRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.memberRecordsTableId,
+
+          rowId:
+            memberId,
+
+          data,
+        });
+    }
+
+    try {
+      await syncBeneficiaries({
+        memberId:
+          savedMember.$id,
+
+        form,
+        user,
+      });
+    } catch (beneficiaryError) {
+      if (createMode) {
+        const partialBeneficiaries =
+          await listMemberBeneficiaries(
+            savedMember.$id
+          ).catch(
+            () => []
+          );
+
+        for (
+          const beneficiary of partialBeneficiaries
+        ) {
+          try {
+            await tablesDB.deleteRow({
+              databaseId:
+                APPWRITE.databaseId,
+
+              tableId:
+                APPWRITE.beneficiariesTableId,
+
+              rowId:
+                beneficiary.$id,
+            });
+
+            if (
+              beneficiary.photoFileId
+            ) {
+              await safelyDeletePhoto(
+                beneficiary.photoFileId
+              );
+            }
+          } catch {
+            // Best effort cleanup.
+          }
+        }
+
+        await tablesDB.deleteRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.memberRecordsTableId,
+
+          rowId:
+            savedMember.$id,
+        });
+      }
+      else {
+        await tablesDB.updateRow({
+          databaseId:
+            APPWRITE.databaseId,
+
+          tableId:
+            APPWRITE.memberRecordsTableId,
+
+          rowId:
+            memberId,
+
+          data:
+            restoreMemberData(
+              currentMember
+            ),
+        });
+      }
+
+      throw beneficiaryError;
+    }
+
+    await Promise.all(
+      [...new Set(
+        photoState.oldPhotosToDelete
+          .filter(Boolean)
+      )].map(
+        safelyDeletePhoto
+      )
+    );
+
+    await writeAudit({
+      memberId:
+        savedMember.$id,
+
+      action:
+        createMode
+          ? 'member_created'
+          : 'member_updated',
+
+      user,
+
+      summary:
+        createMode
+          ? `Member ${savedMember.memberCode} created`
+          : `Member ${savedMember.memberCode} updated`,
+
+      before:
+        createMode
+          ? null
+          : compactMemberSnapshot(
+              currentMember
+            ),
+
+      after:
+        compactMemberSnapshot(
+          savedMember
+        ),
+    });
+
+    return savedMember;
+  } catch (error) {
+    await Promise.all(
+      photoState.uploadedIds
+        .filter(Boolean)
+        .map(
+          safelyDeletePhoto
+        )
     );
 
     throw error;

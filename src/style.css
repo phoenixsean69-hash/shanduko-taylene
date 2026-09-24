@@ -2173,3 +2173,207 @@ textarea {
 }
 
 /* SHANDUKO REAL DATA V1:END */
+
+/* SHANDUKO ADMIN EDIT V1:START */
+
+.member-edit-button {
+  min-height: 32px;
+  white-space: nowrap;
+}
+
+.beneficiary-count {
+  display: inline-flex;
+  min-width: 46px;
+  min-height: 26px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #f1f5f3;
+  color: #425d55;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.member-form-section-head,
+.beneficiary-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.member-form-section-head small,
+.beneficiary-section-header small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.edit-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 20px;
+  background: #eeeafd;
+  color: #635bff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.beneficiary-list {
+  display: grid;
+  gap: 14px;
+}
+
+.beneficiary-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fbfdfc;
+}
+
+.beneficiary-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.beneficiary-card-head strong,
+.beneficiary-card-head small {
+  display: block;
+}
+
+.beneficiary-card-head strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.beneficiary-card-head small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.beneficiary-remove {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ead8d8;
+  border-radius: 8px;
+  background: #fff;
+  color: #b34b4b;
+  cursor: pointer;
+}
+
+.beneficiary-remove:hover {
+  background: #fff4f4;
+}
+
+.beneficiary-upload {
+  min-height: 92px !important;
+}
+
+.beneficiary-empty {
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px dashed var(--border);
+  border-radius: 11px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.beneficiary-empty i {
+  font-size: 22px;
+  color: var(--green);
+}
+
+.beneficiary-summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.beneficiary-summary strong {
+  color: var(--text);
+}
+
+.photo-remove-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #725252;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.photo-remove-check input {
+  width: 16px;
+  height: 16px;
+}
+
+.member-form-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  padding: 14px 0 4px;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(243, 246, 245, 0),
+      rgba(243, 246, 245, .96) 26%,
+      #f3f6f5 100%
+    );
+}
+
+#addBeneficiaryButton:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .member-form-section-head,
+  .beneficiary-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .beneficiary-section-header #addBeneficiaryButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .beneficiary-summary {
+    justify-content: space-between;
+  }
+
+  .member-form-footer {
+    flex-wrap: wrap;
+  }
+
+  .member-form-footer > * {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* SHANDUKO ADMIN EDIT V1:END */
