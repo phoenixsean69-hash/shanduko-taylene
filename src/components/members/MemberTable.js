@@ -9,8 +9,22 @@ function escapeHtml(value) {
 
 function sourceLabel(member) {
   return member.createdSource === 'legacy_register'
-    ? 'Membership Register'
-    : 'Added by Administrator';
+    ? 'Register'
+    : 'Admin';
+}
+
+function verificationLabel(value) {
+  const normalized =
+    String(value || 'pending');
+
+  const labels = {
+    source_register: 'Source',
+    pending: 'Pending',
+    verified: 'Verified',
+    rejected: 'Rejected',
+  };
+
+  return labels[normalized] || normalized;
 }
 
 function statusClass(status) {
@@ -93,7 +107,7 @@ export function MemberTable({
           <div class="registry-member-cell">
             ${memberPhoto(member)}
 
-            <div>
+            <div class="registry-member-copy">
               <strong>
                 ${escapeHtml(member.fullName)}
               </strong>
@@ -105,7 +119,7 @@ export function MemberTable({
           </div>
         </td>
 
-        <td>
+        <td class="registry-id-cell">
           ${escapeHtml(member.nationalId)}
         </td>
 
@@ -113,31 +127,36 @@ export function MemberTable({
           ${escapeHtml(member.standNumber)}
         </td>
 
-        <td>
+        <td class="registry-contact-cell">
           ${escapeHtml(member.whatsappContact)}
         </td>
 
-        <td>
+        <td class="registry-spouse-cell">
           ${escapeHtml(
             member.spouseFullName || '—'
           )}
         </td>
 
-        <td>
+        <td class="registry-center-cell">
           <span class="beneficiary-count">
             ${Number(member.beneficiaryCount || 0)} / 5
           </span>
         </td>
 
-        <td>
-          <span class="ledger-badge admin">
-            ${escapeHtml(
-              sourceLabel(member)
-            )}
+        <td class="registry-center-cell">
+          <span
+            class="registry-mini-badge"
+            title="${
+              member.createdSource === 'legacy_register'
+                ? 'Membership Register'
+                : 'Added by Administrator'
+            }"
+          >
+            ${escapeHtml(sourceLabel(member))}
           </span>
         </td>
 
-        <td>
+        <td class="registry-center-cell">
           <span
             class="status-badge ${
               statusClass(member.status)
@@ -149,36 +168,35 @@ export function MemberTable({
           </span>
         </td>
 
-        <td>
-          ${escapeHtml(
-            String(
-              member.verificationStatus ||
-              'pending'
-            ).replaceAll('_', ' ')
-          )}
+        <td class="registry-center-cell">
+          <span class="registry-verification">
+            ${escapeHtml(
+              verificationLabel(
+                member.verificationStatus
+              )
+            )}
+          </span>
         </td>
 
-        <td>
+        <td class="registry-actions-cell">
           <div class="member-row-actions">
 
             <a
-              class="secondary-button"
+              class="registry-action-button"
               href="#/member?member=${encodeURIComponent(member.$id)}"
-              style="text-decoration:none"
               title="View member"
+              aria-label="View ${escapeHtml(member.fullName)}"
             >
               <i class="bi bi-eye"></i>
-              View
             </a>
 
             <a
-              class="secondary-button"
+              class="registry-action-button"
               href="#/edit-member?member=${encodeURIComponent(member.$id)}"
-              style="text-decoration:none"
               title="Edit member"
+              aria-label="Edit ${escapeHtml(member.fullName)}"
             >
               <i class="bi bi-pencil-square"></i>
-              Edit
             </a>
 
           </div>
@@ -189,19 +207,17 @@ export function MemberTable({
   }
 
   return `
-    <section class="surface-card">
+    <section class="surface-card member-registry-card">
 
-      <header class="surface-card-header">
+      <header class="surface-card-header member-registry-header">
         <div>
           <h2>Cooperative Member Registry</h2>
-          <p>
-            Membership and household records
-          </p>
+          <p>Membership and household records</p>
         </div>
 
         <a
           href="#/new-member"
-          class="primary-button"
+          class="primary-button member-registry-add"
           style="text-decoration:none"
         >
           <i class="bi bi-person-plus"></i>
@@ -209,7 +225,7 @@ export function MemberTable({
         </a>
       </header>
 
-      <div class="table-toolbar">
+      <div class="table-toolbar member-registry-toolbar">
 
         <label class="table-search">
           <i class="bi bi-search"></i>
@@ -224,16 +240,16 @@ export function MemberTable({
         <span class="table-note">
           ${
             loading
-              ? 'Loading records...'
-              : `${members.length} member records`
+              ? 'Loading...'
+              : `${members.length} members`
           }
         </span>
 
       </div>
 
-      <div class="table-scroll">
+      <div class="table-scroll member-registry-scroll">
 
-        <table class="data-table">
+        <table class="data-table member-registry-table">
 
           <thead>
             <tr>
@@ -242,10 +258,10 @@ export function MemberTable({
               <th>Stand</th>
               <th>WhatsApp</th>
               <th>Spouse</th>
-              <th>Beneficiaries</th>
+              <th>Benef.</th>
               <th>Source</th>
               <th>Status</th>
-              <th>Verification</th>
+              <th>Verify</th>
               <th>Actions</th>
             </tr>
           </thead>
