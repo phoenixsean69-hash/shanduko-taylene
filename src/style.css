@@ -2997,3 +2997,31 @@ textarea {
 }
 
 /* SHANDUKO IMAGE BRAND MARK V1:END */
+
+/* SHANDUKO SIDEBAR LINK UNDERLINE FIX V1:START */
+
+/* Brand and navigation should read like app navigation, not browser links. */
+.figma-sidebar a,
+.figma-sidebar a:link,
+.figma-sidebar a:visited,
+.figma-sidebar a:hover,
+.figma-sidebar a:focus,
+.figma-sidebar a:active,
+.brand,
+.brand:hover,
+.brand:focus,
+.nav-item,
+.nav-item:hover,
+.nav-item:focus,
+.nav-item:active {
+  text-decoration: none !important;
+}
+
+/* Prevent underline decoration leaking onto child text. */
+.brand strong,
+.brand small,
+.nav-item span {
+  text-decoration: none !important;
+}
+
+/* SHANDUKO SIDEBAR LINK UNDERLINE FIX V1:END */
