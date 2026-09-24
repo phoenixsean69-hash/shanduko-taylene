@@ -19,6 +19,33 @@ function statusClass(status) {
     : '';
 }
 
+function memberPhoto(member) {
+  return `
+    <span class="member-registry-photo">
+      ${
+        member.memberPhotoUrl
+          ? `
+            <img
+              src="${escapeHtml(member.memberPhotoUrl)}"
+              alt="${escapeHtml(member.fullName)}"
+            >
+          `
+          : `
+            <span>
+              ${escapeHtml(
+                String(
+                  member.firstNames ||
+                  member.fullName ||
+                  'M'
+                ).charAt(0).toUpperCase()
+              )}
+            </span>
+          `
+      }
+    </span>
+  `;
+}
+
 export function MemberTable({
   members = [],
   loading = false,
@@ -63,19 +90,23 @@ export function MemberTable({
       <tr>
 
         <td>
-          <code>
-            ${escapeHtml(member.memberCode)}
-          </code>
+          <div class="registry-member-cell">
+            ${memberPhoto(member)}
+
+            <div>
+              <strong>
+                ${escapeHtml(member.fullName)}
+              </strong>
+
+              <small>
+                ${escapeHtml(member.memberCode)}
+              </small>
+            </div>
+          </div>
         </td>
 
         <td>
-          <strong>
-            ${escapeHtml(member.fullName)}
-          </strong>
-
-          <small>
-            ${escapeHtml(member.nationalId)}
-          </small>
+          ${escapeHtml(member.nationalId)}
         </td>
 
         <td>
@@ -99,14 +130,6 @@ export function MemberTable({
         </td>
 
         <td>
-          ${
-            member.memberPhotoFileId
-              ? '<i class="bi bi-image text-success" title="Member photo on file"></i>'
-              : '<span class="text-muted">—</span>'
-          }
-        </td>
-
-        <td>
           <span class="ledger-badge admin">
             ${escapeHtml(
               sourceLabel(member)
@@ -127,10 +150,19 @@ export function MemberTable({
         </td>
 
         <td>
+          ${escapeHtml(
+            String(
+              member.verificationStatus ||
+              'pending'
+            ).replaceAll('_', ' ')
+          )}
+        </td>
+
+        <td>
           <div class="member-row-actions">
 
             <a
-              class="secondary-button member-view-button"
+              class="secondary-button"
               href="#/member?member=${encodeURIComponent(member.$id)}"
               style="text-decoration:none"
               title="View member"
@@ -140,7 +172,7 @@ export function MemberTable({
             </a>
 
             <a
-              class="secondary-button member-edit-button"
+              class="secondary-button"
               href="#/edit-member?member=${encodeURIComponent(member.$id)}"
               style="text-decoration:none"
               title="Edit member"
@@ -205,15 +237,15 @@ export function MemberTable({
 
           <thead>
             <tr>
-              <th>Member ID</th>
               <th>Member</th>
+              <th>National ID</th>
               <th>Stand</th>
               <th>WhatsApp</th>
               <th>Spouse</th>
               <th>Beneficiaries</th>
-              <th>Photo</th>
               <th>Source</th>
               <th>Status</th>
+              <th>Verification</th>
               <th>Actions</th>
             </tr>
           </thead>

@@ -1,5 +1,25 @@
 const MAX_BENEFICIARIES = 5;
 
+const RELATIONSHIPS = [
+  'Spouse',
+  'Son',
+  'Daughter',
+  'Father',
+  'Mother',
+  'Brother',
+  'Sister',
+  'Grandchild',
+  'Grandfather',
+  'Grandmother',
+  'Uncle',
+  'Aunt',
+  'Cousin',
+  'Niece',
+  'Nephew',
+  'Guardian',
+  'Relative',
+];
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -13,6 +33,181 @@ function selected(value, expected) {
   return String(value ?? '') === expected
     ? 'selected'
     : '';
+}
+
+function relationshipInput({
+  value = '',
+  selectName = '',
+  manualName = '',
+  selectData = '',
+  manualData = '',
+} = {}) {
+  const normalized =
+    String(value ?? '').trim();
+
+  const known =
+    RELATIONSHIPS.includes(
+      normalized
+    );
+
+  const selectValue =
+    known
+      ? normalized
+      : normalized
+        ? '__other__'
+        : '';
+
+  return `
+    <div data-relationship-control>
+
+      <select
+        class="form-select"
+        ${selectName ? `name="${selectName}"` : ''}
+        ${selectData}
+        data-relationship-select
+      >
+        <option value="">
+          Select relationship
+        </option>
+
+        ${RELATIONSHIPS.map(
+          relationship => `
+            <option
+              value="${escapeHtml(relationship)}"
+              ${
+                selected(
+                  selectValue,
+                  relationship
+                )
+              }
+            >
+              ${escapeHtml(relationship)}
+            </option>
+          `
+        ).join('')}
+
+        <option
+          value="__other__"
+          ${
+            selectValue === '__other__'
+              ? 'selected'
+              : ''
+          }
+        >
+          Other / Manual entry
+        </option>
+      </select>
+
+      <div
+        class="relationship-manual ${
+          selectValue === '__other__'
+            ? ''
+            : 'd-none'
+        }"
+        data-relationship-manual-wrap
+      >
+        <input
+          class="form-control mt-2"
+          ${manualName ? `name="${manualName}"` : ''}
+          ${manualData}
+          data-relationship-manual
+          placeholder="Enter relationship"
+          value="${
+            selectValue === '__other__'
+              ? escapeHtml(normalized)
+              : ''
+          }"
+        >
+      </div>
+
+    </div>
+  `;
+}
+
+function photoPicker({
+  inputName = '',
+  inputData = '',
+  label,
+  currentUrl = '',
+  hasCurrentPhoto = false,
+  removeName = '',
+  removeData = '',
+} = {}) {
+  return `
+    <div class="photo-editor">
+
+      <label class="upload-tile photo-upload-tile">
+
+        <input
+          type="file"
+          ${inputName ? `name="${inputName}"` : ''}
+          ${inputData}
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        >
+
+        <span
+          class="picked-image-preview ${
+            currentUrl
+              ? 'has-preview'
+              : ''
+          }"
+          data-image-preview
+          data-current-image="${escapeHtml(currentUrl)}"
+        >
+          ${
+            currentUrl
+              ? `
+                <img
+                  src="${escapeHtml(currentUrl)}"
+                  alt="${escapeHtml(label)}"
+                >
+              `
+              : `
+                <i class="bi bi-image"></i>
+              `
+          }
+        </span>
+
+        <span class="photo-upload-copy">
+          <strong>
+            ${
+              hasCurrentPhoto
+                ? `Replace ${escapeHtml(label)}`
+                : `Add ${escapeHtml(label)}`
+            }
+          </strong>
+
+          <small data-file-caption>
+            ${
+              hasCurrentPhoto
+                ? 'Photo currently on file'
+                : 'Choose image'
+            }
+          </small>
+        </span>
+
+      </label>
+
+      ${
+        hasCurrentPhoto
+          ? `
+            <label class="photo-remove-check mt-2">
+              <input
+                type="checkbox"
+                ${removeName ? `name="${removeName}"` : ''}
+                ${removeData}
+              >
+              <span>
+                Remove current ${escapeHtml(label)}
+              </span>
+            </label>
+          `
+          : ''
+      }
+
+    </div>
+  `;
 }
 
 function beneficiaryCard(
@@ -88,13 +283,16 @@ function beneficiaryCard(
             Relationship
           </label>
 
-          <input
-            class="form-control"
-            data-beneficiary-relationship
-            value="${escapeHtml(
-              beneficiary.relationship || ''
-            )}"
-          >
+          ${relationshipInput({
+            value:
+              beneficiary.relationship || '',
+
+            selectData:
+              'data-beneficiary-relationship-select',
+
+            manualData:
+              'data-beneficiary-relationship-manual',
+          })}
         </div>
 
         <div class="col-md-3">
@@ -108,59 +306,36 @@ function beneficiaryCard(
             type="number"
             min="0"
             max="100"
-            step="0.01"
+            step="5"
+            inputmode="numeric"
             value="${escapeHtml(
               beneficiary.allocationPct ?? ''
             )}"
           >
+
+          <small class="field-hint">
+            Changes in 5% steps
+          </small>
         </div>
 
-        <div class="col-md-6">
-          <label class="upload-tile beneficiary-upload">
-            <input
-              type="file"
-              data-beneficiary-photo
-              accept="image/jpeg,image/png,image/webp"
-              hidden
-            >
+        <div class="col-12">
+          ${photoPicker({
+            inputData:
+              'data-beneficiary-photo',
 
-            <i class="bi bi-person-vcard"></i>
+            label:
+              'beneficiary photo',
 
-            <strong>
-              ${
-                hasPhoto
-                  ? 'Replace beneficiary photo'
-                  : 'Add beneficiary photo'
-              }
-            </strong>
+            currentUrl:
+              beneficiary.photoUrl || '',
 
-            <small>
-              ${
-                hasPhoto
-                  ? 'Photo currently on file'
-                  : 'Optional'
-              }
-            </small>
-          </label>
+            hasCurrentPhoto:
+              hasPhoto,
+
+            removeData:
+              'data-beneficiary-remove-photo',
+          })}
         </div>
-
-        ${
-          hasPhoto
-            ? `
-              <div class="col-md-6 d-flex align-items-center">
-                <label class="photo-remove-check">
-                  <input
-                    type="checkbox"
-                    data-beneficiary-remove-photo
-                  >
-                  <span>
-                    Remove current beneficiary photo
-                  </span>
-                </label>
-              </div>
-            `
-            : ''
-        }
 
       </div>
 
@@ -203,9 +378,7 @@ export function MemberForm({
     member || {};
 
   const beneficiaryRows =
-    beneficiaries.length
-      ? beneficiaries
-      : [];
+    beneficiaries || [];
 
   return `
     <form
@@ -434,93 +607,45 @@ export function MemberForm({
             </div>
 
             <div class="col-md-6">
-              <label class="upload-tile">
-                <input
-                  type="file"
-                  name="memberPhoto"
-                  accept="image/jpeg,image/png,image/webp"
-                  hidden
-                >
+              ${photoPicker({
+                inputName:
+                  'memberPhoto',
 
-                <i class="bi bi-person-bounding-box"></i>
+                label:
+                  'member photo',
 
-                <strong>
-                  ${
+                currentUrl:
+                  memberData.memberPhotoUrl || '',
+
+                hasCurrentPhoto:
+                  Boolean(
                     memberData.memberPhotoFileId
-                      ? 'Replace member photo'
-                      : 'Add member photo'
-                  }
-                </strong>
+                  ),
 
-                <small>
-                  ${
-                    memberData.memberPhotoFileId
-                      ? 'Photo currently on file'
-                      : 'Optional'
-                  }
-                </small>
-              </label>
-
-              ${
-                memberData.memberPhotoFileId
-                  ? `
-                    <label class="photo-remove-check mt-2">
-                      <input
-                        type="checkbox"
-                        name="removeMemberPhoto"
-                      >
-                      <span>
-                        Remove current member photo
-                      </span>
-                    </label>
-                  `
-                  : ''
-              }
+                removeName:
+                  'removeMemberPhoto',
+              })}
             </div>
 
             <div class="col-md-6">
-              <label class="upload-tile">
-                <input
-                  type="file"
-                  name="spousePhoto"
-                  accept="image/jpeg,image/png,image/webp"
-                  hidden
-                >
+              ${photoPicker({
+                inputName:
+                  'spousePhoto',
 
-                <i class="bi bi-camera"></i>
+                label:
+                  'spouse photo',
 
-                <strong>
-                  ${
+                currentUrl:
+                  memberData.spousePhotoUrl || '',
+
+                hasCurrentPhoto:
+                  Boolean(
                     memberData.spousePhotoFileId
-                      ? 'Replace spouse photo'
-                      : 'Add spouse photo'
-                  }
-                </strong>
+                  ),
 
-                <small>
-                  ${
-                    memberData.spousePhotoFileId
-                      ? 'Photo currently on file'
-                      : 'Optional'
-                  }
-                </small>
-              </label>
-
-              ${
-                memberData.spousePhotoFileId
-                  ? `
-                    <label class="photo-remove-check mt-2">
-                      <input
-                        type="checkbox"
-                        name="removeSpousePhoto"
-                      >
-                      <span>
-                        Remove current spouse photo
-                      </span>
-                    </label>
-                  `
-                  : ''
-              }
+                removeName:
+                  'removeSpousePhoto',
+              })}
             </div>
 
           </div>
@@ -560,11 +685,16 @@ export function MemberForm({
                 Relationship
               </label>
 
-              <input
-                class="form-control"
-                name="nextOfKinRelationship"
-                value="${escapeHtml(memberData.nextOfKinRelationship || '')}"
-              >
+              ${relationshipInput({
+                value:
+                  memberData.nextOfKinRelationship || '',
+
+                selectName:
+                  'nextOfKinRelationshipSelect',
+
+                manualName:
+                  'nextOfKinRelationshipManual',
+              })}
             </div>
 
             <div class="col-md-4">
@@ -597,7 +727,7 @@ export function MemberForm({
             </h3>
 
             <small>
-              Add up to 5 people. Combined allocation cannot exceed 100%.
+              Maximum 5 people. Total allocation cannot exceed 100%.
             </small>
           </div>
 
@@ -643,6 +773,15 @@ export function MemberForm({
             <span>No beneficiaries added yet.</span>
           </div>
 
+          <div
+            id="beneficiaryAllocationWarning"
+            class="beneficiary-allocation-warning"
+            hidden
+          >
+            <i class="bi bi-exclamation-triangle"></i>
+            Total beneficiary allocation cannot exceed 100%.
+          </div>
+
           <div class="beneficiary-summary">
             <span>
               <strong id="beneficiaryCount">
@@ -661,7 +800,7 @@ export function MemberForm({
                       row.allocationPct || 0
                     ),
                   0
-                ).toFixed(2)}
+                ).toFixed(0)}
               </strong>%
             </span>
           </div>

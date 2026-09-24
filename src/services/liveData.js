@@ -99,6 +99,25 @@ async function listAllRows(
   return rows;
 }
 
+function photoUrl(fileId) {
+  if (!fileId) {
+    return '';
+  }
+
+  try {
+    return String(
+      storage.getFileView({
+        bucketId:
+          APPWRITE.memberPhotosBucketId,
+
+        fileId,
+      })
+    );
+  } catch {
+    return '';
+  }
+}
+
 function byNewest(a, b) {
   const aDate =
     new Date(
@@ -229,8 +248,58 @@ export async function listMembersWithBeneficiaryCounts() {
         counts.get(
           String(member.$id)
         ) || 0,
+
+      memberPhotoUrl:
+        photoUrl(
+          member.memberPhotoFileId
+        ),
     })
   );
+}
+
+export async function getMemberForEdit(
+  memberId
+) {
+  const [
+    member,
+    beneficiaries,
+  ] = await Promise.all([
+    getMemberRecord(
+      memberId
+    ),
+
+    listMemberBeneficiaries(
+      memberId
+    ),
+  ]);
+
+  return {
+    member: {
+      ...member,
+
+      memberPhotoUrl:
+        photoUrl(
+          member.memberPhotoFileId
+        ),
+
+      spousePhotoUrl:
+        photoUrl(
+          member.spousePhotoFileId
+        ),
+    },
+
+    beneficiaries:
+      beneficiaries.map(
+        beneficiary => ({
+          ...beneficiary,
+
+          photoUrl:
+            photoUrl(
+              beneficiary.photoFileId
+            ),
+        })
+      ),
+  };
 }
 
 export async function listAdminLedger() {
@@ -468,7 +537,13 @@ function collectMemberValues(form) {
 
       nextOfKinRelationship:
         nullable(
-          values.nextOfKinRelationship
+          relationshipValue(
+            form.elements
+              .nextOfKinRelationshipSelect,
+
+            form.elements
+              .nextOfKinRelationshipManual
+          )
         ),
 
       nextOfKinPhone:
@@ -485,6 +560,24 @@ function collectMemberValues(form) {
         ),
     },
   };
+}
+
+function relationshipValue(
+  selectElement,
+  manualElement
+) {
+  const selected =
+    normalize(
+      selectElement?.value
+    );
+
+  if (selected === '__other__') {
+    return normalize(
+      manualElement?.value
+    );
+  }
+
+  return selected;
 }
 
 function collectBeneficiarySlots(form) {
@@ -506,10 +599,14 @@ function collectBeneficiarySlots(form) {
       );
 
     const relationship =
-      normalize(
+      relationshipValue(
         card.querySelector(
-          '[data-beneficiary-relationship]'
-        )?.value
+          '[data-beneficiary-relationship-select]'
+        ),
+
+        card.querySelector(
+          '[data-beneficiary-relationship-manual]'
+        )
       );
 
     const allocationText =
@@ -577,11 +674,29 @@ function collectBeneficiarySlots(form) {
       );
     }
 
+    const fiveStepDifference =
+      Math.abs(
+        allocationPct / 5 -
+        Math.round(
+          allocationPct / 5
+        )
+      );
+
+    if (
+      fiveStepDifference >
+      0.000001
+    ) {
+      throw new Error(
+        `Beneficiary ${index + 1} allocation must use 5% increments.`
+      );
+    }
+
     populated.push({
       beneficiaryId:
         beneficiaryId || null,
 
       fullName,
+
       relationship:
         relationship || null,
 
@@ -620,7 +735,10 @@ function collectBeneficiarySlots(form) {
       0
     );
 
-  if (allocationTotal > 100.000001) {
+  if (
+    allocationTotal >
+    100.000001
+  ) {
     throw new Error(
       'Beneficiary allocations cannot exceed 100% in total.'
     );

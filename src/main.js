@@ -3,13 +3,29 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './style.css';
 
 import {
-  account
+  account,
+  APPWRITE
 } from './lib/appwrite.js';
+
+import {
+  getMemberForEdit,
+  getMemberRecord,
+  listAdminLedger,
+  listAuditEvents,
+  listDevelopmentLedger,
+  listMemberBeneficiaries,
+  listMembersWithBeneficiaryCounts,
+  loadDashboardData,
+  MAX_BENEFICIARIES,
+  saveMemberRecord
+} from './services/liveData.js';
+
+
 
 import {
   createBeneficiaryCard,
   MemberForm,
-} from './components/members/MemberForm.js';
+  } from './components/members/MemberForm.js';
 
 import {
   MemberTable
@@ -22,23 +38,11 @@ import {
 import {
   deleteMemberRecord,
   getMemberReadModel,
-} from './services/memberCrud.js';
+  } from './services/memberCrud.js';
 
-import {
-  APPWRITE
-} from './lib/appwrite.js';
 
-import {
-  getMemberRecord,
-  listAdminLedger,
-  listAuditEvents,
-  listDevelopmentLedger,
-  listMemberBeneficiaries,
-  listMembersWithBeneficiaryCounts,
-  loadDashboardData,
-  MAX_BENEFICIARIES,
-  saveMemberRecord,
-} from './services/liveData.js';
+
+
 
 import {
   AppShell
@@ -538,6 +542,69 @@ function clearMemberFormError() {
   error.hidden = true;
 }
 
+function wireRelationshipControls(
+  root = document
+) {
+  root
+    .querySelectorAll(
+      '[data-relationship-control]'
+    )
+    .forEach(control => {
+      const select =
+        control.querySelector(
+          '[data-relationship-select]'
+        );
+
+      const manualWrap =
+        control.querySelector(
+          '[data-relationship-manual-wrap]'
+        );
+
+      const manual =
+        control.querySelector(
+          '[data-relationship-manual]'
+        );
+
+      if (
+        !select ||
+        !manualWrap ||
+        select.dataset.relationshipWired === 'true'
+      ) {
+        return;
+      }
+
+      select.dataset.relationshipWired =
+        'true';
+
+      const sync = () => {
+        const manualMode =
+          select.value ===
+          '__other__';
+
+        manualWrap.classList.toggle(
+          'd-none',
+          !manualMode
+        );
+
+        if (manual) {
+          manual.required =
+            manualMode;
+
+          if (manualMode) {
+            manual.focus();
+          }
+        }
+      };
+
+      select.addEventListener(
+        'change',
+        sync
+      );
+
+      sync();
+    });
+}
+
 function updateBeneficiarySummary() {
   const cards =
     [
@@ -556,6 +623,11 @@ function updateBeneficiarySummary() {
       '#beneficiaryAllocationTotal'
     );
 
+  const warning =
+    document.querySelector(
+      '#beneficiaryAllocationWarning'
+    );
+
   const empty =
     document.querySelector(
       '#beneficiaryEmptyState'
@@ -564,6 +636,11 @@ function updateBeneficiarySummary() {
   const addButton =
     document.querySelector(
       '#addBeneficiaryButton'
+    );
+
+  const saveButton =
+    document.querySelector(
+      '#saveMemberButton'
     );
 
   cards.forEach(
@@ -580,15 +657,20 @@ function updateBeneficiarySummary() {
     }
   );
 
+  const allocationInputs =
+    cards.map(
+      card =>
+        card.querySelector(
+          '[data-beneficiary-allocation]'
+        )
+    ).filter(Boolean);
+
   const allocation =
-    cards.reduce(
-      (sum, card) => {
+    allocationInputs.reduce(
+      (sum, input) => {
         const value =
           Number(
-            card.querySelector(
-              '[data-beneficiary-allocation]'
-            )?.value ||
-            0
+            input.value || 0
           );
 
         return sum +
@@ -601,6 +683,20 @@ function updateBeneficiarySummary() {
       0
     );
 
+  const allocationInvalid =
+    allocation >
+    100.000001;
+
+  allocationInputs.forEach(
+    input => {
+      input.setCustomValidity(
+        allocationInvalid
+          ? 'Total beneficiary allocation cannot exceed 100%.'
+          : ''
+      );
+    }
+  );
+
   if (count) {
     count.textContent =
       String(cards.length);
@@ -608,12 +704,17 @@ function updateBeneficiarySummary() {
 
   if (total) {
     total.textContent =
-      allocation.toFixed(2);
+      allocation.toFixed(0);
 
     total.classList.toggle(
       'text-danger',
-      allocation > 100
+      allocationInvalid
     );
+  }
+
+  if (warning) {
+    warning.hidden =
+      !allocationInvalid;
   }
 
   if (empty) {
@@ -627,6 +728,11 @@ function updateBeneficiarySummary() {
     addButton.disabled =
       cards.length >=
       MAX_BENEFICIARIES;
+  }
+
+  if (saveButton) {
+    saveButton.disabled =
+      allocationInvalid;
   }
 }
 
@@ -671,8 +777,15 @@ function wireBeneficiaries() {
         )
       );
 
+      wireRelationshipControls(
+        list
+      );
+
+      wirePhotoUploads(
+        list
+      );
+
       updateBeneficiarySummary();
-      wirePhotoUploads();
     }
   );
 
@@ -711,13 +824,33 @@ function wireBeneficiaries() {
     }
   );
 
+  list.addEventListener(
+    'change',
+    event => {
+      if (
+        event.target.matches(
+          '[data-beneficiary-allocation]'
+        )
+      ) {
+        updateBeneficiarySummary();
+      }
+    }
+  );
+
+  wireRelationshipControls(
+    list
+  );
+
   updateBeneficiarySummary();
 }
 
-function wirePhotoUploads() {
-  document
+function wirePhotoUploads(
+  root = document
+) {
+  root
     .querySelectorAll(
-      '#memberForm .upload-tile input[type="file"]'
+      '#memberForm .upload-tile input[type="file"], ' +
+      '[data-beneficiary-card] .upload-tile input[type="file"]'
     )
     .forEach(input => {
       if (
@@ -738,23 +871,87 @@ function wirePhotoUploads() {
               '.upload-tile'
             );
 
-          const caption =
+          const preview =
             tile?.querySelector(
-              'small'
+              '[data-image-preview]'
             );
 
-          if (!tile || !caption) {
+          const caption =
+            tile?.querySelector(
+              '[data-file-caption]'
+            );
+
+          if (
+            !tile ||
+            !preview
+          ) {
             return;
           }
 
+          const previousObjectUrl =
+            preview.dataset.objectUrl;
+
+          if (previousObjectUrl) {
+            URL.revokeObjectURL(
+              previousObjectUrl
+            );
+
+            delete preview.dataset.objectUrl;
+          }
+
           if (input.files?.length) {
+            const file =
+              input.files[0];
+
+            const objectUrl =
+              URL.createObjectURL(
+                file
+              );
+
+            preview.dataset.objectUrl =
+              objectUrl;
+
+            preview.classList.add(
+              'has-preview'
+            );
+
+            preview.innerHTML =
+              `<img src="${objectUrl}" alt="Selected image preview">`;
+
             tile.classList.add(
               'has-file'
             );
 
-            caption.textContent =
-              input.files[0].name;
+            if (caption) {
+              caption.textContent =
+                file.name;
+            }
+
+            return;
           }
+
+          const currentImage =
+            preview.dataset.currentImage;
+
+          if (currentImage) {
+            preview.classList.add(
+              'has-preview'
+            );
+
+            preview.innerHTML =
+              `<img src="${currentImage}" alt="Current image">`;
+          } else {
+            preview.classList.remove(
+              'has-preview'
+            );
+
+            preview.innerHTML =
+              '<i class="bi bi-image"></i>';
+          }
+
+          tile.classList.remove(
+            'has-file'
+          );
         }
       );
     });
@@ -770,7 +967,14 @@ function wireMemberForm() {
     return;
   }
 
-  wirePhotoUploads();
+  wireRelationshipControls(
+    form
+  );
+
+  wirePhotoUploads(
+    form
+  );
+
   wireBeneficiaries();
 
   form.addEventListener(
@@ -1037,7 +1241,9 @@ async function loadMemberReadPage() {
 
 async function loadEditMember() {
   const page =
-    document.querySelector('#page');
+    document.querySelector(
+      '#page'
+    );
 
   if (!page) {
     return;
@@ -1063,19 +1269,13 @@ async function loadEditMember() {
   }
 
   try {
-    const [
+    const {
       member,
       beneficiaries,
-    ] =
-      await Promise.all([
-        getMemberRecord(
-          memberId
-        ),
-
-        listMemberBeneficiaries(
-          memberId
-        ),
-      ]);
+    } =
+      await getMemberForEdit(
+        memberId
+      );
 
     page.innerHTML =
       MemberForm({

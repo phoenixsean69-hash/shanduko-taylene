@@ -2833,3 +2833,147 @@ textarea {
 }
 
 /* SHANDUKO MEMBER CRUD READ DELETE V1:END */
+
+/* SHANDUKO MEMBER FORM UX V2:START */
+
+.photo-editor {
+  min-width: 0;
+}
+
+.photo-upload-tile {
+  min-height: 126px !important;
+  display: grid !important;
+  grid-template-columns: 92px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 13px !important;
+}
+
+.picked-image-preview {
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex: 0 0 92px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #eef3f1;
+  color: var(--green);
+}
+
+.picked-image-preview i {
+  font-size: 26px;
+}
+
+.picked-image-preview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.photo-upload-copy {
+  min-width: 0;
+}
+
+.photo-upload-copy strong,
+.photo-upload-copy small {
+  display: block;
+}
+
+.photo-upload-copy strong {
+  color: var(--text);
+  font-size: 14px !important;
+}
+
+.photo-upload-copy small {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px !important;
+  overflow-wrap: anywhere;
+}
+
+.relationship-manual {
+  width: 100%;
+}
+
+.field-hint {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.beneficiary-allocation-warning {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #e4b0b0;
+  border-radius: 9px;
+  background: #fff4f4;
+  color: #a64242;
+  font-size: 12px;
+}
+
+.beneficiary-allocation-warning i {
+  margin-right: 6px;
+}
+
+.registry-member-cell {
+  min-width: 190px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.registry-member-cell > div {
+  min-width: 0;
+}
+
+.registry-member-cell strong,
+.registry-member-cell small {
+  display: block;
+}
+
+.member-registry-photo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #e7f3ee;
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.member-registry-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+#beneficiaryAllocationTotal.text-danger {
+  color: #b23d3d !important;
+}
+
+#saveMemberButton:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .photo-upload-tile {
+    grid-template-columns: 72px minmax(0, 1fr) !important;
+  }
+
+  .picked-image-preview {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* SHANDUKO MEMBER FORM UX V2:END */
