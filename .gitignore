@@ -11,3 +11,5 @@ backup-*/
 # Appwrite CLI generated agent skills
 .agents/
 .claude/
+.vercel
+.env*

@@ -50,6 +50,34 @@ export function Sidebar() {
   return `
     <aside class="figma-sidebar">
 
+      <button
+        type="button"
+        class="sidebar-collapse-toggle"
+        aria-label="Expand sidebar"
+        aria-expanded="false"
+        title="Expand or collapse sidebar"
+        onclick="
+          const shell = this.closest('.app-shell');
+          shell.classList.toggle('sidebar-collapsed');
+          const collapsed = shell.classList.contains('sidebar-collapsed');
+          this.setAttribute('aria-expanded', String(!collapsed));
+          this.setAttribute(
+            'aria-label',
+            collapsed ? 'Expand sidebar' : 'Collapse sidebar'
+          );
+        "
+      >
+        <i
+          class="bi bi-chevron-right sidebar-expand-icon"
+          aria-hidden="true"
+        ></i>
+
+        <i
+          class="bi bi-chevron-left sidebar-collapse-icon"
+          aria-hidden="true"
+        ></i>
+      </button>
+
       <a
         href="#/dashboard"
         class="brand"
