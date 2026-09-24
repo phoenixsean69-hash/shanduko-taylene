@@ -5,7 +5,11 @@ export function Login() {
 
         <div class="auth-brand">
           <span class="auth-brand-mark">
-            <i class="bi bi-buildings"></i>
+            <img
+              src="/shanduko.png"
+              alt=""
+              aria-hidden="true"
+            >
           </span>
 
           <div>

@@ -2977,3 +2977,23 @@ textarea {
 }
 
 /* SHANDUKO MEMBER FORM UX V2:END */
+
+/* SHANDUKO IMAGE BRAND MARK V1:START */
+
+.brand-mark,
+.auth-brand-mark {
+  overflow: hidden !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+}
+
+.brand-mark img,
+.auth-brand-mark img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  border-radius: inherit !important;
+}
+
+/* SHANDUKO IMAGE BRAND MARK V1:END */

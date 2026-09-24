@@ -55,7 +55,11 @@ export function Sidebar() {
         class="brand"
       >
         <span class="brand-mark">
-          <i class="bi bi-buildings-fill"></i>
+          <img
+            src="/shanduko.png"
+            alt=""
+            aria-hidden="true"
+          >
         </span>
 
         <span>
