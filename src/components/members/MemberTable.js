@@ -274,6 +274,31 @@ export function MemberTable({
 
       </div>
 
+      ${
+        members.length && !loading && !error
+          ? `
+            <footer
+              id="memberPagination"
+              class="member-pagination"
+              aria-label="Member registry pagination"
+            >
+              <div
+                id="memberPaginationInfo"
+                class="member-pagination-info"
+              >
+                Showing 1-${Math.min(10, members.length)}
+                of ${members.length} members
+              </div>
+
+              <div
+                id="memberPaginationControls"
+                class="member-pagination-controls"
+              ></div>
+            </footer>
+          `
+          : ''
+      }
+
     </section>
   `;
 }

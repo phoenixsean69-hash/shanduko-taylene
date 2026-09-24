@@ -453,39 +453,262 @@ async function signOut() {
   wireLogin();
 }
 
-function wireMemberSearch() {
+function wireMemberRegistryPagination() {
   const search =
     document.querySelector(
       '#memberSearch'
     );
 
-  if (!search) {
+  const rowContainer =
+    document.querySelector(
+      '#memberRows'
+    );
+
+  const info =
+    document.querySelector(
+      '#memberPaginationInfo'
+    );
+
+  const controls =
+    document.querySelector(
+      '#memberPaginationControls'
+    );
+
+  if (
+    !search ||
+    !rowContainer ||
+    !info ||
+    !controls
+  ) {
     return;
+  }
+
+  const PAGE_SIZE = 10;
+
+  let currentPage = 1;
+
+  const allRows =
+    [
+      ...rowContainer.querySelectorAll(
+        'tr'
+      ),
+    ];
+
+  function matchingRows() {
+    const query =
+      search.value
+        .trim()
+        .toLowerCase();
+
+    if (!query) {
+      return allRows;
+    }
+
+    return allRows.filter(
+      row =>
+        row.innerText
+          .toLowerCase()
+          .includes(query)
+    );
+  }
+
+  function renderPage() {
+    const rows =
+      matchingRows();
+
+    const total =
+      rows.length;
+
+    const pageCount =
+      Math.max(
+        1,
+        Math.ceil(
+          total / PAGE_SIZE
+        )
+      );
+
+    currentPage =
+      Math.min(
+        Math.max(
+          currentPage,
+          1
+        ),
+        pageCount
+      );
+
+    allRows.forEach(
+      row => {
+        row.hidden = true;
+      }
+    );
+
+    const startIndex =
+      (currentPage - 1) *
+      PAGE_SIZE;
+
+    const endIndex =
+      Math.min(
+        startIndex +
+        PAGE_SIZE,
+        total
+      );
+
+    rows
+      .slice(
+        startIndex,
+        endIndex
+      )
+      .forEach(
+        row => {
+          row.hidden = false;
+        }
+      );
+
+    if (total === 0) {
+      info.textContent =
+        'No matching members';
+    } else {
+      info.textContent =
+        `Showing ${startIndex + 1}-${endIndex} of ${total} members`;
+    }
+
+    controls.innerHTML = '';
+
+    const previous =
+      document.createElement(
+        'button'
+      );
+
+    previous.type =
+      'button';
+
+    previous.className =
+      'member-page-button member-page-nav';
+
+    previous.innerHTML =
+      '<i class="bi bi-chevron-left"></i>';
+
+    previous.title =
+      'Previous page';
+
+    previous.setAttribute(
+      'aria-label',
+      'Previous page'
+    );
+
+    previous.disabled =
+      currentPage <= 1 ||
+      total === 0;
+
+    previous.addEventListener(
+      'click',
+      () => {
+        currentPage -= 1;
+        renderPage();
+      }
+    );
+
+    controls.appendChild(
+      previous
+    );
+
+    for (
+      let pageNumber = 1;
+      pageNumber <= pageCount;
+      pageNumber += 1
+    ) {
+      const button =
+        document.createElement(
+          'button'
+        );
+
+      button.type =
+        'button';
+
+      button.className =
+        'member-page-button';
+
+      button.textContent =
+        String(pageNumber);
+
+      if (
+        pageNumber ===
+        currentPage
+      ) {
+        button.classList.add(
+          'active'
+        );
+
+        button.setAttribute(
+          'aria-current',
+          'page'
+        );
+      }
+
+      button.addEventListener(
+        'click',
+        () => {
+          currentPage =
+            pageNumber;
+
+          renderPage();
+        }
+      );
+
+      controls.appendChild(
+        button
+      );
+    }
+
+    const next =
+      document.createElement(
+        'button'
+      );
+
+    next.type =
+      'button';
+
+    next.className =
+      'member-page-button member-page-nav';
+
+    next.innerHTML =
+      '<i class="bi bi-chevron-right"></i>';
+
+    next.title =
+      'Next page';
+
+    next.setAttribute(
+      'aria-label',
+      'Next page'
+    );
+
+    next.disabled =
+      currentPage >= pageCount ||
+      total === 0;
+
+    next.addEventListener(
+      'click',
+      () => {
+        currentPage += 1;
+        renderPage();
+      }
+    );
+
+    controls.appendChild(
+      next
+    );
   }
 
   search.addEventListener(
     'input',
-    event => {
-      const query =
-        event.target.value
-          .trim()
-          .toLowerCase();
-
-      document
-        .querySelectorAll(
-          '#memberRows tr'
-        )
-        .forEach(row => {
-          row.hidden =
-            query.length > 0 &&
-            !row.innerText
-              .toLowerCase()
-              .includes(query);
-        });
+    () => {
+      currentPage = 1;
+      renderPage();
     }
   );
-}
 
+  renderPage();
+}
 async function loadMembers() {
   const page =
     document.querySelector('#page');
@@ -503,7 +726,7 @@ async function loadMembers() {
         members,
       });
 
-    wireMemberSearch();
+    wireMemberRegistryPagination();
   } catch (error) {
     page.innerHTML =
       MemberTable({

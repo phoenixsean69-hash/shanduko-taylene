@@ -3579,3 +3579,106 @@ textarea {
 }
 
 /* SHANDUKO COMPACT MEMBER REGISTRY V1:END */
+
+/* SHANDUKO MEMBER PAGINATION V2:START */
+
+.member-pagination {
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding: 9px 14px;
+
+  border-top: 1px solid var(--border);
+
+  background: #ffffff;
+}
+
+.member-pagination-info {
+  color: var(--muted);
+
+  font-size: 11px !important;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.member-pagination-controls {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.member-page-button {
+  min-width: 30px;
+  height: 30px;
+
+  display: inline-grid;
+  place-items: center;
+
+  padding: 0 7px;
+
+  border: 1px solid var(--border);
+  border-radius: 7px;
+
+  background: #ffffff;
+  color: #536762;
+
+  font-family: inherit;
+  font-size: 11px !important;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color .15s ease,
+    border-color .15s ease,
+    color .15s ease;
+}
+
+.member-page-button:hover:not(:disabled) {
+  border-color: #a9c0b7;
+
+  background: #edf5f1;
+  color: var(--green);
+}
+
+.member-page-button.active {
+  border-color: var(--green);
+
+  background: var(--green);
+  color: #ffffff;
+}
+
+.member-page-button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+.member-page-button i {
+  margin: 0 !important;
+
+  font-size: 11px !important;
+}
+
+@media (max-width: 650px) {
+  .member-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .member-pagination-controls {
+    width: 100%;
+
+    overflow-x: auto;
+
+    padding-bottom: 2px;
+  }
+}
+
+/* SHANDUKO MEMBER PAGINATION V2:END */
