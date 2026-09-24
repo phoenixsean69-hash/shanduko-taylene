@@ -9,6 +9,11 @@ export const pageMeta = {
     'Membership and household records'
   ],
 
+  member: [
+    'Member Record',
+    'Member identity, household, images and beneficiaries'
+  ],
+
   'new-member': [
     'Add Member',
     'Create a cooperative member and household record'

@@ -2483,3 +2483,353 @@ textarea {
 }
 
 /* SHANDUKO STAT CARD CLIPPING FIX V1:END */
+
+/* SHANDUKO MEMBER CRUD READ DELETE V1:START */
+
+.member-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.member-read-page {
+  display: grid;
+  gap: 16px;
+}
+
+.member-read-header {
+  min-height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 20px;
+}
+
+.member-read-heading {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.member-read-avatar {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 58px;
+  border-radius: 16px;
+  background: #e7f3ee;
+  color: var(--green);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.member-read-heading h2 {
+  margin: 4px 0 7px;
+  color: var(--text);
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.member-read-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.member-read-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.danger-button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid #d9a0a0;
+  border-radius: 7px;
+  background: #fff4f4;
+  color: #a83d3d;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.danger-button:hover {
+  border-color: #c87878;
+  background: #feecec;
+}
+
+.danger-button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.member-read-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.member-detail-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 6px 18px 16px;
+}
+
+.member-detail-item {
+  min-width: 0;
+  padding: 13px 10px;
+  border-bottom: 1px solid #edf1ef;
+}
+
+.member-detail-item span,
+.member-detail-item strong {
+  display: block;
+}
+
+.member-detail-item span {
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.member-detail-item strong {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.member-photo-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 18px;
+}
+
+.member-photo-card {
+  min-width: 0;
+}
+
+.member-photo-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  margin-bottom: 9px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #f4f7f6;
+  color: #8fa09a;
+}
+
+.member-photo-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.member-photo-frame i {
+  font-size: 34px;
+}
+
+.member-photo-card strong,
+.member-photo-card small {
+  display: block;
+}
+
+.member-photo-card strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.member-photo-card small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.member-beneficiary-list {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px 18px;
+}
+
+.member-beneficiary-view {
+  display: grid;
+  grid-template-columns:
+    48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fbfdfc;
+}
+
+.member-beneficiary-photo {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #edf4f1;
+  color: var(--green);
+}
+
+.member-beneficiary-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.member-beneficiary-copy span,
+.member-beneficiary-copy strong,
+.member-beneficiary-copy small,
+.member-beneficiary-allocation span,
+.member-beneficiary-allocation strong {
+  display: block;
+}
+
+.member-beneficiary-copy span,
+.member-beneficiary-allocation span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.member-beneficiary-copy strong {
+  margin-top: 2px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.member-beneficiary-copy small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.member-beneficiary-allocation {
+  text-align: right;
+}
+
+.member-beneficiary-allocation strong {
+  margin-top: 3px;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.member-notes {
+  min-height: 86px;
+  padding: 18px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.member-delete-dialog {
+  width: min(92vw, 430px);
+  padding: 28px;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--text);
+  box-shadow:
+    0 28px 80px rgba(22, 42, 36, .22);
+}
+
+.member-delete-dialog::backdrop {
+  background: rgba(24, 38, 34, .48);
+  backdrop-filter: blur(2px);
+}
+
+.member-delete-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  border-radius: 13px;
+  background: #fff0f0;
+  color: #b34747;
+  font-size: 20px;
+}
+
+.member-delete-dialog h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.member-delete-dialog p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.member-delete-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+@media (max-width: 900px) {
+  .member-read-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .member-read-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .member-read-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .member-detail-grid,
+  .member-photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-beneficiary-view {
+    grid-template-columns:
+      44px minmax(0, 1fr);
+  }
+
+  .member-beneficiary-allocation {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .member-read-actions > * {
+    flex: 1;
+  }
+}
+
+/* SHANDUKO MEMBER CRUD READ DELETE V1:END */

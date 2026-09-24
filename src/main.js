@@ -16,6 +16,15 @@ import {
 } from './components/members/MemberTable.js';
 
 import {
+  MemberDetails
+} from './components/members/MemberDetails.js';
+
+import {
+  deleteMemberRecord,
+  getMemberReadModel,
+} from './services/memberCrud.js';
+
+import {
   APPWRITE
 } from './lib/appwrite.js';
 
@@ -72,6 +81,10 @@ import {
 const routes = {
   dashboard: Dashboard,
   members: Members,
+  member: () =>
+    MemberDetails({
+      loading: true,
+    }),
   'new-member': NewMember,
   'edit-member': () =>
     MemberForm({
@@ -86,6 +99,7 @@ const routes = {
 const headerTitles = {
   dashboard: 'Dashboard',
   members: 'Member Registry',
+  member: 'Member Record',
   'new-member': 'Add Member',
   'edit-member': 'Edit Member',
   'admin-ledger': 'Admin Finance Tracking',
@@ -833,6 +847,194 @@ function wireMemberForm() {
   );
 }
 
+function wireMemberReadPage(
+  member
+) {
+  const dialog =
+    document.querySelector(
+      '#deleteMemberDialog'
+    );
+
+  const openButton =
+    document.querySelector(
+      '[data-delete-member]'
+    );
+
+  const cancelButton =
+    document.querySelector(
+      '[data-cancel-delete]'
+    );
+
+  const confirmButton =
+    document.querySelector(
+      '[data-confirm-delete]'
+    );
+
+  if (
+    !dialog ||
+    !openButton ||
+    !confirmButton
+  ) {
+    return;
+  }
+
+  openButton.addEventListener(
+    'click',
+    () => {
+      if (
+        typeof dialog.showModal ===
+        'function'
+      ) {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute(
+          'open',
+          ''
+        );
+      }
+    }
+  );
+
+  cancelButton?.addEventListener(
+    'click',
+    () => {
+      if (
+        typeof dialog.close ===
+        'function'
+      ) {
+        dialog.close();
+      } else {
+        dialog.removeAttribute(
+          'open'
+        );
+      }
+    }
+  );
+
+  dialog.addEventListener(
+    'click',
+    event => {
+      if (event.target === dialog) {
+        if (
+          typeof dialog.close ===
+          'function'
+        ) {
+          dialog.close();
+        }
+      }
+    }
+  );
+
+  confirmButton.addEventListener(
+    'click',
+    async () => {
+      confirmButton.disabled = true;
+
+      confirmButton.innerHTML =
+        '<span class="spinner-border spinner-border-sm"></span> Deleting...';
+
+      try {
+        const deleted =
+          await deleteMemberRecord({
+            memberId:
+              member.$id,
+
+            user:
+              currentUser,
+          });
+
+        if (
+          typeof dialog.close ===
+          'function'
+        ) {
+          dialog.close();
+        }
+
+        showToast(
+          `Member ${deleted.memberCode} deleted successfully.`
+        );
+
+        location.hash =
+          '#/members';
+      } catch (error) {
+        confirmButton.disabled =
+          false;
+
+        confirmButton.innerHTML =
+          '<i class="bi bi-trash3"></i> Delete Record';
+
+        if (
+          typeof dialog.close ===
+          'function'
+        ) {
+          dialog.close();
+        }
+
+        showToast(
+          error?.message ||
+          'Could not delete the member record.'
+        );
+      }
+    }
+  );
+}
+
+async function loadMemberReadPage() {
+  const page =
+    document.querySelector(
+      '#page'
+    );
+
+  if (!page) {
+    return;
+  }
+
+  const {
+    params,
+  } =
+    routeState();
+
+  const memberId =
+    params.get('member');
+
+  if (!memberId) {
+    page.innerHTML =
+      MemberDetails({
+        error:
+          'No member record was selected.',
+      });
+
+    return;
+  }
+
+  try {
+    const {
+      member,
+      beneficiaries,
+    } =
+      await getMemberReadModel(
+        memberId
+      );
+
+    page.innerHTML =
+      MemberDetails({
+        member,
+        beneficiaries,
+      });
+
+    wireMemberReadPage(
+      member
+    );
+  } catch (error) {
+    page.innerHTML =
+      MemberDetails({
+        error:
+          error?.message ||
+          'Could not load the member record.',
+      });
+  }
+}
+
 async function loadEditMember() {
   const page =
     document.querySelector('#page');
@@ -1055,6 +1257,10 @@ async function wirePage(key) {
 
   if (key === 'members') {
     await loadMembers();
+  }
+
+  if (key === 'member') {
+    await loadMemberReadPage();
   }
 
   if (key === 'new-member') {

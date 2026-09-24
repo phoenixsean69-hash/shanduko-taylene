@@ -108,7 +108,9 @@ export function MemberTable({
 
         <td>
           <span class="ledger-badge admin">
-            ${escapeHtml(sourceLabel(member))}
+            ${escapeHtml(
+              sourceLabel(member)
+            )}
           </span>
         </td>
 
@@ -125,14 +127,29 @@ export function MemberTable({
         </td>
 
         <td>
-          <a
-            class="secondary-button member-edit-button"
-            href="#/edit-member?member=${encodeURIComponent(member.$id)}"
-            style="text-decoration:none"
-          >
-            <i class="bi bi-pencil-square"></i>
-            Edit
-          </a>
+          <div class="member-row-actions">
+
+            <a
+              class="secondary-button member-view-button"
+              href="#/member?member=${encodeURIComponent(member.$id)}"
+              style="text-decoration:none"
+              title="View member"
+            >
+              <i class="bi bi-eye"></i>
+              View
+            </a>
+
+            <a
+              class="secondary-button member-edit-button"
+              href="#/edit-member?member=${encodeURIComponent(member.$id)}"
+              style="text-decoration:none"
+              title="Edit member"
+            >
+              <i class="bi bi-pencil-square"></i>
+              Edit
+            </a>
+
+          </div>
         </td>
 
       </tr>
@@ -197,7 +214,7 @@ export function MemberTable({
               <th>Photo</th>
               <th>Source</th>
               <th>Status</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
 
